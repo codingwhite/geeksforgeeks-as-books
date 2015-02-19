@@ -1,0 +1,262 @@
+<body><div><div class="post" id="post">
+							<div class="post-info">			
+					<p class="post-title-info">
+						</p><h2 class="post-title">Splay Tree | Set 1 (Search)</h2>
+								
+					<p class="clear"></p>				  
+				<div class="post-content" id="post-content">
+					<p>The worst case time complexity of Binary Search Tree (BST) operations like search, delete, insert is O(n). The worst case occurs when the tree is skewed. We can get the worst case time complexity as O(Logn) with <a href="http://www.geeksforgeeks.org/avl-tree-set-1-insertion/" target="_blank">AVL </a> and Red-Black Trees. <span id="more-125429"></span></p>
+<p><strong>Can we do better than AVL or Red-Black trees in practical situations?</strong><br>
+Like <a href="http://www.geeksforgeeks.org/avl-tree-set-1-insertion/" target="_blank">AVL </a>and Red-Black Trees, Splay tree is also <a href="http://en.wikipedia.org/wiki/Self-balancing_binary_search_tree" target="_blank">self-balancing BST</a>. The main idea of splay tree is to bring the recently accessed item to root of the tree, this makes the recently searched item to be accessible in O(1) time if accessed again. The idea is to use locality of reference (In a typical application, 80% of the access are to 20% of the items). Imagine a situation where we have millions or billions of keys and only few of them are accessed frequently, which is very likely in many practical applications.</p>
+<p>All splay tree operations run in O(log n) time on average, where n is the number of entries in the tree. Any single operation can take Theta(n) time in the worst case.</p>
+<p><strong>Search Operation</strong><br>
+The search operation in Splay tree does the standard BST search, in addition to search, it also splays (move a node to the root).  If the search is successful, then the node that is found is splayed and becomes the new root. Else the last node accessed prior to reaching the NULL is splayed and becomes the new root.</p>
+<p>There are following cases for the node being accessed.</p>
+<p><strong>1)</strong> <strong>Node is root</strong> We simply return the root, don&#8217;t do anything else as the accessed node is already root.</p>
+<p><strong>2) Zig: </strong>  <em><strong>Node is child of root</strong> </em>(the node has no grandparent). Node is either a left child of root (we do a right rotation) or node is a right child of its parent (we do a left rotation).<br>
+T1, T2 and T3 are subtrees of the tree rooted with y (on left side) or x (on right side)           </p>
+<pre>
+                y                                     x
+               / \     Zig (Right Rotation)          /  \
+              x   T3   &#226;&#128;&#147; - &#226;&#128;&#147; - &#226;&#128;&#147; - &#226;&#128;&#147; - - -&gt;         T1   y 
+             / \       
+<p><strong>3)</strong><strong> <em>Node has both parent and grandparent</em></strong>.  There can be following subcases.<br>
+........<strong>3.a) Zig-Zig and Zag-Zag</strong> Node is left child of parent and parent is also left child of grand parent (Two right rotations) OR node is right child of its parent and parent is also right child of grand parent (Two Left Rotations).  </p>
+<pre>
+Zig-Zig (Left Left Case):
+       G                        P                           X       
+      / \                     /   \                        / \      
+     P  T4   rightRotate(G)  X     G     rightRotate(P)  T1   P     
+    / \      ============&gt;  / \   / \    ============&gt;       / \    
+   X  T3                   T1 T2 T3 T4                      T2  G
+  / \                                                          / \ 
+ T1 T2                                                        T3  T4 
+
+Zag-Zag (Right Right Case):
+  G                          P                           X       
+ /  \                      /   \                        / \      
+T1   P     leftRotate(G)  G     X     leftRotate(P)    P   T4
+    / \    ============&gt; / \   / \    ============&gt;   / \   
+   T2   X               T1 T2 T3 T4                  G   T3
+       / \                                          / \ 
+      T3 T4                                        T1  T2
+</pre>
+<p>........<strong>3.b) Zig-Zag and Zag-Zig</strong> Node is left child of parent and parent is right child of grand parent (Left Rotation followed by right rotation) OR node is right child of its parent and parent is left child of grand parent (Right Rotation followed by left rotation).  </p>
+<pre>
+Zig-Zag (Left Right Case):
+       G                        G                            X       
+      / \                     /   \                        /   \      
+     P   T4  leftRotate(P)   X     T4    rightRotate(G)   P     G     
+   /  \      ============&gt;  / \          ============&gt;   / \   /  \    
+  T1   X                   P  T3                       T1  T2 T3  T4 
+      / \                 / \                                       
+    T2  T3              T1   T2                                     
+
+Zag-Zig (Right Left Case):
+  G                          G                           X       
+ /  \                      /  \                        /   \      
+T1   P    rightRotate(P)  T1   X     leftRotate(P)    G     P
+    / \   =============&gt;      / \    ============&gt;   / \   / \   
+   X  T4                    T2   P                 T1  T2 T3  T4
+  / \                           / \                
+ T2  T3                        T3  T4  </pre>
+<p><strong>Example:</strong></p>
+<pre> 
+         100                      100                       [20]
+         /  \                    /   \                        \ 
+       50   200                50    200                      50
+      /          search(20)    /          search(20)         /  \  
+     40          ======&gt;     [20]         ========&gt;         30   100
+    /            1. Zig-Zig    \          2. Zig-Zig         \     \
+   30               at 40       30            at 100         40    200  
+  /                               \     
+[20]                              40</pre>
+<p>The important thing to note is, the search or splay operation not only brings the searched key to root, but also balances the BST. For example in above case, height of BST is reduced by 1.</p>
+<p><strong>Implementation:</strong></p>
+<pre class="brush: cpp; highlight: [42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112]; title: ; notranslate" title="">
+// The code is adopted from http://goo.gl/SDH9hH
+#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+
+// An AVL tree node
+struct node
+{
+    int key;
+    struct node *left, *right;
+};
+
+/* Helper function that allocates a new node with the given key and
+    NULL left and right pointers. */
+struct node* newNode(int key)
+{
+    struct node* node = (struct node*)malloc(sizeof(struct node));
+    node-&gt;key   = key;
+    node-&gt;left  = node-&gt;right  = NULL;
+    return (node);
+}
+
+// A utility function to right rotate subtree rooted with y
+// See the diagram given above.
+struct node *rightRotate(struct node *x)
+{
+    struct node *y = x-&gt;left;
+    x-&gt;left = y-&gt;right;
+    y-&gt;right = x;
+    return y;
+}
+
+// A utility function to left rotate subtree rooted with x
+// See the diagram given above.
+struct node *leftRotate(struct node *x)
+{
+    struct node *y = x-&gt;right;
+    x-&gt;right = y-&gt;left;
+    y-&gt;left = x;
+    return y;
+}
+
+// This function brings the key at root if key is present in tree.
+// If key is not present, then it brings the last accessed item at
+// root.  This function modifies the tree and returns the new root
+struct node *splay(struct node *root, int key)
+{
+    // Base cases: root is NULL or key is present at root
+    if (root == NULL || root-&gt;key == key)
+        return root;
+
+    // Key lies in left subtree
+    if (root-&gt;key &gt; key)
+    {
+        // Key is not in tree, we are done
+        if (root-&gt;left == NULL) return root;
+
+        // Zig-Zig (Left Left)
+        if (root-&gt;left-&gt;key &gt; key)
+        {
+            // First recursively bring the key as root of left-left
+            root-&gt;left-&gt;left = splay(root-&gt;left-&gt;left, key);
+
+            // Do first rotation for root, second rotation is done after else
+            root = rightRotate(root);
+        }
+        else if (root-&gt;left-&gt;key &lt; key) // Zig-Zag (Left Right)
+        {
+            // First recursively bring the key as root of left-right
+            root-&gt;left-&gt;right = splay(root-&gt;left-&gt;right, key);
+
+            // Do first rotation for root-&gt;left
+            if (root-&gt;left-&gt;right != NULL)
+                root-&gt;left = leftRotate(root-&gt;left);
+        }
+
+        // Do second rotation for root
+        return (root-&gt;left == NULL)? root: rightRotate(root);
+    }
+    else // Key lies in right subtree
+    {
+        // Key is not in tree, we are done
+        if (root-&gt;right == NULL) return root;
+
+        // Zag-Zig (Right Left)
+        if (root-&gt;right-&gt;key &gt; key)
+        {
+            // Bring the key as root of right-left
+            root-&gt;right-&gt;left = splay(root-&gt;right-&gt;left, key);
+
+            // Do first rotation for root-&gt;right
+            if (root-&gt;right-&gt;left != NULL)
+                root-&gt;right = rightRotate(root-&gt;right);
+        }
+        else if (root-&gt;right-&gt;key &lt; key)// Zag-Zag (Right Right)
+        {
+            // Bring the key as root of right-right and do first rotation
+            root-&gt;right-&gt;right = splay(root-&gt;right-&gt;right, key);
+            root = leftRotate(root);
+        }
+
+        // Do second rotation for root
+        return (root-&gt;right == NULL)? root: leftRotate(root);
+    }
+}
+
+// The search function for Splay tree.  Note that this function
+// returns the new root of Splay Tree.  If key is present in tree
+// then, it is moved to root.
+struct node *search(struct node *root, int key)
+{
+    return splay(root, key);
+}
+
+// A utility function to print preorder traversal of the tree.
+// The function also prints height of every node
+void preOrder(struct node *root)
+{
+    if (root != NULL)
+    {
+        printf("%d ", root-&gt;key);
+        preOrder(root-&gt;left);
+        preOrder(root-&gt;right);
+    }
+}
+
+/* Drier program to test above function*/
+int main()
+{
+    struct node *root = newNode(100);
+    root-&gt;left = newNode(50);
+    root-&gt;right = newNode(200);
+    root-&gt;left-&gt;left = newNode(40);
+    root-&gt;left-&gt;left-&gt;left = newNode(30);
+    root-&gt;left-&gt;left-&gt;left-&gt;left = newNode(20);
+
+    root = search(root, 20);
+    printf("Preorder traversal of the modified Splay tree is \n");
+    preOrder(root);
+    return 0;
+}
+</pre>
+<p>Output:
+</p><pre>Preorder traversal of the modified Splay tree is
+20 50 30 40 100 200</pre>
+<p><strong> Summary</strong><br>
+<strong>1)</strong> Splay trees have excellent locality properties.  Frequently accessed items are easy to find.  Infrequent items are out of way.</p>
+<p><strong>2) </strong>All splay tree operations take O(Logn) time on average.  Splay trees can be rigorously shown to run in O(log n) average time per operation, over any sequence of operations (assuming we start from an empty tree)</p>
+<p><strong>3)</strong> Splay trees are simpler compared to <a href="http://www.geeksforgeeks.org/avl-tree-set-1-insertion/" target="_blank">AVL </a>and Red-Black Trees as no extra field is required in every tree node.</p>
+<p><strong>4)</strong> Unlike <a href="http://www.geeksforgeeks.org/avl-tree-set-1-insertion/" target="_blank">AVL tree</a>, a splay tree can change even with read-only operations like search.</p>
+<p><strong>Applications of Splay Trees</strong><br>
+Splay trees have become the most widely used basic data structure invented in the last 30 years, because they're the fastest type of balanced search tree for many applications.<br>
+Splay trees are used in Windows NT (in the virtual memory, networking, and file system code), the gcc compiler and GNU C++ library, the sed string editor, Fore Systems network routers, the most popular implementation of Unix malloc, Linux loadable kernel modules, and in much other software (Source: <a href="http://www.cs.berkeley.edu/~jrs/61b/lec/36" target="_blank">http://www.cs.berkeley.edu/~jrs/61b/lec/36</a>)</p>
+<p>We will soon be discussing insert and delete operations on splay trees.  </p>
+<p><strong>References:</strong><br>
+<a href="http://www.cs.berkeley.edu/~jrs/61b/lec/36" target="_blank">http://www.cs.berkeley.edu/~jrs/61b/lec/36</a><br>
+<a href="http://www.cs.cornell.edu/courses/cs3110/2009fa/recitations/rec-splay.html" target="_blank">http://www.cs.cornell.edu/courses/cs3110/2009fa/recitations/rec-splay.html</a><br>
+<a href="http://courses.cs.washington.edu/courses/cse326/01au/lectures/SplayTrees.ppt" target="_blank">http://courses.cs.washington.edu/courses/cse326/01au/lectures/SplayTrees.ppt</a></p>
+<p>Please write comments if you find anything incorrect, or you want to share more information about the topic discussed above</p>
+		
+&#160;
+&#160;
+
+
+
+
+
+
+
+&#160;
+&#160;
+&#160;
+</pre>
+<p>Tags: <a href="http://www.geeksforgeeks.org/tag/advance-data-structures/" rel="tag">Advance Data Structures</a>, <a href="http://www.geeksforgeeks.org/tag/advanced-data-structures/" rel="tag">Advanced Data Structures</a></p> 
+
+
+
+
+
+
+				<h3>Source:</h3><p><a href="http://www.geeksforgeeks.org/splay-tree-set-1-insert/" rel="tag">http://www.geeksforgeeks.org/splay-tree-set-1-insert/</a></p></div>		  
+			</div> 					
+						
+        
+			</div> 	
+
+</div></body>

@@ -1,0 +1,296 @@
+<body><div><div class="post" id="post">
+							<div class="post-info">			
+					<p class="post-title-info">
+						</p><h2 class="post-title">AVL Tree | Set 1 (Insertion)</h2>
+								
+					<p class="clear"></p>				  
+				<div class="post-content" id="post-content">
+					<p>AVL tree is a self-balancing Binary Search Tree (BST) where the difference between heights of left and right subtrees cannot be more than one for all nodes.<span id="more-17679"></span></p>
+<p><strong>Why AVL Trees?</strong><br>
+Most of the BST operations (e.g., search, max, min, insert, delete.. etc) take O(h) time where h is the height of the BST. The cost of these operations may become O(n) for a skewed Binary tree. If we make sure that height of the tree remains O(Logn) after every insertion and deletion, then we can guarantee an upper bound of O(Logn) for all these operations. The height of an AVL tree is always O(Logn) where n is the number of nodes in the tree (See <a href="http://www.youtube.com/watch?v=TbvhGcf6UJU">this </a>video lecture for proof). </p>
+<p><strong>Insertion</strong><br>
+To make sure that the given tree remains AVL after every insertion, we must augment the standard BST insert operation to perform some re-balancing.  Following are two basic operations that can be performed to re-balance a BST without violating the BST property (keys(left) 
+1) Left Rotation<br>
+2) Right Rotation</p>
+<pre>
+T1, T2 and T3 are subtrees of the tree rooted with y (on left side) 
+or x (on right side)           
+                y                               x
+               / \     Right Rotation          /  \
+              x   T3   &#8211; &#8211; &#8211; &#8211; &#8211; &#8211; &#8211; &gt;        T1   y 
+             / \       
+<p><strong>Steps to follow for insertion</strong><br>
+Let the newly nserted node be w<br>
+<strong>1)</strong> Perform standard BST insert for w.<br>
+<strong>2)</strong> Starting from w, travel up and find the first unbalanced node.  Let z be the first unbalanced node, y be the child of z that comes on the path from w to z and x be the grandchild of z that comes on the path from w to z.<br>
+<strong>3)</strong> Re-balance the tree by performing appropriate rotations on the subtree rooted with z. There can be 4 possible cases that needs to be handled as x, y and z can be arranged in 4 ways.  Following are the possible 4 arrangements:<br>
+a) y is left child of z and x is left child of y (Left Left Case)<br>
+b) y is left child of z and x is right child of y (Left Right Case)<br>
+c) y is right child of z and x is right child of y (Right Right Case)<br>
+d) y is right child of z and x is left child of y (Right Left Case)</p>
+<p>Following are the operations to be performed in above mentioned 4 cases. In all of the cases, we only need to re-balance the subtree rooted with z and the complete tree becomes balanced as the height of subtree (After appropriate rotations) rooted with z becomes same as it was before insertion. (See <a href="http://www.youtube.com/watch?v=TbvhGcf6UJU">this </a>video lecture for proof)</p>
+<p><strong>a) Left Left Case</strong></p>
+<pre>
+T1, T2, T3 and T4 are subtrees.
+         z                                      y 
+        / \                                   /   \
+       y   T4      Right Rotate (z)          x      z
+      / \          - - - - - - - - -&gt;      /  \    /  \ 
+     x   T3                               T1  T2  T3  T4
+    / \
+  T1   T2
+</pre>
+<p><strong>b) Left Right Case</strong></p>
+<pre>
+     z                               z                           x
+    / \                            /   \                        /  \ 
+   y   T4  Left Rotate (y)        x    T4  Right Rotate(z)    y      z
+  / \      - - - - - - - - -&gt;    /  \      - - - - - - - -&gt;  / \    / \
+T1   x                          y    T3                    T1  T2 T3  T4
+    / \                        / \
+  T2   T3                    T1   T2
+</pre>
+<p><strong>c) Right Right Case</strong></p>
+<pre>
+  z                                y
+ /  \                            /   \ 
+T1   y     Left Rotate(z)       z      x
+    /  \   - - - - - - - -&gt;    / \    / \
+   T2   x                     T1  T2 T3  T4
+       / \
+     T3  T4
+</pre>
+<p><strong>d) Right Left Case</strong></p>
+<pre>
+   z                            z                            x
+  / \                          / \                          /  \ 
+T1   y   Right Rotate (y)    T1   x      Left Rotate(z)   z      y
+    / \  - - - - - - - - -&gt;     /  \   - - - - - - - -&gt;  / \    / \
+   x   T4                      T2   y                  T1  T2  T3  T4
+  / \                              /  \
+T2   T3                           T3   T4
+</pre>
+<p><strong>C implementation</strong><br>
+Following is the C implementation for AVL Tree Insertion.  The following C implementation uses the recursive BST insert to insert a new node.  In the recursive BST insert, after insertion, we get pointers to all ancestors one by one in bottom up manner.  So we don&#8217;t need parent pointer to travel up.  The recursive code itself travels up and visits all the ancestors of the newly inserted node.<br>
+1) Perform the normal BST insertion.<br>
+2) The current node must be one of the ancestors of the newly inserted node.  Update the height of the current node.<br>
+3) Get the balance factor (left subtree height &#8211; right subtree height) of the current node.<br>
+4) If balance factor is greater than 1, then the current node is unbalanced and we are either in Left Left case or left Right case. To check whether it is left left case or not, compare the newly inserted key with the key in left subtree root.<br>
+5) If balance factor is less than -1, then the current node is unbalanced and we are either in Right Right case or Right Left case. To check whether it is Right Right case or not, compare the newly inserted key with the key in right subtree root. </p>
+<pre class="brush: cpp; highlight: [43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133]; title: ; notranslate" title="">
+#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+
+// An AVL tree node
+struct node
+{
+    int key;
+    struct node *left;
+    struct node *right;
+    int height;
+};
+
+// A utility function to get maximum of two integers
+int max(int a, int b);
+
+// A utility function to get height of the tree
+int height(struct node *N)
+{
+    if (N == NULL)
+        return 0;
+    return N-&gt;height;
+}
+
+// A utility function to get maximum of two integers
+int max(int a, int b)
+{
+    return (a &gt; b)? a : b;
+}
+
+/* Helper function that allocates a new node with the given key and
+    NULL left and right pointers. */
+struct node* newNode(int key)
+{
+    struct node* node = (struct node*)
+                        malloc(sizeof(struct node));
+    node-&gt;key   = key;
+    node-&gt;left   = NULL;
+    node-&gt;right  = NULL;
+    node-&gt;height = 1;  // new node is initially added at leaf
+    return(node);
+}
+
+// A utility function to right rotate subtree rooted with y
+// See the diagram given above.
+struct node *rightRotate(struct node *y)
+{
+    struct node *x = y-&gt;left;
+    struct node *T2 = x-&gt;right;
+
+    // Perform rotation
+    x-&gt;right = y;
+    y-&gt;left = T2;
+
+    // Update heights
+    y-&gt;height = max(height(y-&gt;left), height(y-&gt;right))+1;
+    x-&gt;height = max(height(x-&gt;left), height(x-&gt;right))+1;
+
+    // Return new root
+    return x;
+}
+
+// A utility function to left rotate subtree rooted with x
+// See the diagram given above.
+struct node *leftRotate(struct node *x)
+{
+    struct node *y = x-&gt;right;
+    struct node *T2 = y-&gt;left;
+
+    // Perform rotation
+    y-&gt;left = x;
+    x-&gt;right = T2;
+
+    //  Update heights
+    x-&gt;height = max(height(x-&gt;left), height(x-&gt;right))+1;
+    y-&gt;height = max(height(y-&gt;left), height(y-&gt;right))+1;
+
+    // Return new root
+    return y;
+}
+
+// Get Balance factor of node N
+int getBalance(struct node *N)
+{
+    if (N == NULL)
+        return 0;
+    return height(N-&gt;left) - height(N-&gt;right);
+}
+
+struct node* insert(struct node* node, int key)
+{
+    /* 1.  Perform the normal BST rotation */
+    if (node == NULL)
+        return(newNode(key));
+
+    if (key &lt; node-&gt;key)
+        node-&gt;left  = insert(node-&gt;left, key);
+    else
+        node-&gt;right = insert(node-&gt;right, key);
+
+    /* 2. Update height of this ancestor node */
+    node-&gt;height = max(height(node-&gt;left), height(node-&gt;right)) + 1;
+
+    /* 3. Get the balance factor of this ancestor node to check whether
+       this node became unbalanced */
+    int balance = getBalance(node);
+
+    // If this node becomes unbalanced, then there are 4 cases
+
+    // Left Left Case
+    if (balance &gt; 1 &amp;&amp; key &lt; node-&gt;left-&gt;key)
+        return rightRotate(node);
+
+    // Right Right Case
+    if (balance &lt; -1 &amp;&amp; key &gt; node-&gt;right-&gt;key)
+        return leftRotate(node);
+
+    // Left Right Case
+    if (balance &gt; 1 &amp;&amp; key &gt; node-&gt;left-&gt;key)
+    {
+        node-&gt;left =  leftRotate(node-&gt;left);
+        return rightRotate(node);
+    }
+
+    // Right Left Case
+    if (balance &lt; -1 &amp;&amp; key &lt; node-&gt;right-&gt;key)
+    {
+        node-&gt;right = rightRotate(node-&gt;right);
+        return leftRotate(node);
+    }
+
+    /* return the (unchanged) node pointer */
+    return node;
+}
+
+// A utility function to print preorder traversal of the tree.
+// The function also prints height of every node
+void preOrder(struct node *root)
+{
+    if(root != NULL)
+    {
+        printf("%d ", root-&gt;key);
+        preOrder(root-&gt;left);
+        preOrder(root-&gt;right);
+    }
+}
+
+/* Drier program to test above function*/
+int main()
+{
+  struct node *root = NULL;
+
+  /* Constructing tree given in the above figure */
+  root = insert(root, 10);
+  root = insert(root, 20);
+  root = insert(root, 30);
+  root = insert(root, 40);
+  root = insert(root, 50);
+  root = insert(root, 25);
+
+  /* The constructed AVL Tree would be
+            30
+           /  \
+         20   40
+        /  \     \
+       10  25    50
+  */
+
+  printf("Pre order traversal of the constructed AVL tree is \n");
+  preOrder(root);
+
+  return 0;
+}
+</pre>
+<p>Output:</p>
+<pre>
+  Pre order traversal of the constructed AVL tree is
+  30 20 10 25 40 50
+</pre>
+<p>Time Complexity: The rotation operations (left and right rotate) take constant time as only few pointers are being changed there.  Updating the height and getting the balance factor also take constant time. So the time complexity of AVL insert remains same as BST insert which is O(h) where h is height of the tree.  Since AVL tree is balanced, the height is O(Logn).  So time complexity of AVL insert is O(Logn).</p>
+<p>The AVL tree and other self balancing search trees like Red Black are useful to get all basic operations done in O(Logn) time.  The AVL trees are more balanced compared to Red Black Trees, but they may cause more rotations during insertion and deletion.  So if your application involves many frequent insertions and deletions, then Red Black trees should be preferred. And if the insertions and deletions are less frequent and search is more frequent operation, then AVL tree should be preferred over Red Black Tree.</p>
+<p>Following are some previous posts that have used self-balancing search trees.</p>
+<p><a href="http://www.geeksforgeeks.org/archives/14873">Median in a stream of integers (running integers)</a><br>
+<a href="http://www.geeksforgeeks.org/archives/11306">Maximum of all subarrays of size k</a><br>
+<a href="http://www.geeksforgeeks.org/archives/17235">Count smaller elements on right side</a></p>
+<p><strong>References:</strong><br>
+<a href="http://www.youtube.com/watch?v=mRGQylRWAsI&amp;feature=relmfu">IITD Video Lecture on AVL Tree Introduction</a><br>
+<a href="http://www.youtube.com/watch?v=TbvhGcf6UJU">IITD Video Lecture on AVL Tree Insertion and Deletion</a></p>
+<p>Please write comments if you find anything incorrect, or you want to share more information about the topic discussed above.</p>
+		
+&#160;
+&#160;
+
+
+
+
+
+
+
+&#160;
+&#160;
+&#160;
+</pre>
+<p>Tags: <a href="http://www.geeksforgeeks.org/tag/advance-data-structures/" rel="tag">Advance Data Structures</a></p> 
+
+
+
+
+
+
+				<h3>Source:</h3><p><a href="http://www.geeksforgeeks.org/avl-tree-set-1-insertion/" rel="tag">http://www.geeksforgeeks.org/avl-tree-set-1-insertion/</a></p></div>		  
+			</div> 					
+						
+        
+			</div> 	
+
+</div></body>

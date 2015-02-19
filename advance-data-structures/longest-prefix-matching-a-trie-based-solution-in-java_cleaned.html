@@ -1,0 +1,193 @@
+<body><div><div class="post" id="post">
+							<div class="post-info">			
+					<p class="post-title-info">
+						</p><h2 class="post-title">Longest prefix matching &#8211; A Trie based solution in Java</h2>
+								
+					<p class="clear"></p>				  
+				<div class="post-content" id="post-content">
+					<p>Given a dictionary of words and an input string, find the longest prefix of the string which is also a word in dictionary.<span id="more-117275"></span></p>
+<p><strong>Examples:</strong></p>
+<pre>
+Let the dictionary contains the following words:
+{are, area, base, cat, cater, children, basement}
+
+Below are some input/output examples:
+--------------------------------------
+Input String            Output
+--------------------------------------
+caterer                 cater
+basemexy                base
+child                   </pre>
+<p><strong>Solution</strong><br>
+We build a Trie of all dictionary words. Once the Trie is built, traverse through it using characters of input string. If prefix matches a dictionary word, store current length and look for a longer match.  Finally, return the longest match.<br>
+Following is Java implementation of the above solution based. </p>
+<pre class="brush: java; highlight: [53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91]; title: ; notranslate" title="">
+import java.util.HashMap;
+  
+// Trie Node, which stores a character and the children in a HashMap
+class TrieNode {           
+    public TrieNode(char ch)  {
+        value = ch;
+        children = new HashMap&lt;&gt;();
+        bIsEnd = false;
+    }    
+    public HashMap&lt;Character,TrieNode&gt; getChildren() {   return children;  }    
+    public char getValue()                           {   return value;     }    
+    public void setIsEnd(boolean val)                {   bIsEnd = val;     }    
+    public boolean isEnd()                           {   return bIsEnd;    }
+      
+    private char value;    
+    private HashMap&lt;Character,TrieNode&gt; children;
+    private boolean bIsEnd;  
+}
+  
+// Implements the actual Trie
+class Trie {        
+    // Constructor
+    public Trie()   {     root = new TrieNode((char)0);       }    
+  
+    // Method to insert a new word to Trie
+    public void insert(String word)  {
+          
+        // Find length of the given word
+        int length = word.length();        
+        TrieNode crawl = root;
+          
+        // Traverse through all characters of given word
+        for( int level = 0; level &lt; length; level++)
+        {
+            HashMap&lt;Character,TrieNode&gt; child = crawl.getChildren();            
+            char ch = word.charAt(level);
+              
+            // If there is already a child for current character of given word 
+            if( child.containsKey(ch))
+                crawl = child.get(ch);
+            else   // Else create a child
+            {              
+                TrieNode temp = new TrieNode(ch);
+                child.put( ch, temp );
+                crawl = temp;
+            }
+        }
+          
+        // Set bIsEnd true for last character
+        crawl.setIsEnd(true);
+    }
+      
+    // The main method that finds out the longest string 'input'
+    public String getMatchingPrefix(String input)  {
+        String result = ""; // Initialize resultant string
+        int length = input.length();  // Find length of the input string       
+          
+        // Initialize reference to traverse through Trie
+        TrieNode crawl = root;   
+         
+        // Iterate through all characters of input string 'str' and traverse 
+        // down the Trie
+        int level, prevMatch = 0; 
+        for( level = 0 ; level &lt; length; level++ )
+        {    
+            // Find current character of str
+            char ch = input.charAt(level);    
+             
+            // HashMap of current Trie node to traverse down
+            HashMap&lt;Character,TrieNode&gt; child = crawl.getChildren();                        
+            
+            // See if there is a Trie edge for the current character
+            if( child.containsKey(ch) )
+            {
+               result += ch;          //Update result
+               crawl = child.get(ch); //Update crawl to move down in Trie
+                
+               // If this is end of a word, then update prevMatch
+               if( crawl.isEnd() ) 
+                    prevMatch = level + 1;
+            }            
+            else  break;
+        }
+         
+        // If the last processed character did not match end of a word, 
+        // return the previously matching prefix
+        if( !crawl.isEnd() )
+                return result.substring(0, prevMatch);        
+        
+        else return result;
+    }
+      
+    private TrieNode root;      
+}
+  
+// Testing class
+public class Test {
+   public static void main(String[] args) {
+        Trie dict = new Trie();        
+        dict.insert("are");
+        dict.insert("area");
+        dict.insert("base");
+        dict.insert("cat");
+        dict.insert("cater");        
+        dict.insert("basement");
+        
+        String input = "caterer";
+        System.out.print(input + ":   ");
+        System.out.println(dict.getMatchingPrefix(input));              
+
+        input = "basement";
+        System.out.print(input + ":   ");
+        System.out.println(dict.getMatchingPrefix(input));                      
+        
+        input = "are";
+        System.out.print(input + ":   ");
+        System.out.println(dict.getMatchingPrefix(input));              
+
+        input = "arex";
+        System.out.print(input + ":   ");
+        System.out.println(dict.getMatchingPrefix(input));              
+
+        input = "basemexz";
+        System.out.print(input + ":   ");
+        System.out.println(dict.getMatchingPrefix(input));                      
+        
+        input = "xyz";
+        System.out.print(input + ":   ");
+        System.out.println(dict.getMatchingPrefix(input));                      
+    }
+}</pre>
+<p>Output:
+</p><pre>
+caterer:   cater
+basement:   basement
+are:   are
+arex:   are
+basemexz:   base
+xyz:   
+</pre>
+<p>Time Complexity: Time complexity of finding the longest prefix is O(n) where n is length of the input string.   Refer <a href="http://www.geeksforgeeks.org/trie-insert-and-search/">this </a>for time complexity of building the Trie.</p>
+<p>This article is compiled by <strong>Ravi Chandra Enaganti</strong>. Please write comments if you find anything incorrect, or you want to share more information about the topic discussed above</p>
+		
+&#160;
+&#160;
+
+
+
+
+
+
+
+&#160;
+&#160;
+&#160;
+<p>Tags: <a href="http://www.geeksforgeeks.org/tag/advance-data-structures/" rel="tag">Advance Data Structures</a>, <a href="http://www.geeksforgeeks.org/tag/java/" rel="tag">Java</a></p> 
+
+
+
+
+
+
+				<h3>Source:</h3><p><a href="http://www.geeksforgeeks.org/longest-prefix-matching-a-trie-based-solution-in-java/" rel="tag">http://www.geeksforgeeks.org/longest-prefix-matching-a-trie-based-solution-in-java/</a></p></div>		  
+			</div> 					
+						
+        
+			</div> 	
+
+</div></body>

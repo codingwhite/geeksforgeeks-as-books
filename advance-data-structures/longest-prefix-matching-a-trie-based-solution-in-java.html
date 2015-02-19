@@ -1,0 +1,1631 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+       <title>Longest prefix matching - A Trie based solution in Java - GeeksforGeeks</title>
+       <style type="text/css" media="screen">
+          @import url('http://d2o58evtke57tz.cloudfront.net/wp-content/themes/minimoo/style.css');
+    </style>
+      <link href="http://d2o58evtke57tz.cloudfront.net/wp-content/themes/minimoo/favicon.ico" rel="shortcut icon" />    
+    
+<!-- This site is optimized with the Yoast WordPress SEO plugin v1.7.1 - https://yoast.com/wordpress/plugins/seo/ -->
+<link rel="canonical" href="http://www.geeksforgeeks.org/longest-prefix-matching-a-trie-based-solution-in-java/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Longest prefix matching - A Trie based solution in Java - GeeksforGeeks" />
+<meta property="og:description" content="Given a dictionary of words and an input string, find the longest prefix of the string which is also a word in dictionary. Examples: Let the dictionary contains the following words: {are, area, base, cat, cater, children, basement} Below are some input/output examples: -------------------------------------- Input String Output -------------------------------------- caterer cater basemexy base child &lt; Empty &hellip;" />
+<meta property="og:url" content="http://www.geeksforgeeks.org/longest-prefix-matching-a-trie-based-solution-in-java/" />
+<meta property="og:site_name" content="GeeksforGeeks" />
+<meta property="article:tag" content="Advance Data Structures" />
+<meta property="article:tag" content="Java" />
+<meta property="article:section" content="Trees" />
+<meta property="article:published_time" content="2013-04-27T22:19:41+00:00" />
+<meta property="article:modified_time" content="2013-04-28T00:36:04+00:00" />
+<meta property="og:updated_time" content="2013-04-28T00:36:04+00:00" />
+<!-- / Yoast WordPress SEO plugin. -->
+
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css?ver=4.0.1' type='text/css' media='all' />
+<link rel='stylesheet' id='bbp-default-css'  href='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/bbpress/templates/default/css/bbpress.css?ver=2.5.4-5380' type='text/css' media='screen' />
+<link rel='stylesheet' id='wp-pagenavi-css'  href='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/wp-pagenavi/pagenavi-css.css?ver=2.70' type='text/css' media='all' />
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-includes/js/jquery/jquery.js?ver=1.11.1'></script>
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1'></script>
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js?ver=1.0'></script>
+
+<!-- Bad Behavior 2.2.16 run time: 1.487 ms -->
+<script type="text/javascript">
+<!--
+function bb2_addLoadEvent(func) {
+	var oldonload = window.onload;
+	if (typeof window.onload != 'function') {
+		window.onload = func;
+	} else {
+		window.onload = function() {
+			oldonload();
+			func();
+		}
+	}
+}
+
+bb2_addLoadEvent(function() {
+	for ( i=0; i < document.forms.length; i++ ) {
+		if (document.forms[i].method == 'post') {
+			var myElement = document.createElement('input');
+			myElement.setAttribute('type', 'hidden');
+			myElement.name = 'bb2_screener_';
+			myElement.value = '1419263767 49.200.246.100';
+			document.forms[i].appendChild(myElement);
+		}
+	}
+});
+// --></script>
+		<style type="text/css" id="syntaxhighlighteranchor"></style>
+   <meta name="google-site-verification" content="rHK2v8_zzuAZQY8JHAzbllDN8u-aQxcn2Kqnp67Old0" />
+</head>
+
+<body>
+<!-- o4dI0sCXUgoSONabbd8mbZ4SA3E -->    
+    <div id="wrapper">
+        <div class="blog-info">
+                <h1 class="blog-title">
+                <a href="http://www.geeksforgeeks.org" title="GeeksforGeeks">GeeksforGeeks</a>
+            </h1>
+       
+            <div class="blog-description">
+                A computer science portal for geeks            </div>
+        </div>
+        <b><p>  <h2 align="right"> <a href="http://geeksquiz.com/">GeeksQuiz</a></h2> 
+   <a href="http://www.geeksforgeeks.org/wp-login.php">Login</a> 
+         </p></b>  
+         
+         <div class="clear"></div>         
+              
+                     
+            <div id="menu">   
+                 <ul>
+ <li><a href="http://www.geeksforgeeks.org">Home</a></li>
+  <li><a href="http://www.geeksforgeeks.org/fundamentals-of-algorithms/">Algorithms</a></li>
+ <li><a href="http://www.geeksforgeeks.org/data-structures/">DS</a></li>
+  <li><a href="http://www.geeksforgeeks.org/gate-corner/">GATE</a></li>
+  <li><a href="http://www.geeksforgeeks.org/about/interview-corner/">Interview Corner</a></li>
+  <li><a href="http://www.geeksforgeeks.org/forums/">Q&A</a></li>
+  <li><a href="http://www.geeksforgeeks.org/c/">C</a></li>
+  <li><a href="http://www.geeksforgeeks.org/c-plus-plus/">C++</a></li>
+  <li><a href="http://www.geeksforgeeks.org/java/">Java</a></li>
+  <li><a href="http://www.geeksforgeeks.org/books/">Books</a></li>
+  <li><a href="http://www.geeksforgeeks.org/contribute/">Contribute</a></li>
+  <li><a href="http://www.geeksforgeeks.org/contribute/ask-a-question/">Ask a Q</a></li>
+  <li><a href="http://www.geeksforgeeks.org/about/">About</a></li>
+            </ul>
+
+               
+            <div class="clear"></div>     
+        </div>
+             <div id="navmenu">
+				<ul id="menu" style="padding:0; margin:0;">
+						<li class="cat-item cat-item-3"><a href="http://www.geeksforgeeks.org/category/c-arrays/" title="Questions regarding Arrays">Array</a>
+</li>	
+
+	<li class="cat-item cat-item-17"><a href="http://www.geeksforgeeks.org/category/bit-magic/" title="View all posts filed under Bit Magic">Bit Magic</a>
+</li>
+	<li class="cat-item cat-item-14"><a href="http://www.geeksforgeeks.org/category/c-puzzles/" title="View all posts filed under C/C++ Puzzles">C/C++</a>
+</li>
+
+<li class="cat-item cat-item-18"><a href="http://www.geeksforgeeks.org/category/articles/" title="View all posts filed under Articles">Articles</a>
+</li>
+
+	<li class="cat-item cat-item-67"><a href="http://www.geeksforgeeks.org/category/gfact/" title="View all posts filed under GFacts">GFacts</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://www.geeksforgeeks.org/category/linked-list/" title="Linked List problems">Linked List</a>
+</li>
+	<li class="cat-item cat-item-66"><a href="http://www.geeksforgeeks.org/category/multiple-choice-question/" title="View all posts filed under MCQ">MCQ</a>
+
+</li>
+	<li class="cat-item cat-item-4"><a href="http://www.geeksforgeeks.org/category/c-programs/" title="Miscellaneous">Misc</a>
+</li>
+	<li class="cat-item cat-item-5"><a href="http://www.geeksforgeeks.org/category/program-output/" title="View all posts filed under Output">Output</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="http://www.geeksforgeeks.org/category/c-strings/" title="Questions related to strings">String</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://www.geeksforgeeks.org/category/tree/" title="View all posts filed under Trees">Tree</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://www.geeksforgeeks.org/category/graph/" title="View all posts filed under Graph">Graph</a>
+</li>
+</ul>
+        </div>
+             <div id="content">	   	
+	<div class="post" id="post">
+							<div class="post-info">			
+					<div class="post-title-info">
+						<h2 class="post-title">Longest prefix matching &#8211; A Trie based solution in Java</h2>
+					</div>			
+					<div class="clear"></div>				  
+				<div class="post-content" id="post-content">
+					<p>Given a dictionary of words and an input string, find the longest prefix of the string which is also a word in dictionary.<span id="more-117275"></span></p>
+<p><strong>Examples:</strong></p>
+<pre>
+Let the dictionary contains the following words:
+{are, area, base, cat, cater, children, basement}
+
+Below are some input/output examples:
+--------------------------------------
+Input String            Output
+--------------------------------------
+caterer                 cater
+basemexy                base
+child                   < Empty ></pre>
+<p><strong>Solution</strong><br />
+We build a Trie of all dictionary words. Once the Trie is built, traverse through it using characters of input string. If prefix matches a dictionary word, store current length and look for a longer match.  Finally, return the longest match.<br />
+Following is Java implementation of the above solution based. </p>
+<pre class="brush: java; highlight: [53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91]; title: ; notranslate" title="">
+import java.util.HashMap;
+  
+// Trie Node, which stores a character and the children in a HashMap
+class TrieNode {           
+    public TrieNode(char ch)  {
+        value = ch;
+        children = new HashMap&lt;&gt;();
+        bIsEnd = false;
+    }    
+    public HashMap&lt;Character,TrieNode&gt; getChildren() {   return children;  }    
+    public char getValue()                           {   return value;     }    
+    public void setIsEnd(boolean val)                {   bIsEnd = val;     }    
+    public boolean isEnd()                           {   return bIsEnd;    }
+      
+    private char value;    
+    private HashMap&lt;Character,TrieNode&gt; children;
+    private boolean bIsEnd;  
+}
+  
+// Implements the actual Trie
+class Trie {        
+    // Constructor
+    public Trie()   {     root = new TrieNode((char)0);       }    
+  
+    // Method to insert a new word to Trie
+    public void insert(String word)  {
+          
+        // Find length of the given word
+        int length = word.length();        
+        TrieNode crawl = root;
+          
+        // Traverse through all characters of given word
+        for( int level = 0; level &lt; length; level++)
+        {
+            HashMap&lt;Character,TrieNode&gt; child = crawl.getChildren();            
+            char ch = word.charAt(level);
+              
+            // If there is already a child for current character of given word 
+            if( child.containsKey(ch))
+                crawl = child.get(ch);
+            else   // Else create a child
+            {              
+                TrieNode temp = new TrieNode(ch);
+                child.put( ch, temp );
+                crawl = temp;
+            }
+        }
+          
+        // Set bIsEnd true for last character
+        crawl.setIsEnd(true);
+    }
+      
+    // The main method that finds out the longest string 'input'
+    public String getMatchingPrefix(String input)  {
+        String result = &quot;&quot;; // Initialize resultant string
+        int length = input.length();  // Find length of the input string       
+          
+        // Initialize reference to traverse through Trie
+        TrieNode crawl = root;   
+         
+        // Iterate through all characters of input string 'str' and traverse 
+        // down the Trie
+        int level, prevMatch = 0; 
+        for( level = 0 ; level &lt; length; level++ )
+        {    
+            // Find current character of str
+            char ch = input.charAt(level);    
+             
+            // HashMap of current Trie node to traverse down
+            HashMap&lt;Character,TrieNode&gt; child = crawl.getChildren();                        
+            
+            // See if there is a Trie edge for the current character
+            if( child.containsKey(ch) )
+            {
+               result += ch;          //Update result
+               crawl = child.get(ch); //Update crawl to move down in Trie
+                
+               // If this is end of a word, then update prevMatch
+               if( crawl.isEnd() ) 
+                    prevMatch = level + 1;
+            }            
+            else  break;
+        }
+         
+        // If the last processed character did not match end of a word, 
+        // return the previously matching prefix
+        if( !crawl.isEnd() )
+                return result.substring(0, prevMatch);        
+        
+        else return result;
+    }
+      
+    private TrieNode root;      
+}
+  
+// Testing class
+public class Test {
+   public static void main(String[] args) {
+        Trie dict = new Trie();        
+        dict.insert(&quot;are&quot;);
+        dict.insert(&quot;area&quot;);
+        dict.insert(&quot;base&quot;);
+        dict.insert(&quot;cat&quot;);
+        dict.insert(&quot;cater&quot;);        
+        dict.insert(&quot;basement&quot;);
+        
+        String input = &quot;caterer&quot;;
+        System.out.print(input + &quot;:   &quot;);
+        System.out.println(dict.getMatchingPrefix(input));              
+
+        input = &quot;basement&quot;;
+        System.out.print(input + &quot;:   &quot;);
+        System.out.println(dict.getMatchingPrefix(input));                      
+        
+        input = &quot;are&quot;;
+        System.out.print(input + &quot;:   &quot;);
+        System.out.println(dict.getMatchingPrefix(input));              
+
+        input = &quot;arex&quot;;
+        System.out.print(input + &quot;:   &quot;);
+        System.out.println(dict.getMatchingPrefix(input));              
+
+        input = &quot;basemexz&quot;;
+        System.out.print(input + &quot;:   &quot;);
+        System.out.println(dict.getMatchingPrefix(input));                      
+        
+        input = &quot;xyz&quot;;
+        System.out.print(input + &quot;:   &quot;);
+        System.out.println(dict.getMatchingPrefix(input));                      
+    }
+}</pre>
+<p>Output:
+<pre>
+caterer:   cater
+basement:   basement
+are:   are
+arex:   are
+basemexz:   base
+xyz:   
+</pre>
+<p>Time Complexity: Time complexity of finding the longest prefix is O(n) where n is length of the input string.   Refer <a href="http://www.geeksforgeeks.org/trie-insert-and-search/">this </a>for time complexity of building the Trie.</p>
+<p>This article is compiled by <strong>Ravi Chandra Enaganti</strong>. Please write comments if you find anything incorrect, or you want to share more information about the topic discussed above</p>
+		
+&nbsp;
+&nbsp;
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Big Rectangle Blog Bottom -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:336px;height:280px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="4061219431"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+<h3>Related Topics:</h3><ul><li><a href="http://www.geeksforgeeks.org/find-closest-leaf-binary-tree/" title="Find the closest leaf in a Binary Tree">Find the closest leaf in a Binary Tree</a></li><li><a href="http://www.geeksforgeeks.org/diagonal-sum-binary-tree/" title="Diagonal Sum of a Binary Tree">Diagonal Sum of a Binary Tree</a></li><li><a href="http://www.geeksforgeeks.org/bottom-view-binary-tree/" title="Bottom View of a Binary Tree">Bottom View of a Binary Tree</a></li><li><a href="http://www.geeksforgeeks.org/binary-indexed-tree-or-fenwick-tree-2/" title="Binary Indexed Tree or Fenwick tree">Binary Indexed Tree or Fenwick tree</a></li><li><a href="http://www.geeksforgeeks.org/implement-reverse-dns-look-cache/" title="How to Implement Reverse DNS Look Up Cache?">How to Implement Reverse DNS Look Up Cache?</a></li><li><a href="http://www.geeksforgeeks.org/given-n-appointments-find-conflicting-appointments/" title="Given n appointments, find all conflicting appointments">Given n appointments, find all conflicting appointments</a></li><li><a href="http://www.geeksforgeeks.org/perfect-binary-tree-specific-level-order-traversal/" title="Perfect Binary Tree Specific Level Order Traversal">Perfect Binary Tree Specific Level Order Traversal</a></li><li><a href="http://www.geeksforgeeks.org/print-nodes-top-view-binary-tree/" title="Print Nodes in Top View of Binary Tree">Print Nodes in Top View of Binary Tree</a></li></ul>
+<p>Tags: <a href="http://www.geeksforgeeks.org/tag/advance-data-structures/" rel="tag">Advance Data Structures</a>, <a href="http://www.geeksforgeeks.org/tag/java/" rel="tag">Java</a></p> 
+<div>
+<iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.geeksforgeeks.org%2Flongest-prefix-matching-a-trie-based-solution-in-java%2F&layout=button_count&show_faces=false&width=90&action=like&colorscheme=light" scrolling="no" frameborder="0" allowTransparency="true" style="border:none; overflow:hidden; width:90px; height:20px"></iframe>
+<a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.geeksforgeeks.org/longest-prefix-matching-a-trie-based-solution-in-java/" data-text="Longest prefix matching &#8211; A Trie based solution in Java" data-count="horizontal" data-via="jakerutter">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+<g:plusone size="medium" href="http://www.geeksforgeeks.org/longest-prefix-matching-a-trie-based-solution-in-java/"></g:plusone>
+<!-- Place this render call where appropriate -->
+<script type="text/javascript">
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script></div>
+
+
+
+
+
+				</div>		  
+			</div> <!-- end post main -->					
+			<div class="post-meta">
+				<div class="left"></div>				
+				<div class="clear"></div>
+			</div>			
+        
+			<div class="comments-main">		
+ <b>Writing code in comment?</b> Please use <b><a href="http://ideone.com/">ideone.com</a></b> and share the link here.
+				
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-34864">
+        <div id="dsq-comment-header-34864" class="dsq-comment-header">
+            <cite id="dsq-cite-34864">
+                <span id="dsq-author-user-34864">Yogesh</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-34864" class="dsq-comment-body">
+            <div id="dsq-comment-message-34864" class="dsq-comment-message"><p>Hi Ravi, </p>
+<p>As per the problem statement it will fail for some test cases.</p>
+<p>e.g. input &#8220;a&#8221; it will print ans &#8220;a&#8221; which is wrong as &#8220;a&#8221; is not in the dictionary.</p>
+<p>I think , isEnd() method can be properly used. Save the prev matched Node </p>
+<p>as use it before printing the result.Chaged the getPrefix method a bit.</p>
+<p>// The main method that finds out the longest string &#8216;input&#8217;</p>
+<p> public String getMatchingPrefix(String input)  {</p>
+<p>     String result = &#8220;&#8221;; // Initialize resultant string</p>
+<p>     int length = input.length();  // Find length of the input string       </p>
+<p>     // Initialize reference to traverse through Trie</p>
+<p>     TrieNode crawl = root;   </p>
+<p>     TrieNode prevNode = null; </p>
+<p>     // Iterate through all characters of input string &#8216;str&#8217; and traverse </p>
+<p>     // down the Trie</p>
+<p>     int level, prevMatch = 0; </p>
+<p>     for( level = 0 ; level &lt; length; level++ )</p>
+<p>     {    </p>
+<p>         // Find current character of str</p>
+<p>         char ch = input.charAt(level);    </p>
+<p>         // HashMap of current Trie node to traverse down</p>
+<p>         HashMap child = crawl.getChildren();                        </p>
+<p>         prevNode = crawl;</p>
+<p>         // See if there is a Trie edge for the current character</p>
+<p>         if( child.containsKey(ch) )</p>
+<p>         {</p>
+<p>            result += ch;          //Update result</p>
+<p>            //System.out.println(&#8220;Reached: &#8221; + ch);</p>
+<p>            prevNode = crawl;</p>
+<p>           // System.out.println(&#8220;prevNode: &#8221; + prevNode.getValue());</p>
+<p>            crawl = child.get(ch); //Update crawl to move down in Trie</p>
+<p>            // If this is end of a word, then update prevMatch</p>
+<p>            if( crawl.isWord() ) </p>
+<p>                 prevMatch = level;</p>
+<p>         }            </p>
+<p>         else {</p>
+<p>             //crawl = prevNode;</p>
+<p>             break;</p>
+<p>         }</p>
+<p>     }</p>
+<p>     // If the last processed character did not match end of a word, </p>
+<p>     // return the previously matching prefix</p>
+<p>     if(prevNode!=null &amp;&amp; prevNode.isWord()) {</p>
+<p>	 return result.substring(0, prevMatch+1);</p>
+<p>     }   else {<br />
+return &#8220;&#8221;;</p>
+<p>     }</p>
+<p> }</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-29177">
+        <div id="dsq-comment-header-29177" class="dsq-comment-header">
+            <cite id="dsq-cite-29177">
+                <span id="dsq-author-user-29177">wasseypuriyan</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-29177" class="dsq-comment-body">
+            <div id="dsq-comment-message-29177" class="dsq-comment-message"><p><code><br />
+//Trie<br />
+#include<br />
+#include<br />
+#include<br />
+#include</p>
+<p>using namespace std;</p>
+<p>struct node{<br />
+    char data;<br />
+    node *child[128];<br />
+};</p>
+<p>class trie{</p>
+<p>    private:<br />
+    node *root;</p>
+<p>    public:<br />
+    trie()<br />
+    {<br />
+        root=new_node(0);<br />
+    }</p>
+<p>    node *new_node(int data)<br />
+    {<br />
+        node *Q = new node;<br />
+        Q-&gt;data = data;<br />
+        return Q;<br />
+    }</p>
+<p>    void add(string S)<br />
+    {<br />
+        node *cur = root;<br />
+        for(int i=0; ichild[S[i]-'A'])<br />
+            cur-&gt;child[S[i]-'A'] = new_node(S[i]);</p>
+<p>            cur = cur-&gt;child[S[i]-'A'];<br />
+        }<br />
+    }</p>
+<p>    void check(node *cur, string S, int i)<br />
+    {<br />
+        if(cur)<br />
+        {<br />
+            cout&lt;data&lt;&lt;&quot; &quot;;<br />
+            if(i child[S[i]-'A'],S,i+1);<br />
+        }<br />
+        else<br />
+        cout&lt; 0 &amp;&amp; S[0] &gt; 'A')<br />
+        check(root-&gt;child[S[0]-'A'],S,1);<br />
+        else<br />
+        cout&lt;&lt;&quot;nEmpty root n&quot;;<br />
+    }<br />
+};            </p>
+<p>int main()<br />
+{<br />
+    int N = 2;<br />
+    trie T;<br />
+    string S;<br />
+    for(int i=0; i&lt;N; i++)<br />
+    {<br />
+        cout&lt;&lt;&quot;nEnter word for dictionary &quot;;<br />
+        getline(cin,S);<br />
+        T.add(S);<br />
+    }</p>
+<p>    for(int i=0; i&lt;4; i++)<br />
+    {<br />
+        cout&lt;&lt;&quot;nEnter search query &quot;;<br />
+        getline(cin,S);<br />
+        T.checkroot(S);<br />
+    }<br />
+    cout&lt;&lt;endl;<br />
+}<br />
+</code></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-22263">
+        <div id="dsq-comment-header-22263" class="dsq-comment-header">
+            <cite id="dsq-cite-22263">
+                <span id="dsq-author-user-22263">illuminati</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-22263" class="dsq-comment-body">
+            <div id="dsq-comment-message-22263" class="dsq-comment-message"><p>#include<br />
+#include<br />
+using namespace std;<br />
+struct node{<br />
+       bool isLeaf;<br />
+       node* alp[26];<br />
+}*root=NULL;<br />
+void trie_insert(string  str)<br />
+{<br />
+     int i,j;<br />
+     node *ptr;<br />
+     int len=str.size();<br />
+     if(root==NULL)<br />
+     {<br />
+             root=new node;<br />
+             root-&gt;isLeaf=false;<br />
+             for(i=0;ialp[i]=NULL;<br />
+             }<br />
+     }<br />
+     ptr=root;<br />
+     for(i=0;ialp[str[i]-&#8216;a&#8217;]==NULL)<br />
+          {<br />
+                node* p=new node;<br />
+                ptr-&gt;alp[str[i]-&#8216;a&#8217;]=p;<br />
+                if(i==len-1)<br />
+                p-&gt;isLeaf=true;<br />
+                else<br />
+                p-&gt;isLeaf=false;<br />
+                for(j=0;jalp[j]=NULL;<br />
+                }<br />
+                ptr=p;<br />
+          }<br />
+          else<br />
+          {<br />
+                ptr=ptr-&gt;alp[str[i]-&#8216;a&#8217;];<br />
+          }<br />
+     }<br />
+}<br />
+int trie_search(string s)<br />
+{<br />
+    int len=s.size();<br />
+    int i;<br />
+    node* ptr=root;<br />
+    for(i=0;ialp[s[i]-&#8216;a&#8217;];<br />
+            if(ptr==NULL)<br />
+                   return 0;<br />
+            if(i==len-1 &amp;&amp; ptr-&gt;isLeaf)<br />
+            {<br />
+                   return 1;<br />
+            }<br />
+        }<br />
+    }<br />
+    return 0;<br />
+}<br />
+int longest_prefix(string s)<br />
+{<br />
+    int len=s.size();<br />
+    int i;<br />
+    node* ptr=root;<br />
+    for(i=0;ialp[s[i]-&#8216;a&#8217;];<br />
+            if(ptr==NULL)<br />
+                   return i-1;<br />
+            if(i==len-1 &amp;&amp; ptr-&gt;isLeaf)<br />
+            {<br />
+                   return i;<br />
+            }<br />
+    }<br />
+    return i-1;<br />
+}<br />
+int main()<br />
+{<br />
+    string dict[6]={&#8220;any&#8221;,&#8221;answer&#8221;,&#8221;arc&#8221;,&#8221;hello&#8221;,&#8221;hell&#8221;,&#8221;ans&#8221;},s;<br />
+    for(int i=0;i&gt;s;<br />
+    cout&lt;&lt;trie_search(s)&lt;&lt;endl;<br />
+    cout&lt;&lt;s.substr(0,longest_prefix(s)+1)&lt;&lt;endl;<br />
+    system(&quot;pause&quot;);<br />
+}</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment byuser comment-author-pritybhudolia odd alt thread-odd thread-alt depth-1" id="dsq-comment-21725">
+        <div id="dsq-comment-header-21725" class="dsq-comment-header">
+            <cite id="dsq-cite-21725">
+                <span id="dsq-author-user-21725">pritybhudolia</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-21725" class="dsq-comment-body">
+            <div id="dsq-comment-message-21725" class="dsq-comment-message"><p>C Implementation</p>
+<pre> <code language="C">
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+ 
+#define ARRAY_SIZE(a) sizeof(a)/sizeof(a[0])
+#define ALPHABET_SIZE (26)
+#define CHAR_TO_INDEX(c) ((int)c - 97)
+ 
+// trie node
+typedef struct trie_node trienode;
+struct trie_node
+{
+    int value;
+    trienode *children[ALPHABET_SIZE];
+};
+ 
+// trie ADT
+typedef struct trie_t trie;
+struct trie_t
+{
+    trienode *root;
+    int count;
+};
+ 
+// Returns new trie node (initialized to NULLs)
+trienode *getnode(void)
+{
+    trienode *pnode = NULL; 
+    pnode = (trienode *)malloc(sizeof(trienode));
+     if( pnode )
+    {
+        int i;
+         pnode-&gt;value = 0;
+         for(i = 0; i &lt; ALPHABET_SIZE; i++)
+        {
+            pnode-&gt;children[i] = NULL;
+        }
+    }
+     return pnode;
+}
+ // Initializes trie (root is dummy node)
+void initialize(trie *ptrie)
+{
+    ptrie-&gt;root = getnode();
+    ptrie-&gt;count = 0;
+}
+ 
+// If not present, inserts key into trie
+// If the key is prefix of trie node, just marks leaf node
+void insert(trie *ptrie, char key[])
+{
+    int level;
+    int length = strlen(key);
+    int index;
+    trienode *pcrawl;
+ 
+    ptrie-&gt;count++;
+    pcrawl = ptrie-&gt;root;
+ 
+    for( level = 0; level &lt; length; level++ )
+    {
+        index = CHAR_TO_INDEX(key[level]);
+        if( !pcrawl-&gt;children[index] )
+        {
+            pcrawl-&gt;children[index] = getnode();
+        }
+ 
+        pcrawl = pcrawl-&gt;children[index];
+    }
+ 
+    // mark last node as leaf
+    pcrawl-&gt;value = ptrie-&gt;count;
+}
+ 
+// Returns -1, if prefix is not found in trie
+int search(trie *ptrie, char key[])
+{
+    int level;
+    int prefix=0;
+    int length = strlen(key);
+    int index;
+    trienode *pcrawl;
+ 
+    pcrawl = ptrie-&gt;root;
+ 
+    for( level = 0; level &lt; length; level++ )
+    {
+        index = CHAR_TO_INDEX(key[level]);
+        if( !pcrawl-&gt;children[index] )
+        {           
+        return prefix-1;
+        }
+        pcrawl = pcrawl-&gt;children[index];        
+        if(pcrawl-&gt;value&gt;prefix)prefix=pcrawl-&gt;value;
+    }
+ 
+    return -1;
+}
+ 
+// Driver
+int main()
+{
+    // Input keys (use only 'a' through 'z' and lower case)
+    char keys[][9] = {&quot;are&quot;, &quot;area&quot;, &quot;base&quot;, &quot;cat&quot;, &quot;cater&quot;, &quot;children&quot;, &quot;basement&quot;};
+    trie_t trie;
+    //array to search for the prefixes
+    char find[][32] = {&quot;caterer&quot;, &quot;basemessy&quot;,&quot;child&quot;,&quot;arey&quot;,&quot;canteen&quot;};
+ 
+    initialize(&amp;trie);
+ 
+    // Construct trie
+    for(int i = 0; i &lt; ARRAY_SIZE(keys); i++)
+    {
+        insert(&amp;trie, keys[i]);
+    }
+    //search for prefixes in trie
+    for(int i = 0; i &lt; ARRAY_SIZE(find); i++)
+    {
+    if(search(&amp;trie, find[i])&gt;=0)        
+    printf(&quot;%s ----------- %s\n&quot;, find[i],keys[search(&amp;trie, find[i])] );
+    else
+    printf(&quot;%s----------prefix not found\n&quot;,find[i]);
+   }
+   
+    getchar();
+    return 0;
+}
+
+</code> </pre>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment byuser comment-author-aman1234 even thread-even depth-1" id="dsq-comment-19935">
+        <div id="dsq-comment-header-19935" class="dsq-comment-header">
+            <cite id="dsq-cite-19935">
+                <span id="dsq-author-user-19935">aman1234</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-19935" class="dsq-comment-body">
+            <div id="dsq-comment-message-19935" class="dsq-comment-message"><pre> <code language="C">
+string substr(string s)
+{
+       if(!root)
+       return &quot;&quot;;
+       
+       static string ans=&quot;&quot;;
+       string temp=&quot;&quot;;
+       int level=s.size();
+       node * c=root;
+       
+       for(int i=0;i&lt;level;i++)
+       {
+            c=c-&gt;point[s[i]-'a'];
+            
+            if(c==NULL)
+            return ans;
+           temp+=s[i];
+           
+            if(c-&gt;d &gt; 0)
+            ans=temp;
+            
+            
+       }
+       
+       return ans;
+}
+</code> </pre>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-19417">
+        <div id="dsq-comment-header-19417" class="dsq-comment-header">
+            <cite id="dsq-cite-19417">
+                <span id="dsq-author-user-19417">Sudipto</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-19417" class="dsq-comment-body">
+            <div id="dsq-comment-message-19417" class="dsq-comment-message"><p>@geeksforgeeks : What is the use of the &#8216;value&#8217; field in a &#8216;TrieNode&#8217;?</p>
+<pre> <code language="C">
+/* Paste your code here (You may delete these lines if not writing code) */
+</code> </pre>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-18891">
+        <div id="dsq-comment-header-18891" class="dsq-comment-header">
+            <cite id="dsq-cite-18891">
+                <span id="dsq-author-user-18891">Nitendra Kumar</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-18891" class="dsq-comment-body">
+            <div id="dsq-comment-message-18891" class="dsq-comment-message"><pre> <code language="Java">
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class Test1{
+	public static void main(String[] args) {
+		List&lt;String&gt; list = new ArrayList&lt;String&gt;();
+		list.add(&quot;are&quot;);
+		list.add(&quot;area&quot;);
+		list.add(&quot;base&quot;);
+		list.add(&quot;cat&quot;);
+		list.add(&quot;cater&quot;);
+		list.add(&quot;children&quot;);
+		list.add(&quot;basement&quot;);
+		Map&lt;Integer, String&gt; map = new HashMap&lt;Integer, String&gt;();
+		
+		String input = &quot;caterer&quot;;
+		int length = 0;
+		for (String str : list) {
+			if (input.startsWith(str)) {
+				if (str.length() &gt; length) {
+					length = str.length();
+					map.put(str.length(), str);
+				}
+				
+			}
+		}
+		System.out.println(&quot;Input String : &quot; + input +&quot; OutPut String : &quot; + map.get(length));
+	}
+}
+</code> </pre>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</li><!-- #comment-## -->
+</li><!-- #comment-## -->
+    <li class="comment byuser comment-author-abhishek08aug odd alt thread-odd thread-alt depth-1" id="dsq-comment-18500">
+        <div id="dsq-comment-header-18500" class="dsq-comment-header">
+            <cite id="dsq-cite-18500">
+                <span id="dsq-author-user-18500">abhishek08aug</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-18500" class="dsq-comment-body">
+            <div id="dsq-comment-message-18500" class="dsq-comment-message"><p>Intelligent <img src="http://d2o58evtke57tz.cloudfront.net/wp-includes/images/smilies/icon_biggrin.gif" alt=":D" class="wp-smiley" /></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-18429">
+        <div id="dsq-comment-header-18429" class="dsq-comment-header">
+            <cite id="dsq-cite-18429">
+                <span id="dsq-author-user-18429">Kumar Gautam</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-18429" class="dsq-comment-body">
+            <div id="dsq-comment-message-18429" class="dsq-comment-message"><p>Code without using HashMap.The idea is to use references as we use pointers in C and C++.</p>
+<pre> <code language="Java">
+package Java;
+import java.io.*;
+
+class TNode{
+	final int MAXCHAR = 26;
+	private boolean bIsEnd;
+	private TNode children[];
+	
+	public TNode(){
+		bIsEnd = false;
+		children = new TNode[MAXCHAR];
+		for(int i = 0; i &lt; MAXCHAR; i++)
+			children[i] = null;
+	}
+	
+	public void setIsEnd(boolean val){
+		bIsEnd = val;
+	}
+	
+	public boolean isEnd(){
+		return bIsEnd;
+	}
+	
+	public void setChild(int index){
+		children[index] = new TNode();
+	}
+	
+	public TNode getChild(int index){
+		return children[index];
+	}
+}
+
+class T{
+	private TNode root;
+	
+	public T(){
+		root = new TNode();
+	}
+	
+	public void insert(String word){
+		int length = word.length();
+		TNode crawl = root;
+		for(int level = 0; level &lt; length; level++){
+			char ch = word.charAt(level);
+			int index = (int)ch - (int)'a';
+			if(crawl.getChild(index) != null)
+				crawl = crawl.getChild(index);
+			else{
+				crawl.setChild(index);
+				crawl = crawl.getChild(index);
+			}
+		}
+		crawl.setIsEnd(true);
+	}
+	
+	public String getMatchingPrefix(String input){
+		int length = input.length();
+		TNode crawl = root;
+		int prevMatch = 0;
+		String result = &quot;&quot;;
+		for(int level = 0; level &lt; length; level++){
+			char ch = input.charAt(level);
+			int index = (int)ch - (int)'a';
+			if(crawl.getChild(index) != null){
+				result += ch;
+				crawl = crawl.getChild(index);
+				
+				if(crawl.isEnd())
+					prevMatch = level + 1;
+			}
+			else
+				break;
+		}
+		if(!crawl.isEnd())
+			return result.substring(0, prevMatch);
+		else
+			return result;
+	}
+}
+
+public class LongestPrefixMatching {
+	public static void main(String[] args) throws IOException{
+		T dict = new T();
+		dict.insert(&quot;are&quot;);
+		dict.insert(&quot;area&quot;);
+        dict.insert(&quot;base&quot;);
+        dict.insert(&quot;cat&quot;);
+        dict.insert(&quot;cater&quot;);        
+        dict.insert(&quot;basement&quot;);
+        
+        for(int i = 0; i &lt; 6; i++){
+	        System.out.print(&quot;Enter a string: &quot;);
+	        String input = getString();
+	        System.out.print(input + &quot;: &quot;);
+	        System.out.println(dict.getMatchingPrefix(input));
+        }
+	}
+	
+	public static String getString() throws IOException{
+		InputStreamReader isr = new InputStreamReader(System.in);
+		BufferedReader br = new BufferedReader(isr);
+		String s = br.readLine();
+		return s;
+	}
+}
+
+</code> </pre>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-17793">
+        <div id="dsq-comment-header-17793" class="dsq-comment-header">
+            <cite id="dsq-cite-17793">
+                <span id="dsq-author-user-17793">spicavigo</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-17793" class="dsq-comment-body">
+            <div id="dsq-comment-message-17793" class="dsq-comment-message"><p>Here is a solution in Python in O(n).</p>
+<p>Run the code here &#8211; <a href="http://codebunk.com/bunk#-ItYwbtf7Un77Vj2qSL2" rel="nofollow">http://codebunk.com/bunk#-ItYwbtf7Un77Vj2qSL2</a></p>
+<p>class Node(object):<br />
+    def __init__(self, ch):<br />
+        self.ch = ch<br />
+        self.children = {}<br />
+        self.words = []</p>
+<p>    def add(self, sword, word):<br />
+        if not sword:<br />
+            self.words.append(word)<br />
+            return<br />
+        chnode = self.children.get(sword[0], Node(sword[0]))<br />
+        chnode.add(sword[1:], word)<br />
+        self.children[sword[0]] = chnode</p>
+<p>def find_prefix(root, word):<br />
+    prefix = []<br />
+    for e in word:<br />
+        prefix = root.words or prefix<br />
+        if e in root.children.keys():<br />
+            root = root.children[e]<br />
+        else:<br />
+            break<br />
+    prefix = root.words or prefix<br />
+    return prefix</p>
+<p>def load_dict():<br />
+    words = [&#8216;are&#8217;, &#8216;area&#8217;, &#8216;base&#8217;, &#8216;cat&#8217;, &#8216;cater&#8217;, &#8216;children&#8217;, &#8216;basement&#8217;]<br />
+    root = Node(None)<br />
+    for e in words:root.add(e.lower(), e)<br />
+    return root</p>
+<p>r = load_dict()<br />
+print find_prefix(r, &#8216;caterer&#8217;)<br />
+print find_prefix(r, &#8216;basement&#8217;)<br />
+print find_prefix(r, &#8216;are&#8217;)<br />
+print find_prefix(r, &#8216;arex&#8217;)<br />
+print find_prefix(r, &#8216;xyz&#8217;)</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-17792">
+        <div id="dsq-comment-header-17792" class="dsq-comment-header">
+            <cite id="dsq-cite-17792">
+                <span id="dsq-author-user-17792">spicavigo</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-17792" class="dsq-comment-body">
+            <div id="dsq-comment-message-17792" class="dsq-comment-message"><p>A solution in O(n) in Python<br />
+<a href="http://codebunk.com/bunk#-ItYwbtf7Un77Vj2qSL2" rel="nofollow">http://codebunk.com/bunk#-ItYwbtf7Un77Vj2qSL2</a></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-17775">
+        <div id="dsq-comment-header-17775" class="dsq-comment-header">
+            <cite id="dsq-cite-17775">
+                <span id="dsq-author-user-17775">Prateek Sharma</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-17775" class="dsq-comment-body">
+            <div id="dsq-comment-message-17775" class="dsq-comment-message"><p>Python Code&#8230;&#8230;&#8230;&#8230;</p>
+<p>import numpy as np<br />
+def longestPrefixString(a,string):<br />
+    newList =[]<br />
+    newListLength= []<br />
+    lenOfString = len(string)<br />
+    liststr = list(string)<br />
+    for i in range(len(a)):<br />
+        length = len(a[i])<br />
+        n =0<br />
+        while(n&lt;lenOfString and n&lt;length):<br />
+            if ord(a[i][n]) == ord(liststr[n]):<br />
+                n +=1<br />
+                continue<br />
+            else:<br />
+                break<br />
+        if (n == length):<br />
+            newList.append(a[i])<br />
+    for i in newList:<br />
+        newListLength.append(len(i))<br />
+    indexOfMaxElement = np.argmax(newListLength)<br />
+    print &quot;Word is: &quot;+newList[indexOfMaxElement] </p>
+<p>def main():<br />
+    arrayOfDictionary =[&#8216;car&#8217;,&#8217;child&#8217;,&#8217;children&#8217;,&#8217;maximum&#8217;]<br />
+    inputString= &#8216;maximumndnd&#8217;<br />
+    longestPrefixString(arrayOfDictionary,inputString)<br />
+if __name__ == &#8216;__main__':<br />
+    main()</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment byuser comment-author-anishp2012 even thread-even depth-1" id="dsq-comment-17677">
+        <div id="dsq-comment-header-17677" class="dsq-comment-header">
+            <cite id="dsq-cite-17677">
+                <span id="dsq-author-user-17677">anishp2012</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-17677" class="dsq-comment-body">
+            <div id="dsq-comment-message-17677" class="dsq-comment-message"><p>Please have a look at my code below.Have used a simple HashSet<string> to accomplish the same.</p>
+<p>Kindly give comments if there is some problem with the code</p>
+<pre> <code language="Java">
+/**
+ * 
+ */
+package com.abb.java.trainings;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * @author INANPRA4
+ * @date Apr 27, 2013
+ * @time 11:20:31 PM
+ */
+public class ValidWordDictionary {
+
+    Set&lt;String&gt; wordsInDictionary = null;
+    
+    private final String WORD_1 = &quot;are&quot;;
+    private final String WORD_2 = &quot;area&quot;;
+    private final String WORD_3 = &quot;base&quot;;
+    private final String WORD_4 = &quot;cat&quot;;
+    private final String WORD_5 = &quot;cater&quot;;
+    private final String WORD_6 = &quot;children&quot;;
+    private final String WORD_7 = &quot;basement&quot;;
+    
+    /**
+     * Default Constructor
+     */
+    public ValidWordDictionary () {
+	initDictionary();
+    }
+    
+    /**
+     * Initializes the Dictionary
+     */
+    public void initDictionary() {
+	this.wordsInDictionary = new HashSet&lt;String&gt;();
+	wordsInDictionary.add ( WORD_1 );
+	wordsInDictionary.add ( WORD_2 );
+	wordsInDictionary.add ( WORD_3 );
+	wordsInDictionary.add ( WORD_4 );
+	wordsInDictionary.add ( WORD_5 );
+	wordsInDictionary.add ( WORD_6 );
+	wordsInDictionary.add ( WORD_7 );
+    }
+    
+    /**
+     * Responsible for reading a value from the keyboard
+     * 
+     * @return
+     */
+    private String getStringFromKeyboard() {
+	System.out.print(&quot;\n Enter the string:&quot;);
+	try {
+	    return new BufferedReader(new InputStreamReader(System.in))
+		    .readLine();
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
+	return null;
+    }
+    
+    /**
+     * Execution starts here
+     * @param args
+     */
+    public static void main(String[] args) {
+	final String wordInDictionary = new ValidWordDictionary().getValidWordFromDictionary();
+	if (wordInDictionary == null) {
+	    System.out.println (&quot;No word of the longest prefix of the entered string could be found in the dictionary&quot;);
+	} else {
+	    System.out.println (&quot;The word is : &quot; + wordInDictionary);
+	}
+    }
+
+    /**
+     * Responsible for retrieving the  longest prefix of the string which is also a word in dictionary.
+     * @return &lt;String&gt; word from the dictionary , null otherwise
+     */
+    private String getValidWordFromDictionary() {
+	String valueEntered = getStringFromKeyboard();
+	if (valueEntered != null &amp;&amp; valueEntered.trim().length() &gt; 0) {
+	    for (int i = valueEntered.length(); i &gt;0 ; i--) {
+		String validWordInDictionary =  valueEntered.substring(0, i-1) ;
+		if (this.wordsInDictionary.contains(validWordInDictionary)) {
+		    return validWordInDictionary;
+		}
+	    }
+	}
+	return null;
+    }
+}
+
+</code> </pre>
+<p>Output :<br />
+caterer :cater<br />
+basement:basement<br />
+arex:are<br />
+are:are<br />
+basemexz :base<br />
+xyx: No word of the longest prefix of the entered string could be found in the dictionary</string></p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment byuser comment-author-kartik odd alt depth-2" id="dsq-comment-17679">
+        <div id="dsq-comment-header-17679" class="dsq-comment-header">
+            <cite id="dsq-cite-17679">
+                <span id="dsq-author-user-17679">kartik</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-17679" class="dsq-comment-body">
+            <div id="dsq-comment-message-17679" class="dsq-comment-message"><p>@anishp2012: Thanks for suggesting another method.  The code looks good and seems to be handling all cases.  However, time complexity of this looks more that that of the Trie method.  It seems that you generate all prefixes and them look them in hashTable.  The worst case complexity of this would be O(n^2), but the method suggested above takes O(n) time.  Please correct me if i am wrong.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment byuser comment-author-anishp2012 even depth-3" id="dsq-comment-17689">
+        <div id="dsq-comment-header-17689" class="dsq-comment-header">
+            <cite id="dsq-cite-17689">
+                <span id="dsq-author-user-17689">anishp2012</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-17689" class="dsq-comment-body">
+            <div id="dsq-comment-message-17689" class="dsq-comment-message"><p>@kartik : Thanks for your reply.There needs to be a correction as to what you&#8217;ve understood.<br />
+&#8220;The prefixes generated which you see in my code, will be compared starting from the string entered(Initial input provided by the user) and if not found in the dictionary, will keep truncating the entered string to check for the word in the dictionary again untill it is found (exactly opposite to what had been depicted in the initial code provided by Ravi.Hence,I avoid storing any string and keep checking for string matches which has a longer prefix String in the dictionary).<br />
+For retrieval from the dictionary,I have used a HashSet<string> .As you might be already aware that for a HashSet<e>, for retrieval complexity is O(1).Hence the worst case complexity will also be O(n) and not O(n^2).&#8221;<br />
+Would love to provide more documentation if you still face any problems understanding the code which I&#8217;ve provided.<br />
+Kindly correct me if you feel I&#8217;m not correct</p>
+<p>Regards<br />
+Anish</e></string></p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment byuser comment-author-kartik odd alt depth-4" id="dsq-comment-17691">
+        <div id="dsq-comment-header-17691" class="dsq-comment-header">
+            <cite id="dsq-cite-17691">
+                <span id="dsq-author-user-17691">kartik</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-17691" class="dsq-comment-body">
+            <div id="dsq-comment-message-17691" class="dsq-comment-message"><p>@anishp2012: To the best of my knowledge, the worst case time complexity of lookup in HashSet is O(n).  You may refer following link. </p>
+<p><a href="http://stackoverflow.com/questions/6574916/hashset-look-up-complexity" rel="nofollow">http://stackoverflow.com/questions/6574916/hashset-look-up-complexity</a></p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment byuser comment-author-anishp2012 even depth-5" id="dsq-comment-17692">
+        <div id="dsq-comment-header-17692" class="dsq-comment-header">
+            <cite id="dsq-cite-17692">
+                <span id="dsq-author-user-17692">anishp2012</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-17692" class="dsq-comment-body">
+            <div id="dsq-comment-message-17692" class="dsq-comment-message"><p>@kartik : Its typically O(1) and even referring to the link which you have provided, we can see that<br />
+ &#8220;Yes, but it&#8217;s really the worst case: if all the elements in the HashSet have the same hash code (or a hash code leading to the same bucket). With a correctly written hashCode and a normally distributed key sample, a lookup is O(1).&#8221;<br />
+Still,I feel we can improve by using TreeSet<string> instead of HashSet</string><string> since I would like my words in the dictionary to be in the sorted order as in a dictionary.I hope you agree to the same<br />
+Thanks<br />
+Anish</string></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-17693">
+        <div id="dsq-comment-header-17693" class="dsq-comment-header">
+            <cite id="dsq-cite-17693">
+                <span id="dsq-author-user-17693">Ravi Chandra</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-17693" class="dsq-comment-body">
+            <div id="dsq-comment-message-17693" class="dsq-comment-message"><p>I second kartik. No doubt, the solution provided by Anish is simpler than Trie based solution. But the worst case time complexity of this solution would be O(n^2). Also for dictionary with many words, the space complexity for Trie based solution would always be better.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment byuser comment-author-autoalgorithmist even depth-5" id="dsq-comment-17696">
+        <div id="dsq-comment-header-17696" class="dsq-comment-header">
+            <cite id="dsq-cite-17696">
+http://www.facebook.com/barnwal.aashish                <span id="dsq-author-user-17696">Aashish</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-17696" class="dsq-comment-body">
+            <div id="dsq-comment-message-17696" class="dsq-comment-message"><p>The TRIE DS will always have a win-win factor because of its nature of storing words as a prefix(thereby saving space).</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://www.geeksforgeeks.org/longest-prefix-matching-a-trie-based-solution-in-java/';
+var disqus_identifier = '117275 http://www.geeksforgeeks.org/?p=117275';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'geeksforgeeks';
+var disqus_title = "Longest prefix matching &#8211; A Trie based solution in Java";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+			</div>
+	
+					
+			
+			
+
+		</div> <!-- end post -->	
+
+<br></br>
+	
+</div> <!-- end content -->
+
+<ul id="sidebar">
+	<li id="text-19" class="widget widget_text">			<div class="textwidget"><script>
+  (function() {
+    var cx = '009682134359037907028:tj6eafkv_be';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+
+<style type="text/css">
+  .gsc-control-cse {
+    font-family: "Trebuchet MS", sans-serif;
+    border-color: #E1F3DA;
+    background-color: #E1F3DA;
+  }
+  input.gsc-input {
+    border-color: #94CC7A;
+  }
+  input.gsc-search-button {
+    border-color: #94CC7A;
+    background-color: #AADA92;
+  }
+  .gsc-tabHeader.gsc-tabhInactive {
+    border-color: #A9DA92;
+    background-color: #FFFFFF;
+  }
+  .gsc-tabHeader.gsc-tabhActive {
+    border-color: #A9DA92;
+    background-color: #A9DA92;
+  }
+  .gsc-tabsArea {
+    border-color: #A9DA92;
+  }
+  .gsc-webResult.gsc-result {
+    border-color: #A9DA92;
+    background-color: #FFFFFF;
+  }
+  .gsc-webResult.gsc-result:hover {
+    border-color: #A9DA92;
+    background-color: #FFFFFF;
+  }
+  .gs-webResult.gs-result a.gs-title:link,
+  .gs-webResult.gs-result a.gs-title:link b {
+    color: #009900;
+  }
+  .gs-webResult.gs-result a.gs-title:visited,
+  .gs-webResult.gs-result a.gs-title:visited b {
+    color: #009900;
+  }
+  .gs-webResult.gs-result a.gs-title:hover,
+  .gs-webResult.gs-result a.gs-title:hover b {
+    color: #003300;
+  }
+  .gs-webResult.gs-result a.gs-title:active,
+  .gs-webResult.gs-result a.gs-title:active b {
+    color: #009900;
+  }
+  .gsc-cursor-page {
+    color: #009900;
+  }
+  a.gsc-trailing-more-results:link {
+    color: #009900;
+  }
+  .gs-webResult.gs-result .gs-snippet {
+    color: #454545;
+  }
+  .gs-webResult.gs-result .gs-visibleUrl {
+    color: #33cc00;
+  }
+  .gs-webResult.gs-result .gs-visibleUrl-short {
+    color: #33cc00;
+  }
+  .gs-webResult.gs-result .gs-visibleUrl-short {
+    display: none;
+  }
+  .gs-webResult.gs-result .gs-visibleUrl-long {
+    display: block;
+  }
+  .gsc-cursor-box {
+    border-color: #A9DA92;
+  }
+  .gsc-results .gsc-cursor-page {
+    border-color: #A9DA92;
+    background-color: #FFFFFF;
+  }
+  .gsc-results .gsc-cursor-page.gsc-cursor-current-page {
+    border-color: #A9DA92;
+    background-color: #A9DA92;
+  }
+  .gs-promotion.gs-result {
+    border-color: #94CC7A;
+    background-color: #CBE8B4;
+  }
+  .gs-promotion.gs-result a.gs-title:link {
+    color: #0066CC;
+  }
+  .gs-promotion.gs-result a.gs-title:visited {
+    color: #0066CC;
+  }
+  .gs-promotion.gs-result a.gs-title:hover {
+    color: #0066CC;
+  }
+  .gs-promotion.gs-result a.gs-title:active {
+    color: #0066CC;
+  }
+  .gs-promotion.gs-result .gs-snippet {
+    color: #454545;
+  }
+  .gs-promotion.gs-result .gs-visibleUrl,
+  .gs-promotion.gs-result .gs-visibleUrl-short {
+    color: #815FA7;
+  }
+</style>    </div>
+		</li>
+<li id="text-9" class="widget widget_text">			<div class="textwidget"><div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=138031159685820";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<div class="fb-like-box" data-href="https://www.facebook.com/pages/GeeksforGeeks/316764689022" data-width="250" data-height="170" data-colorscheme="light" data-show-faces="true" data-header="false" data-stream="false" data-show-border="false"></div></div>
+		</li>
+<li id="text-18" class="widget widget_text">			<div class="textwidget"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- LargeRectangleSide -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:336px;height:280px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="1884636833"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
+		</li>
+<li id="text-13" class="widget widget_text">			<div class="textwidget"><ul><li><a href="http://www.geeksforgeeks.org/category/interview-experiences/">Interview Experiences</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/advance-data-structures">Advanced Data Structures</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/dynamic-programming">Dynamic Programming</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/Greedy-Algorithm/">Greedy Algorithms</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/backtracking">Backtracking</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/pattern-searching">Pattern Searching</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/divide-and-conquer">Divide & Conquer</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/MathematicalAlgo">Mathematical Algorithms</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/recursion">Recursion</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/geometric-algorithms/">Geometric Algorithms</a></li>
+</ul></div>
+		</li>
+<li id="text-17" class="widget widget_text">			<div class="textwidget"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Big 300x600 Sidebar -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:600px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="4402736037"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
+		</li>
+<li id="text-14" class="widget widget_text"><h2 class="widgettitle">Popular Posts</h2>
+			<div class="textwidget"><ul>
+<li><a href="http://www.geeksforgeeks.org/write-a-c-program-to-print-all-permutations-of-a-given-string/">  All permutations of a given string </a></li>
+<li><a href="http://www.geeksforgeeks.org/memory-layout-of-c-program/"> Memory Layout of C Programs</a> </li>
+<li><a href="http://www.geeksforgeeks.org/understanding-extern-keyword-in-c/"> Understanding “extern” keyword in C</a> </li>
+<li><a href="http://www.geeksforgeeks.org/median-of-two-sorted-arrays/">Median of two sorted arrays</a> </li>
+<li><a href="http://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion-and-without-stack/"> Tree traversal without recursion and without stack! </a></li>
+<li><a href="http://www.geeksforgeeks.org/structure-member-alignment-padding-and-data-packing/"> Structure Member Alignment, Padding and Data Packing</a> </li>
+<li><a href="http://www.geeksforgeeks.org/write-a-function-to-get-the-intersection-point-of-two-linked-lists/"> Intersection point of two Linked Lists</a> </li>
+<li><a href="http://www.geeksforgeeks.org/lowest-common-ancestor-in-a-binary-search-tree/"> Lowest Common Ancestor in a BST.</span></a> </li>
+<li><a href="http://www.geeksforgeeks.org/a-program-to-check-if-a-binary-tree-is-bst-or-not/"> Check if a binary tree is BST or not</a> </li>
+<li><a href="http://www.geeksforgeeks.org/sorted-linked-list-to-balanced-bst/"> Sorted Linked List to Balanced BST</a></li>
+</ul></div>
+		</li>
+<li id="text-3" class="widget widget_text">			<div class="textwidget"><a href="https://twitter.com/GeeksforGeeks" class="twitter-follow-button" data-show-count="false">Follow @GeeksforGeeks</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>         
+
+
+<!-- GOOGLE FEEDBURNER BUTTON-->
+<a href="http://feeds.feedburner.com/Geeksforgeeks" title="Subscribe to my feed" rel="alternate" type="application/rss+xml"><img src="http://www.feedburner.com/fb/images/pub/feed-icon32x32.png" alt="" style="border:0"/></a><a href="http://feeds.feedburner.com/Geeksforgeeks" title="Subscribe to my feed" rel="alternate" type="application/rss+xml">Subscribe</a>
+
+</div>
+		</li>
+<li id="text-21" class="widget widget_text"><h2 class="widgettitle">Recent Comments</h2>
+			<div class="textwidget"><script type="text/javascript" src="http://geeksforgeeks.disqus.com//recent_comments_widget.js?num_items=6&hide_avatars=1&excerpt_length=50&hide_mods=0"></script></div>
+		</li>
+<li id="text-22" class="widget widget_text">			<div class="textwidget"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- LinkAd -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:90px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="2606115235"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- LinkAd -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:90px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="2606115235"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- LinkAd -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:90px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="2606115235"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
+		</li>
+
+</ul>					  
+		<div class="clear"></div>
+
+		<div id="footer">
+		
+		    <div class="xhtml">
+                        @geeksforgeeks, <a href="http://creativecommons.org/licenses/by-nc-nd/2.5/in/deed.en_US" title="Valid XHTML Strict 1.0">Some rights reserved</a>  <a href="http://www.geeksforgeeks.org/about/contact-us/"> &nbsp; &nbsp; &nbsp; &nbsp;Contact Us!</a>
+
+		    </div>
+		    
+		    <div class="credits">
+			  Powered by <a href="http://wordpress.org">WordPress </a> &amp; <a href="http://mootools.net/" title="Mootools JavaScript Framework">MooTools</a>, customized by geeksforgeeks team </div>
+			  
+		   <div class="clear"></div>						                            
+		   
+		</div> <!--end footer-->  
+        
+		        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'geeksforgeeks';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1) {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('rel'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script'); 
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shCore.js?ver=3.0.9'></script>
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shBrushJava.js?ver=3.0.9'></script>
+<script type='text/javascript'>
+	(function(){
+		var corecss = document.createElement('link');
+		var themecss = document.createElement('link');
+		var corecssurl = "http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCore.css?ver=3.0.9";
+		if ( corecss.setAttribute ) {
+				corecss.setAttribute( "rel", "stylesheet" );
+				corecss.setAttribute( "type", "text/css" );
+				corecss.setAttribute( "href", corecssurl );
+		} else {
+				corecss.rel = "stylesheet";
+				corecss.href = corecssurl;
+		}
+		document.getElementsByTagName("head")[0].insertBefore( corecss, document.getElementById("syntaxhighlighteranchor") );
+		var themecssurl = "http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shThemeDefault.css?ver=3.0.9";
+		if ( themecss.setAttribute ) {
+				themecss.setAttribute( "rel", "stylesheet" );
+				themecss.setAttribute( "type", "text/css" );
+				themecss.setAttribute( "href", themecssurl );
+		} else {
+				themecss.rel = "stylesheet";
+				themecss.href = themecssurl;
+		}
+		//document.getElementById("syntaxhighlighteranchor").appendChild(themecss);
+		document.getElementsByTagName("head")[0].insertBefore( themecss, document.getElementById("syntaxhighlighteranchor") );
+	})();
+	SyntaxHighlighter.config.strings.expandSource = '+ expand source';
+	SyntaxHighlighter.config.strings.help = '?';
+	SyntaxHighlighter.config.strings.alert = 'SyntaxHighlighter\n\n';
+	SyntaxHighlighter.config.strings.noBrush = 'Can\'t find brush for: ';
+	SyntaxHighlighter.config.strings.brushNotHtmlScript = 'Brush wasn\'t configured for html-script option: ';
+	SyntaxHighlighter.defaults['gutter'] = false;
+	SyntaxHighlighter.defaults['pad-line-numbers'] = true;
+	SyntaxHighlighter.defaults['toolbar'] = false;
+	SyntaxHighlighter.all();
+</script>
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/bbpress/templates/default/js/editor.js?ver=2.5.4-5380'></script>
+				  
+		</div> <!--end wrapper-->
+        <div id="ajaxSpinner"></div> <!--For AJAX spinner holder-->
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-12148232-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+	</body>
+
+</html>
+<!-- Dynamic page generated in 0.207 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2014-12-22 21:26:07 -->
+
+<!-- Compression = gzip -->
+<!-- super cache -->

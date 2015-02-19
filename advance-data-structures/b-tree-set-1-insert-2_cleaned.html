@@ -1,0 +1,336 @@
+<body><div><div class="post" id="post">
+							<div class="post-info">			
+					<p class="post-title-info">
+						</p><h2 class="post-title">B-Tree | Set 2 (Insert)</h2>
+								
+					<p class="clear"></p>				  
+				<div class="post-content" id="post-content">
+					<p>In the <a href="http://www.geeksforgeeks.org/b-tree-set-1-introduction-2/" target="_blank">previous post</a>, we introduced B-Tree.  We also discussed search() and traverse() functions. <span id="more-116247"></span><br>
+In this post, insert() operation is discussed. A new key is always inserted at leaf node. Let the key to be inserted be k. Like BST, we start from root and traverse down till we reach a leaf node.  Once we reach a leaf node, we insert the key in that leaf node.  Unlike BSTs, we have a predefined range on number of keys that a node can contain.  So before inserting a key to node, we make sure that the node has extra space.<br>
+<em>How to make sure that a node has space available for key before the key is inserted?</em> We use an operation called splitChild() that is used to split a child of a node.  See the following diagram to understand split.  In the following diagram, child y of x is being split into two nodes y and z. Note that the splitChild operation moves a key up and this is the reason B-Trees grow up unlike BSTs which grow down. </p>
+<p><a href="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/BTreeSplit.jpg"><img src="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/BTreeSplit-1024x321.jpg" alt="BTreeSplit" width="550" height="172" class="aligncenter size-large wp-image-117251"></a></p>
+<p>As discussed above, to insert a new key, we go down from root to leaf. Before traversing down to a node, we first check if the node is full.  If the node is full, we split it to create space.  Following is complete algorithm.</p>
+<p><strong>Insertion</strong><br>
+<strong>1)</strong> Initialize x as root.<br>
+<strong>2)</strong> While x is not leaf, do following<br>
+..<strong>a)</strong> Find the child of x that is going to to be traversed next. Let the child be y.<br>
+..<strong>b)</strong> If y is not full, change x to point to y.<br>
+..<strong>c) </strong>If y is full, split it and change x to point to one of the two parts of y.  If k is smaller than mid key in y, then set x as first part of y. Else second part of y.  When we split y, we move a key from y to its parent x.<br>
+<strong>3)</strong> The loop in step 2 stops when x is leaf.  x must have space for 1 extra key as we have been splitting all nodes in advance.  So simply insert k to x. </p>
+<p>Note that the algorithm follows the Cormen book.  It is actually a proactive insertion algorithm where before going down to a node, we split it if it is full. The advantage of splitting before is, we never traverse a node twice. If we don&#8217;t split a node before going down to it and split it only if new key is inserted (reactive), we may end up traversing all nodes again from leaf to root.  This happens in cases when all nodes on the path from root to leaf are full.  So when we come to the leaf node, we split it and move a key up.  Moving a key up will cause a split in parent node (because parent was already full).  This cascading effect never happens in this proactive insertion algorithm.  There is a  disadvantage of this proactive insertion though, we may do unnecessary splits. </p>
+<p>Let us understand the algorithm with an example tree of minimum degree &#8216;t&#8217; as 3 and a sequence of integers 10, 20, 30, 40, 50, 60, 70, 80 and 90 in an initially empty B-Tree.</p>
+<p>Initially root is NULL. Let us first insert 10.<br>
+<a href="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/Btree1.png"><img src="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/Btree1.png" alt="Btree1" width="200" height="46" class="aligncenter size-full wp-image-117219"></a></p>
+<p>Let us now insert 20, 30, 40 and 50.  They all will be inserted in root because maximum number of keys a node can accommodate is 2*t &#8211; 1 which is 5.</p>
+<p><a href="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/BTree2Ins.png"><img src="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/BTree2Ins.png" alt="BTree2Ins" width="240" height="55" class="aligncenter size-full wp-image-117226"></a></p>
+<p>Let us now insert 60. Since root node is full, it will first split into two, then 60 will be inserted into the appropriate child.<br>
+<a href="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/BTreeIns3.png"><img src="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/BTreeIns3.png" alt="BTreeIns3" width="300" height="194" class="aligncenter size-full wp-image-117232"></a></p>
+<p>Let us now insert 70 and 80. These new keys will be inserted into the appropriate leaf without any split.<br>
+<a href="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/BTreeIns4.png"><img src="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/BTreeIns4.png" alt="BTreeIns4" width="328" height="100" class="aligncenter size-full wp-image-117237"></a></p>
+<p>Let us now insert 90.  This insertion will cause a split. The middle key will go up to the parent.<br>
+<a href="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/BTreeIns6.png"><img src="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/BTreeIns6.png" alt="BTreeIns6" width="283" height="107" class="aligncenter size-full wp-image-117240"></a></p>
+<p>See <a href="http://integrator-crimea.com/ddu0110.html" target="_blank">this </a>for more examples.</p>
+<p>Following is C++ implementation of the above proactive algorithm.</p>
+<pre class="brush: cpp; highlight: [16,17,18,19,20,21,22,23,54,55,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241]; title: ; notranslate" title="">
+// C++ program for B-Tree insertion
+#include&lt;iostream&gt;
+using namespace std;
+
+// A BTree node
+class BTreeNode
+{
+    int *keys;  // An array of keys
+    int t;      // Minimum degree (defines the range for number of keys)
+    BTreeNode **C; // An array of child pointers
+    int n;     // Current number of keys
+    bool leaf; // Is true when node is leaf. Otherwise false
+public:
+    BTreeNode(int _t, bool _leaf);   // Constructor
+
+    // A utility function to insert a new key in the subtree rooted with
+    // this node. The assumption is, the node must be non-full when this
+    // function is called
+    void insertNonFull(int k);
+
+    // A utility function to split the child y of this node. i is index of y in
+    // child array C[].  The Child y must be full when this function is called
+    void splitChild(int i, BTreeNode *y);
+
+    // A function to traverse all nodes in a subtree rooted with this node
+    void traverse();
+
+    // A function to search a key in subtree rooted with this node.
+    BTreeNode *search(int k);   // returns NULL if k is not present.
+
+// Make BTree friend of this so that we can access private members of this
+// class in BTree functions
+friend class BTree;
+};
+
+// A BTree
+class BTree
+{
+    BTreeNode *root; // Pointer to root node
+    int t;  // Minimum degree
+public:
+    // Constructor (Initializes tree as empty)
+    BTree(int _t)
+    {  root = NULL;  t = _t; }
+
+    // function to traverse the tree
+    void traverse()
+    {  if (root != NULL) root-&gt;traverse(); }
+
+    // function to search a key in this tree
+    BTreeNode* search(int k)
+    {  return (root == NULL)? NULL : root-&gt;search(k); }
+
+    // The main function that inserts a new key in this B-Tree
+    void insert(int k);
+};
+
+// Constructor for BTreeNode class
+BTreeNode::BTreeNode(int t1, bool leaf1)
+{
+    // Copy the given minimum degree and leaf property
+    t = t1;
+    leaf = leaf1;
+
+    // Allocate memory for maximum number of possible keys
+    // and child pointers
+    keys = new int[2*t-1];
+    C = new BTreeNode *[2*t];
+
+    // Initialize the number of keys as 0
+    n = 0;
+}
+
+// Function to traverse all nodes in a subtree rooted with this node
+void BTreeNode::traverse()
+{
+    // There are n keys and n+1 children, travers through n keys
+    // and first n children
+    int i;
+    for (i = 0; i &lt; n; i++)
+    {
+        // If this is not leaf, then before printing key[i],
+        // traverse the subtree rooted with child C[i].
+        if (leaf == false)
+            C[i]-&gt;traverse();
+        cout &lt;&lt; " " &lt;&lt; keys[i];
+    }
+
+    // Print the subtree rooted with last child
+    if (leaf == false)
+        C[i]-&gt;traverse();
+}
+
+// Function to search key k in subtree rooted with this node
+BTreeNode *BTreeNode::search(int k)
+{
+    // Find the first key greater than or equal to k
+    int i = 0;
+    while (i &lt; n &amp;&amp; k &gt; keys[i])
+        i++;
+
+    // If the found key is equal to k, return this node
+    if (keys[i] == k)
+        return this;
+
+    // If key is not found here and this is a leaf node
+    if (leaf == true)
+        return NULL;
+
+    // Go to the appropriate child
+    return C[i]-&gt;search(k);
+}
+
+// The main function that inserts a new key in this B-Tree
+void BTree::insert(int k)
+{
+    // If tree is empty
+    if (root == NULL)
+    {
+        // Allocate memory for root
+        root = new BTreeNode(t, true);
+        root-&gt;keys[0] = k;  // Insert key
+        root-&gt;n = 1;  // Update number of keys in root
+    }
+    else // If tree is not empty
+    {
+        // If root is full, then tree grows in height
+        if (root-&gt;n == 2*t-1)
+        {
+            // Allocate memory for new root
+            BTreeNode *s = new BTreeNode(t, false);
+
+            // Make old root as child of new root
+            s-&gt;C[0] = root;
+
+            // Split the old root and move 1 key to the new root
+            s-&gt;splitChild(0, root);
+
+            // New root has two children now.  Decide which of the
+            // two children is going to have new key
+            int i = 0;
+            if (s-&gt;keys[0] &lt; k)
+                i++;
+            s-&gt;C[i]-&gt;insertNonFull(k);
+
+            // Change root
+            root = s;
+        }
+        else  // If root is not full, call insertNonFull for root
+            root-&gt;insertNonFull(k);
+    }
+}
+
+// A utility function to insert a new key in this node
+// The assumption is, the node must be non-full when this
+// function is called
+void BTreeNode::insertNonFull(int k)
+{
+    // Initialize index as index of rightmost element
+    int i = n-1;
+
+    // If this is a leaf node
+    if (leaf == true)
+    {
+        // The following loop does two things
+        // a) Finds the location of new key to be inserted
+        // b) Moves all greater keys to one place ahead
+        while (i &gt;= 0 &amp;&amp; keys[i] &gt; k)
+        {
+            keys[i+1] = keys[i];
+            i--;
+        }
+
+        // Insert the new key at found location
+        keys[i+1] = k;
+        n = n+1;
+    }
+    else // If this node is not leaf
+    {
+        // Find the child which is going to have the new key
+        while (i &gt;= 0 &amp;&amp; keys[i] &gt; k)
+            i--;
+
+        // See if the found child is full
+        if (C[i+1]-&gt;n == 2*t-1)
+        {
+            // If the child is full, then split it
+            splitChild(i+1, C[i+1]);
+
+            // After split, the middle key of C[i] goes up and
+            // C[i] is splitted into two.  See which of the two
+            // is going to have the new key
+            if (keys[i+1] &lt; k)
+                i++;
+        }
+        C[i+1]-&gt;insertNonFull(k);
+    }
+}
+
+// A utility function to split the child y of this node
+// Note that y must be full when this function is called
+void BTreeNode::splitChild(int i, BTreeNode *y)
+{
+    // Create a new node which is going to store (t-1) keys
+    // of y
+    BTreeNode *z = new BTreeNode(y-&gt;t, y-&gt;leaf);
+    z-&gt;n = t - 1;
+
+    // Copy the last (t-1) keys of y to z
+    for (int j = 0; j &lt; t-1; j++)
+        z-&gt;keys[j] = y-&gt;keys[j+t];
+
+    // Copy the last t children of y to z
+    if (y-&gt;leaf == false)
+    {
+        for (int j = 0; j &lt; t; j++)
+            z-&gt;C[j] = y-&gt;C[j+t];
+    }
+
+    // Reduce the number of keys in y
+    y-&gt;n = t - 1;
+
+    // Since this node is going to have a new child,
+    // create space of new child
+    for (int j = n; j &gt;= i+1; j--)
+        C[j+1] = C[j];
+
+    // Link the new child to this node
+    C[i+1] = z;
+
+    // A key of y will move to this node. Find location of
+    // new key and move all greater keys one space ahead
+    for (int j = n-1; j &gt;= i; j--)
+        keys[j+1] = keys[j];
+
+    // Copy the middle key of y to this node
+    keys[i] = y-&gt;keys[t-1];
+
+    // Increment count of keys in this node
+    n = n + 1;
+}
+
+// Driver program to test above functions
+int main()
+{
+    BTree t(3); // A B-Tree with minium degree 3
+    t.insert(10);
+    t.insert(20);
+    t.insert(5);
+    t.insert(6);
+    t.insert(12);
+    t.insert(30);
+    t.insert(7);
+    t.insert(17);
+
+    cout &lt;&lt; "Traversal of the constucted tree is ";
+    t.traverse();
+
+    int k = 6;
+    (t.search(k) != NULL)? cout &lt;&lt; "\nPresent" : cout &lt;&lt; "\nNot Present";
+
+    k = 15;
+    (t.search(k) != NULL)? cout &lt;&lt; "\nPresent" : cout &lt;&lt; "\nNot Present";
+
+    return 0;
+}
+</pre>
+<p>Output:
+</p><pre>Traversal of the constucted tree is  5 6 7 10 12 17 20 30
+Present
+Not Present</pre>
+<p><strong>References:</strong><br>
+<a href="http://www.flipkart.com/introduction-algorithms-3rd/p/itmczynzhyhxv2gs?pid=9788120340077&amp;affid=sandeepgfg" target="_blank">Introduction to Algorithms 3rd Edition by Clifford Stein, Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest</a><br>
+<a href="http://www.cs.utexas.edu/users/djimenez/utsa/cs3343/lecture17.html">http://www.cs.utexas.edu/users/djimenez/utsa/cs3343/lecture17.html</a></p>
+<p>Please write comments if you find anything incorrect, or you want to share more information about the topic discussed above.</p>
+		
+&#160;
+&#160;
+
+
+
+
+
+
+
+&#160;
+&#160;
+&#160;
+<p>Tags: <a href="http://www.geeksforgeeks.org/tag/advance-data-structures/" rel="tag">Advance Data Structures</a>, <a href="http://www.geeksforgeeks.org/tag/advanced-data-structures/" rel="tag">Advanced Data Structures</a></p> 
+
+
+
+
+
+
+				<h3>Source:</h3><p><a href="http://www.geeksforgeeks.org/b-tree-set-1-insert-2/" rel="tag">http://www.geeksforgeeks.org/b-tree-set-1-insert-2/</a></p></div>		  
+			</div> 					
+						
+        
+			</div> 	
+
+</div></body>

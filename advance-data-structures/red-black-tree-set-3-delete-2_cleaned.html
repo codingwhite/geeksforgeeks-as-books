@@ -1,0 +1,59 @@
+<body><div><h2>Red-Black Tree | Set 3 (Delete)</h2><div class="post-content" id="post-content">
+					<p>We have discussed following topics on Red-Black tree in previous posts. We strongly recommend to refer following post as prerequisite of this post.<span id="more-126866"></span></p>
+<p><a href="http://www.geeksforgeeks.org/red-black-tree-set-1-introduction-2/" target="_blank">Red-Black Tree Introduction</a><br>
+<a href="http://www.geeksforgeeks.org/red-black-tree-set-2-insert/" target="_blank">Red Black Tree Insert</a></p>
+<p><strong>Insertion Vs Deletion:</strong><br>
+Like Insertion, recoloring and rotations are used to maintain the Red-Black properties.</p>
+<p>In insert operation, we check color of uncle to decide the appropriate case. In delete operation, <em><strong>we check color of sibling</strong></em> to decide the appropriate case.</p>
+<p>The main property that violates after insertion is two consecutive reds. In delete, the main violated property is, change of black height in subtrees as deletion of a black node may cause reduced black height in one root to leaf path.</p>
+<p>Deletion is fairly complex process.&#194;&#160; To understand deletion, notion of double black is used.&#194;&#160; When a black node is deleted and replaced by a black child, the child is marked as <em><strong>double black</strong></em>. The main task now becomes to convert this double black to single black.</p>
+<p><strong>Deletion Steps</strong><br>
+Following are detailed steps for deletion.</p>
+<p><strong>1)</strong> Perform <a href="http://geeksquiz.com/binary-search-tree-set-2-delete/" target="_blank">standard BST delete</a>. When we perform standard delete operation in BST, we always end up deleting a node which is either leaf or has only one child (For an internal node, we copy the successor and then recursively call delete for successor, successor is always a leaf node or a node with one child). So we only need to handle cases where a node is leaf or has one child. Let v be the node deleted and u be the child that replaces v.</p>
+<p><strong>2) Simple Case: If either u or v is red,</strong> we mark the replaced child as black (No change in black height). Note that both u and v cannot be red as v is parent of u and two consecutive reds are not allowed in red-black tree.<br>
+<a href="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/rbdelete11.png"><img class="aligncenter size-full wp-image-127998" alt="rbdelete11" src="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/rbdelete11.png" width="440" height="157"></a></p>
+<p><strong>3) </strong><strong>If Both u and v are Black</strong>.</p>
+<p><strong>3.1)</strong> Color u as double black.&#194;&#160; Now our task reduces to convert this double black to single black. Note that If v is leaf, then u is NULL and color of NULL is considered as black. So the deletion of a black leaf also causes a double black.</p>
+<p><a href="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/rbdelete12_new.png"><img src="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/rbdelete12_new.png" alt="rbdelete12_new" width="450" height="194" class="aligncenter size-full wp-image-128039"></a></p>
+<p><strong>3.2)</strong> Do following while the current node u is double black or it is not root. Let sibling of node be <strong>s</strong>.<br>
+&#8230;.<strong>(a): If sibling s is black and at least one of sibling&#8217;s children is <span>red</span></strong>, perform rotation(s). Let the red child of s be <strong><span>r</span></strong>. This case can be divided in four subcases depending upon positions of s and r.</p>
+<p>&#8230;&#8230;&#8230;&#8230;..<strong>(i)</strong> Left Left Case (s is left child of its parent and r is left child of s or both children of s are red). This is mirror of right right case shown in below diagram.</p>
+<p>&#8230;&#8230;&#8230;&#8230;..<strong>(ii)</strong> Left Right Case (s is left child of its parent and r is right child). This is mirror of right left case shown in below diagram.</p>
+<p>&#8230;&#8230;&#8230;&#8230;..<strong>(iii)</strong> Right Right Case (s is right child of its parent and r is right child of s or both children of s are red)<br>
+<a href="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/rbdelete13New.png"><img class="aligncenter size-full wp-image-128018" alt="rbdelete13New" src="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/rbdelete13New.png" width="560" height="168"></a></p>
+<p>&#8230;&#8230;&#8230;&#8230;..<strong>(iv)</strong> Right Left Case (s is right child of its parent and r is left child of s)<br>
+<a href="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/rbdelete14.png"><img class="aligncenter size-full wp-image-128019" alt="rbdelete14" src="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/rbdelete14.png" width="560" height="285"></a></p>
+<p>&#8230;..<strong>(b): If sibling is black and its both children are black</strong>, perform recoloring, and recur for the parent if parent is black.<br>
+<a href="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/rbdelete15.png"><img class="aligncenter size-full wp-image-128023" alt="rbdelete15" src="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/rbdelete15.png" width="560" height="232"></a><br>
+In this case, if parent was red, then we didn&#8217;t need to recur for prent, we can simply make it black (red + double black = single black)</p>
+<p>&#8230;..<strong>(c): If sibling is <span>red</span></strong>, perform a rotation to move old sibling up, recolor the old sibling and parent. The new sibling is always black (See the below diagram). This mainly converts the tree to black sibling case (by rotation) and&#194;&#160; leads to case (a) or (b). This case can be divided in two subcases.<br>
+&#8230;&#8230;&#8230;&#8230;..<strong>(i)</strong> Left Case (s is left child of its parent). This is mirror of right right case shown in below diagram. We right rotate the parent p.<br>
+&#8230;&#8230;&#8230;&#8230;..<strong>(iii)</strong> Right Case (s is right child of its parent). We left rotate the parent p.<br>
+<a href="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/rbdelete16.png"><img class="aligncenter size-full wp-image-128030" alt="rbdelete16" src="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/rbdelete16.png" width="560" height="395"></a></p>
+<p><strong>3.3)</strong> If u is root, make it single black and return (Black height of complete tree reduces by 1).</p>
+<p><strong>References:</strong><br>
+<a href="https://www.cs.purdue.edu/homes/ayg/CS251/slides/chap13c.pdf" target="_blank">https://www.cs.purdue.edu/homes/ayg/CS251/slides/chap13c.pdf</a><br>
+<a href="http://www.flipkart.com/introduction-algorithms-3rd/p/itmczynzhyhxv2gs?pid=9788120340077&amp;affid=sandeepgfg" target="_blank">Introduction to Algorithms 3rd Edition by Clifford Stein, Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest</a></p>
+<p>Please write comments if you find anything incorrect, or you want to share more information about the topic discussed above</p>
+
+&#160;
+&#160;
+
+
+
+
+
+
+
+&#160;
+&#160;
+&#160;
+<p>Tags: <a href="http://www.geeksforgeeks.org/tag/advance-data-structures/" rel="tag">Advance Data Structures</a>, <a href="http://www.geeksforgeeks.org/tag/advanced-data-structures/" rel="tag">Advanced Data Structures</a></p>
+
+
+
+
+
+
+				<h3>Source:</h3><p><a href="http://www.geeksforgeeks.org/red-black-tree-set-3-delete-2/" rel="tag">http://www.geeksforgeeks.org/red-black-tree-set-3-delete-2/</a></p></div>
+			</div></body>

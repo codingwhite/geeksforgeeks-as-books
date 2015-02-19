@@ -1,0 +1,5 @@
+---
+title: Advanced Data Structure - Geeksforgeeks
+author: geeksforgeeks
+rights: Creative Commons Attribution-NonCommercial-NoDerivs 2.5 India (CC BY-NC-ND 2.5 IN)
+language: en-US

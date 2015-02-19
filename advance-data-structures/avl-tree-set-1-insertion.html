@@ -1,0 +1,1814 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+       <title>AVL Tree | Set 1 (Insertion) - GeeksforGeeks</title>
+       <style type="text/css" media="screen">
+          @import url('http://d2o58evtke57tz.cloudfront.net/wp-content/themes/minimoo/style.css');
+    </style>
+      <link href="http://d2o58evtke57tz.cloudfront.net/wp-content/themes/minimoo/favicon.ico" rel="shortcut icon" />    
+    
+<!-- This site is optimized with the Yoast WordPress SEO plugin v1.7.1 - https://yoast.com/wordpress/plugins/seo/ -->
+<link rel="canonical" href="http://www.geeksforgeeks.org/avl-tree-set-1-insertion/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="AVL Tree | Set 1 (Insertion) - GeeksforGeeks" />
+<meta property="og:description" content="AVL tree is a self-balancing Binary Search Tree (BST) where the difference between heights of left and right subtrees cannot be more than one for all nodes. Why AVL Trees? Most of the BST operations (e.g., search, max, min, insert, delete.. etc) take O(h) time where h is the height of the BST. The cost &hellip;" />
+<meta property="og:url" content="http://www.geeksforgeeks.org/avl-tree-set-1-insertion/" />
+<meta property="og:site_name" content="GeeksforGeeks" />
+<meta property="article:tag" content="Advance Data Structures" />
+<meta property="article:section" content="Trees" />
+<meta property="article:published_time" content="2012-02-23T17:24:13+00:00" />
+<meta property="article:modified_time" content="2014-01-27T11:17:55+00:00" />
+<meta property="og:updated_time" content="2014-01-27T11:17:55+00:00" />
+<!-- / Yoast WordPress SEO plugin. -->
+
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css?ver=4.0.1' type='text/css' media='all' />
+<link rel='stylesheet' id='bbp-default-css'  href='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/bbpress/templates/default/css/bbpress.css?ver=2.5.4-5380' type='text/css' media='screen' />
+<link rel='stylesheet' id='wp-pagenavi-css'  href='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/wp-pagenavi/pagenavi-css.css?ver=2.70' type='text/css' media='all' />
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-includes/js/jquery/jquery.js?ver=1.11.1'></script>
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1'></script>
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js?ver=1.0'></script>
+
+<!-- Bad Behavior 2.2.16 run time: 1.489 ms -->
+<script type="text/javascript">
+<!--
+function bb2_addLoadEvent(func) {
+	var oldonload = window.onload;
+	if (typeof window.onload != 'function') {
+		window.onload = func;
+	} else {
+		window.onload = function() {
+			oldonload();
+			func();
+		}
+	}
+}
+
+bb2_addLoadEvent(function() {
+	for ( i=0; i < document.forms.length; i++ ) {
+		if (document.forms[i].method == 'post') {
+			var myElement = document.createElement('input');
+			myElement.setAttribute('type', 'hidden');
+			myElement.name = 'bb2_screener_';
+			myElement.value = '1417110893 89.66.169.226';
+			document.forms[i].appendChild(myElement);
+		}
+	}
+});
+// --></script>
+		<style type="text/css" id="syntaxhighlighteranchor"></style>
+   <meta name="google-site-verification" content="rHK2v8_zzuAZQY8JHAzbllDN8u-aQxcn2Kqnp67Old0" />
+</head>
+
+<body>
+<!-- o4dI0sCXUgoSONabbd8mbZ4SA3E -->    
+    <div id="wrapper">
+        <div class="blog-info">
+                <h1 class="blog-title">
+                <a href="http://www.geeksforgeeks.org" title="GeeksforGeeks">GeeksforGeeks</a>
+            </h1>
+       
+            <div class="blog-description">
+                A computer science portal for geeks            </div>
+        </div>
+        <b><p>  <h2 align="right"> <a href="http://geeksquiz.com/">GeeksQuiz</a></h2> 
+   <a href="http://www.geeksforgeeks.org/wp-login.php">Login</a> 
+         </p></b>  
+         
+         <div class="clear"></div>         
+              
+                     
+            <div id="menu">   
+                 <ul>
+ <li><a href="http://www.geeksforgeeks.org">Home</a></li>
+  <li><a href="http://www.geeksforgeeks.org/fundamentals-of-algorithms/">Algorithms</a></li>
+ <li><a href="http://www.geeksforgeeks.org/data-structures/">DS</a></li>
+  <li><a href="http://www.geeksforgeeks.org/gate-corner/">GATE</a></li>
+  <li><a href="http://www.geeksforgeeks.org/about/interview-corner/">Interview Corner</a></li>
+  <li><a href="http://www.geeksforgeeks.org/forums/">Q&A</a></li>
+  <li><a href="http://www.geeksforgeeks.org/c/">C</a></li>
+  <li><a href="http://www.geeksforgeeks.org/c-plus-plus/">C++</a></li>
+  <li><a href="http://www.geeksforgeeks.org/java/">Java</a></li>
+  <li><a href="http://www.geeksforgeeks.org/books/">Books</a></li>
+  <li><a href="http://www.geeksforgeeks.org/contribute/">Contribute</a></li>
+  <li><a href="http://www.geeksforgeeks.org/contribute/ask-a-question/">Ask a Q</a></li>
+  <li><a href="http://www.geeksforgeeks.org/about/">About</a></li>
+            </ul>
+
+               
+            <div class="clear"></div>     
+        </div>
+             <div id="navmenu">
+				<ul id="menu" style="padding:0; margin:0;">
+						<li class="cat-item cat-item-3"><a href="http://www.geeksforgeeks.org/category/c-arrays/" title="Questions regarding Arrays">Array</a>
+</li>	
+
+	<li class="cat-item cat-item-17"><a href="http://www.geeksforgeeks.org/category/bit-magic/" title="View all posts filed under Bit Magic">Bit Magic</a>
+</li>
+	<li class="cat-item cat-item-14"><a href="http://www.geeksforgeeks.org/category/c-puzzles/" title="View all posts filed under C/C++ Puzzles">C/C++</a>
+</li>
+
+<li class="cat-item cat-item-18"><a href="http://www.geeksforgeeks.org/category/articles/" title="View all posts filed under Articles">Articles</a>
+</li>
+
+	<li class="cat-item cat-item-67"><a href="http://www.geeksforgeeks.org/category/gfact/" title="View all posts filed under GFacts">GFacts</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://www.geeksforgeeks.org/category/linked-list/" title="Linked List problems">Linked List</a>
+</li>
+	<li class="cat-item cat-item-66"><a href="http://www.geeksforgeeks.org/category/multiple-choice-question/" title="View all posts filed under MCQ">MCQ</a>
+
+</li>
+	<li class="cat-item cat-item-4"><a href="http://www.geeksforgeeks.org/category/c-programs/" title="Miscellaneous">Misc</a>
+</li>
+	<li class="cat-item cat-item-5"><a href="http://www.geeksforgeeks.org/category/program-output/" title="View all posts filed under Output">Output</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="http://www.geeksforgeeks.org/category/c-strings/" title="Questions related to strings">String</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://www.geeksforgeeks.org/category/tree/" title="View all posts filed under Trees">Tree</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://www.geeksforgeeks.org/category/graph/" title="View all posts filed under Graph">Graph</a>
+</li>
+</ul>
+        </div>
+             <div id="content">	   	
+	<div class="post" id="post">
+							<div class="post-info">			
+					<div class="post-title-info">
+						<h2 class="post-title">AVL Tree | Set 1 (Insertion)</h2>
+					</div>			
+					<div class="clear"></div>				  
+				<div class="post-content" id="post-content">
+					<p>AVL tree is a self-balancing Binary Search Tree (BST) where the difference between heights of left and right subtrees cannot be more than one for all nodes.<span id="more-17679"></span></p>
+<p><strong>Why AVL Trees?</strong><br />
+Most of the BST operations (e.g., search, max, min, insert, delete.. etc) take O(h) time where h is the height of the BST. The cost of these operations may become O(n) for a skewed Binary tree. If we make sure that height of the tree remains O(Logn) after every insertion and deletion, then we can guarantee an upper bound of O(Logn) for all these operations. The height of an AVL tree is always O(Logn) where n is the number of nodes in the tree (See <a href="http://www.youtube.com/watch?v=TbvhGcf6UJU">this </a>video lecture for proof). </p>
+<p><strong>Insertion</strong><br />
+To make sure that the given tree remains AVL after every insertion, we must augment the standard BST insert operation to perform some re-balancing.  Following are two basic operations that can be performed to re-balance a BST without violating the BST property (keys(left) < key(root) < keys(right)).<br />
+1) Left Rotation<br />
+2) Right Rotation</p>
+<pre>
+T1, T2 and T3 are subtrees of the tree rooted with y (on left side) 
+or x (on right side)           
+                y                               x
+               / \     Right Rotation          /  \
+              x   T3   &#8211; &#8211; &#8211; &#8211; &#8211; &#8211; &#8211; >        T1   y 
+             / \       < - - - - - - -            / \
+            T1  T2     Left Rotation            T2  T3
+Keys in both of the above trees follow the following order 
+      keys(T1) < key(x) < keys(T2) < key(y) < keys(T3)
+So BST property is not violated anywhere.
+</pre>
+<p><strong>Steps to follow for insertion</strong><br />
+Let the newly nserted node be w<br />
+<strong>1)</strong> Perform standard BST insert for w.<br />
+<strong>2)</strong> Starting from w, travel up and find the first unbalanced node.  Let z be the first unbalanced node, y be the child of z that comes on the path from w to z and x be the grandchild of z that comes on the path from w to z.<br />
+<strong>3)</strong> Re-balance the tree by performing appropriate rotations on the subtree rooted with z. There can be 4 possible cases that needs to be handled as x, y and z can be arranged in 4 ways.  Following are the possible 4 arrangements:<br />
+a) y is left child of z and x is left child of y (Left Left Case)<br />
+b) y is left child of z and x is right child of y (Left Right Case)<br />
+c) y is right child of z and x is right child of y (Right Right Case)<br />
+d) y is right child of z and x is left child of y (Right Left Case)</p>
+<p>Following are the operations to be performed in above mentioned 4 cases. In all of the cases, we only need to re-balance the subtree rooted with z and the complete tree becomes balanced as the height of subtree (After appropriate rotations) rooted with z becomes same as it was before insertion. (See <a href="http://www.youtube.com/watch?v=TbvhGcf6UJU">this </a>video lecture for proof)</p>
+<p><strong>a) Left Left Case</strong></p>
+<pre>
+T1, T2, T3 and T4 are subtrees.
+         z                                      y 
+        / \                                   /   \
+       y   T4      Right Rotate (z)          x      z
+      / \          - - - - - - - - ->      /  \    /  \ 
+     x   T3                               T1  T2  T3  T4
+    / \
+  T1   T2
+</pre>
+<p><strong>b) Left Right Case</strong></p>
+<pre>
+     z                               z                           x
+    / \                            /   \                        /  \ 
+   y   T4  Left Rotate (y)        x    T4  Right Rotate(z)    y      z
+  / \      - - - - - - - - ->    /  \      - - - - - - - ->  / \    / \
+T1   x                          y    T3                    T1  T2 T3  T4
+    / \                        / \
+  T2   T3                    T1   T2
+</pre>
+<p><strong>c) Right Right Case</strong></p>
+<pre>
+  z                                y
+ /  \                            /   \ 
+T1   y     Left Rotate(z)       z      x
+    /  \   - - - - - - - ->    / \    / \
+   T2   x                     T1  T2 T3  T4
+       / \
+     T3  T4
+</pre>
+<p><strong>d) Right Left Case</strong></p>
+<pre>
+   z                            z                            x
+  / \                          / \                          /  \ 
+T1   y   Right Rotate (y)    T1   x      Left Rotate(z)   z      y
+    / \  - - - - - - - - ->     /  \   - - - - - - - ->  / \    / \
+   x   T4                      T2   y                  T1  T2  T3  T4
+  / \                              /  \
+T2   T3                           T3   T4
+</pre>
+<p><strong>C implementation</strong><br />
+Following is the C implementation for AVL Tree Insertion.  The following C implementation uses the recursive BST insert to insert a new node.  In the recursive BST insert, after insertion, we get pointers to all ancestors one by one in bottom up manner.  So we don&#8217;t need parent pointer to travel up.  The recursive code itself travels up and visits all the ancestors of the newly inserted node.<br />
+1) Perform the normal BST insertion.<br />
+2) The current node must be one of the ancestors of the newly inserted node.  Update the height of the current node.<br />
+3) Get the balance factor (left subtree height &#8211; right subtree height) of the current node.<br />
+4) If balance factor is greater than 1, then the current node is unbalanced and we are either in Left Left case or left Right case. To check whether it is left left case or not, compare the newly inserted key with the key in left subtree root.<br />
+5) If balance factor is less than -1, then the current node is unbalanced and we are either in Right Right case or Right Left case. To check whether it is Right Right case or not, compare the newly inserted key with the key in right subtree root. </p>
+<pre class="brush: cpp; highlight: [43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133]; title: ; notranslate" title="">
+#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+
+// An AVL tree node
+struct node
+{
+    int key;
+    struct node *left;
+    struct node *right;
+    int height;
+};
+
+// A utility function to get maximum of two integers
+int max(int a, int b);
+
+// A utility function to get height of the tree
+int height(struct node *N)
+{
+    if (N == NULL)
+        return 0;
+    return N-&gt;height;
+}
+
+// A utility function to get maximum of two integers
+int max(int a, int b)
+{
+    return (a &gt; b)? a : b;
+}
+
+/* Helper function that allocates a new node with the given key and
+    NULL left and right pointers. */
+struct node* newNode(int key)
+{
+    struct node* node = (struct node*)
+                        malloc(sizeof(struct node));
+    node-&gt;key   = key;
+    node-&gt;left   = NULL;
+    node-&gt;right  = NULL;
+    node-&gt;height = 1;  // new node is initially added at leaf
+    return(node);
+}
+
+// A utility function to right rotate subtree rooted with y
+// See the diagram given above.
+struct node *rightRotate(struct node *y)
+{
+    struct node *x = y-&gt;left;
+    struct node *T2 = x-&gt;right;
+
+    // Perform rotation
+    x-&gt;right = y;
+    y-&gt;left = T2;
+
+    // Update heights
+    y-&gt;height = max(height(y-&gt;left), height(y-&gt;right))+1;
+    x-&gt;height = max(height(x-&gt;left), height(x-&gt;right))+1;
+
+    // Return new root
+    return x;
+}
+
+// A utility function to left rotate subtree rooted with x
+// See the diagram given above.
+struct node *leftRotate(struct node *x)
+{
+    struct node *y = x-&gt;right;
+    struct node *T2 = y-&gt;left;
+
+    // Perform rotation
+    y-&gt;left = x;
+    x-&gt;right = T2;
+
+    //  Update heights
+    x-&gt;height = max(height(x-&gt;left), height(x-&gt;right))+1;
+    y-&gt;height = max(height(y-&gt;left), height(y-&gt;right))+1;
+
+    // Return new root
+    return y;
+}
+
+// Get Balance factor of node N
+int getBalance(struct node *N)
+{
+    if (N == NULL)
+        return 0;
+    return height(N-&gt;left) - height(N-&gt;right);
+}
+
+struct node* insert(struct node* node, int key)
+{
+    /* 1.  Perform the normal BST rotation */
+    if (node == NULL)
+        return(newNode(key));
+
+    if (key &lt; node-&gt;key)
+        node-&gt;left  = insert(node-&gt;left, key);
+    else
+        node-&gt;right = insert(node-&gt;right, key);
+
+    /* 2. Update height of this ancestor node */
+    node-&gt;height = max(height(node-&gt;left), height(node-&gt;right)) + 1;
+
+    /* 3. Get the balance factor of this ancestor node to check whether
+       this node became unbalanced */
+    int balance = getBalance(node);
+
+    // If this node becomes unbalanced, then there are 4 cases
+
+    // Left Left Case
+    if (balance &gt; 1 &amp;&amp; key &lt; node-&gt;left-&gt;key)
+        return rightRotate(node);
+
+    // Right Right Case
+    if (balance &lt; -1 &amp;&amp; key &gt; node-&gt;right-&gt;key)
+        return leftRotate(node);
+
+    // Left Right Case
+    if (balance &gt; 1 &amp;&amp; key &gt; node-&gt;left-&gt;key)
+    {
+        node-&gt;left =  leftRotate(node-&gt;left);
+        return rightRotate(node);
+    }
+
+    // Right Left Case
+    if (balance &lt; -1 &amp;&amp; key &lt; node-&gt;right-&gt;key)
+    {
+        node-&gt;right = rightRotate(node-&gt;right);
+        return leftRotate(node);
+    }
+
+    /* return the (unchanged) node pointer */
+    return node;
+}
+
+// A utility function to print preorder traversal of the tree.
+// The function also prints height of every node
+void preOrder(struct node *root)
+{
+    if(root != NULL)
+    {
+        printf(&quot;%d &quot;, root-&gt;key);
+        preOrder(root-&gt;left);
+        preOrder(root-&gt;right);
+    }
+}
+
+/* Drier program to test above function*/
+int main()
+{
+  struct node *root = NULL;
+
+  /* Constructing tree given in the above figure */
+  root = insert(root, 10);
+  root = insert(root, 20);
+  root = insert(root, 30);
+  root = insert(root, 40);
+  root = insert(root, 50);
+  root = insert(root, 25);
+
+  /* The constructed AVL Tree would be
+            30
+           /  \
+         20   40
+        /  \     \
+       10  25    50
+  */
+
+  printf(&quot;Pre order traversal of the constructed AVL tree is \n&quot;);
+  preOrder(root);
+
+  return 0;
+}
+</pre>
+<p>Output:</p>
+<pre>
+  Pre order traversal of the constructed AVL tree is
+  30 20 10 25 40 50
+</pre>
+<p>Time Complexity: The rotation operations (left and right rotate) take constant time as only few pointers are being changed there.  Updating the height and getting the balance factor also take constant time. So the time complexity of AVL insert remains same as BST insert which is O(h) where h is height of the tree.  Since AVL tree is balanced, the height is O(Logn).  So time complexity of AVL insert is O(Logn).</p>
+<p>The AVL tree and other self balancing search trees like Red Black are useful to get all basic operations done in O(Logn) time.  The AVL trees are more balanced compared to Red Black Trees, but they may cause more rotations during insertion and deletion.  So if your application involves many frequent insertions and deletions, then Red Black trees should be preferred. And if the insertions and deletions are less frequent and search is more frequent operation, then AVL tree should be preferred over Red Black Tree.</p>
+<p>Following are some previous posts that have used self-balancing search trees.</p>
+<p><a href="http://www.geeksforgeeks.org/archives/14873">Median in a stream of integers (running integers)</a><br />
+<a href="http://www.geeksforgeeks.org/archives/11306">Maximum of all subarrays of size k</a><br />
+<a href="http://www.geeksforgeeks.org/archives/17235">Count smaller elements on right side</a></p>
+<p><strong>References:</strong><br />
+<a href="http://www.youtube.com/watch?v=mRGQylRWAsI&#038;feature=relmfu">IITD Video Lecture on AVL Tree Introduction</a><br />
+<a href="http://www.youtube.com/watch?v=TbvhGcf6UJU">IITD Video Lecture on AVL Tree Insertion and Deletion</a></p>
+<p>Please write comments if you find anything incorrect, or you want to share more information about the topic discussed above.</p>
+		
+&nbsp;
+&nbsp;
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Big Rectangle Blog Bottom -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:336px;height:280px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="4061219431"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+<h3>Related Topics:</h3><ul><li><a href="http://www.geeksforgeeks.org/perfect-binary-tree-specific-level-order-traversal/" title="Perfect Binary Tree Specific Level Order Traversal">Perfect Binary Tree Specific Level Order Traversal</a></li><li><a href="http://www.geeksforgeeks.org/print-nodes-top-view-binary-tree/" title="Print Nodes in Top View of Binary Tree">Print Nodes in Top View of Binary Tree</a></li><li><a href="http://www.geeksforgeeks.org/k-dimensional-tree/" title="K Dimensional Tree">K Dimensional Tree</a></li><li><a href="http://www.geeksforgeeks.org/convert-binary-tree-threaded-binary-tree/" title="Convert a Binary Tree to Threaded binary tree">Convert a Binary Tree to Threaded binary tree</a></li><li><a href="http://www.geeksforgeeks.org/serialize-deserialize-n-ary-tree/" title="Serialize and Deserialize an N-ary Tree">Serialize and Deserialize an N-ary Tree</a></li><li><a href="http://www.geeksforgeeks.org/serialize-deserialize-binary-tree/" title="Serialize and Deserialize a Binary Tree">Serialize and Deserialize a Binary Tree</a></li><li><a href="http://www.geeksforgeeks.org/given-binary-tree-print-nodes-two-given-level-numbers/" title="Print nodes between two given level numbers of a binary tree">Print nodes between two given level numbers of a binary tree</a></li><li><a href="http://www.geeksforgeeks.org/find-height-binary-tree-represented-parent-array/" title="Find Height of Binary Tree represented by Parent array">Find Height of Binary Tree represented by Parent array</a></li></ul>
+<p>Tags: <a href="http://www.geeksforgeeks.org/tag/advance-data-structures/" rel="tag">Advance Data Structures</a></p> 
+<div>
+<iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.geeksforgeeks.org%2Favl-tree-set-1-insertion%2F&layout=button_count&show_faces=false&width=90&action=like&colorscheme=light" scrolling="no" frameborder="0" allowTransparency="true" style="border:none; overflow:hidden; width:90px; height:20px"></iframe>
+<a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.geeksforgeeks.org/avl-tree-set-1-insertion/" data-text="AVL Tree | Set 1 (Insertion)" data-count="horizontal" data-via="jakerutter">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+<g:plusone size="medium" href="http://www.geeksforgeeks.org/avl-tree-set-1-insertion/"></g:plusone>
+<!-- Place this render call where appropriate -->
+<script type="text/javascript">
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script></div>
+
+
+
+
+
+				</div>		  
+			</div> <!-- end post main -->					
+			<div class="post-meta">
+				<div class="left"></div>				
+				<div class="clear"></div>
+			</div>			
+        
+			<div class="comments-main">		
+ <b>Writing code in comment?</b> Please use <b><a href="http://ideone.com/">ideone.com</a></b> and share the link here.
+				
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-34785">
+        <div id="dsq-comment-header-34785" class="dsq-comment-header">
+            <cite id="dsq-cite-34785">
+                <span id="dsq-author-user-34785">BATMAN</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-34785" class="dsq-comment-body">
+            <div id="dsq-comment-message-34785" class="dsq-comment-message"><p>getbalance method does not need this &#8211; if (N == NULL)<br />
+        return 0;</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-32661">
+        <div id="dsq-comment-header-32661" class="dsq-comment-header">
+            <cite id="dsq-cite-32661">
+                <span id="dsq-author-user-32661">Castle Age</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-32661" class="dsq-comment-body">
+            <div id="dsq-comment-message-32661" class="dsq-comment-message"><p>Should the insertion checks if the value of the node equals the key and just return the node?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-32240">
+        <div id="dsq-comment-header-32240" class="dsq-comment-header">
+            <cite id="dsq-cite-32240">
+                <span id="dsq-author-user-32240">Rahul Bhawsar</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-32240" class="dsq-comment-body">
+            <div id="dsq-comment-message-32240" class="dsq-comment-message"><p>Very well written insert function, while climbing up it take cares of everything. great job.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-31171">
+        <div id="dsq-comment-header-31171" class="dsq-comment-header">
+            <cite id="dsq-cite-31171">
+                <span id="dsq-author-user-31171">logesh kumar</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-31171" class="dsq-comment-body">
+            <div id="dsq-comment-message-31171" class="dsq-comment-message"><p>can u pls clear me why can&#8217;t be the if case replaced with if else case. i compiled using if else it worked well and even compilation time reduced about 3 times. is there any specific cases that does want only if case&#8230;</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-30883">
+        <div id="dsq-comment-header-30883" class="dsq-comment-header">
+            <cite id="dsq-cite-30883">
+                <span id="dsq-author-user-30883">satya</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-30883" class="dsq-comment-body">
+            <div id="dsq-comment-message-30883" class="dsq-comment-message"><p>I have a doubt that while rotating shouldn&#8217;t we consider parent pointer also?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-30477">
+        <div id="dsq-comment-header-30477" class="dsq-comment-header">
+            <cite id="dsq-cite-30477">
+                <span id="dsq-author-user-30477">Abhi</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-30477" class="dsq-comment-body">
+            <div id="dsq-comment-message-30477" class="dsq-comment-message"><p>The diagram of right left case has a typo &#8211; the node &#8220;y&#8221; is wrongly marked as &#8220;x&#8221;</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-31895">
+        <div id="dsq-comment-header-31895" class="dsq-comment-header">
+            <cite id="dsq-cite-31895">
+                <span id="dsq-author-user-31895">GeeksforGeeks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-31895" class="dsq-comment-body">
+            <div id="dsq-comment-message-31895" class="dsq-comment-message"><p>Thanks for pointing this out.  We have corrected the typo</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-30209">
+        <div id="dsq-comment-header-30209" class="dsq-comment-header">
+            <cite id="dsq-cite-30209">
+                <span id="dsq-author-user-30209">Raj k</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-30209" class="dsq-comment-body">
+            <div id="dsq-comment-message-30209" class="dsq-comment-message"><p>Thanks alot</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-28734">
+        <div id="dsq-comment-header-28734" class="dsq-comment-header">
+            <cite id="dsq-cite-28734">
+                <span id="dsq-author-user-28734">TheJerryg</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-28734" class="dsq-comment-body">
+            <div id="dsq-comment-message-28734" class="dsq-comment-message"><p>Small typo in case (d) Right Left Case. I believe the child &#8216;X&#8217; node should be &#8216;Y&#8217;. Not like it really makes a difference =p</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-31894">
+        <div id="dsq-comment-header-31894" class="dsq-comment-header">
+            <cite id="dsq-cite-31894">
+                <span id="dsq-author-user-31894">GeeksforGeeks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-31894" class="dsq-comment-body">
+            <div id="dsq-comment-message-31894" class="dsq-comment-message"><p>Thanks for pointing this out.  We have corrected the typo.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-27839">
+        <div id="dsq-comment-header-27839" class="dsq-comment-header">
+            <cite id="dsq-cite-27839">
+                <span id="dsq-author-user-27839">imner</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-27839" class="dsq-comment-body">
+            <div id="dsq-comment-message-27839" class="dsq-comment-message"><p>i dont understand the height . if we have it 1 everytime then what is the height from root&#8230; how is it getting updated. pl explain</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-33555">
+        <div id="dsq-comment-header-33555" class="dsq-comment-header">
+            <cite id="dsq-cite-33555">
+                <span id="dsq-author-user-33555">Lee</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-33555" class="dsq-comment-body">
+            <div id="dsq-comment-message-33555" class="dsq-comment-message"><p>+1 to imner, How does the height of a node being updated in insert function?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-2" id="dsq-comment-33556">
+        <div id="dsq-comment-header-33556" class="dsq-comment-header">
+            <cite id="dsq-cite-33556">
+                <span id="dsq-author-user-33556">Lee</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-33556" class="dsq-comment-body">
+            <div id="dsq-comment-message-33556" class="dsq-comment-message"><p>I think this code does it.<br />
+/* 2. Update height of this ancestor node */<br />
+    node-&gt;height = max(height(node-&gt;left), height(node-&gt;right)) + 1;</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-27379">
+        <div id="dsq-comment-header-27379" class="dsq-comment-header">
+            <cite id="dsq-cite-27379">
+                <span id="dsq-author-user-27379">red</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-27379" class="dsq-comment-body">
+            <div id="dsq-comment-message-27379" class="dsq-comment-message"><p>node-&gt;height = 1;  // new node is initially added at leaf</p>
+<p>height of node must be 0 not 1</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment byuser comment-author-shek8034 even thread-even depth-1" id="dsq-comment-20062">
+        <div id="dsq-comment-header-20062" class="dsq-comment-header">
+            <cite id="dsq-cite-20062">
+                <span id="dsq-author-user-20062">shek8034</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-20062" class="dsq-comment-body">
+            <div id="dsq-comment-message-20062" class="dsq-comment-message"><pre> <code language="C">
+struct node *leftrotate(struct node *ptr)
+{
+   struct node *temp = ptr-&gt;right;
+   ptr-&gt;right = temp-&gt;left;
+   temp-&gt;left = ptr;
+   return temp; //return new root
+}
+
+struct node *rightrotate(struct node *ptr)
+{
+   struct node *temp = ptr-&gt;left;
+   ptr-&gt;left = temp-&gt;right;
+   temp-&gt;right = ptr;
+   return temp; //return new root
+}
+</code> </pre>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment byuser comment-author-shek8034 odd alt depth-2" id="dsq-comment-20063">
+        <div id="dsq-comment-header-20063" class="dsq-comment-header">
+            <cite id="dsq-cite-20063">
+                <span id="dsq-author-user-20063">shek8034</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-20063" class="dsq-comment-body">
+            <div id="dsq-comment-message-20063" class="dsq-comment-message"><p>sorry.. i forgot to find the updated height.<br />
+My mistake <img src="http://d2o58evtke57tz.cloudfront.net/wp-includes/images/smilies/icon_sad.gif" alt=":(" class="wp-smiley" /></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-19229">
+        <div id="dsq-comment-header-19229" class="dsq-comment-header">
+            <cite id="dsq-cite-19229">
+                <span id="dsq-author-user-19229">badri</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-19229" class="dsq-comment-body">
+            <div id="dsq-comment-message-19229" class="dsq-comment-message"><p>In left rotate , its written x-&gt;right = T2; , but basically we need to find the minimum in that path , like </p>
+<p> if(node-&gt;right == NULL)<br />
+                return NULL;<br />
+        struct __rbNode__* suc;<br />
+        suc = node-&gt;right;<br />
+        *prev = suc;<br />
+        while(suc-&gt;left !=NULL) {<br />
+                *prev = suc;<br />
+                suc = suc-&gt;left;<br />
+        }<br />
+        return suc;</p>
+<p>which returns the min element to be used for replacement.<br />
+Am I right?</p>
+<pre> <code language="C">
+/* Paste your code here (You may delete these lines if not writing code) */
+</code> </pre>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment byuser comment-author-abhishek08aug odd alt thread-even depth-1" id="dsq-comment-18382">
+        <div id="dsq-comment-header-18382" class="dsq-comment-header">
+            <cite id="dsq-cite-18382">
+                <span id="dsq-author-user-18382">abhishek08aug</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-18382" class="dsq-comment-body">
+            <div id="dsq-comment-message-18382" class="dsq-comment-message"><p>Intelligent <img src="http://d2o58evtke57tz.cloudfront.net/wp-includes/images/smilies/icon_biggrin.gif" alt=":D" class="wp-smiley" /></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-15712">
+        <div id="dsq-comment-header-15712" class="dsq-comment-header">
+            <cite id="dsq-cite-15712">
+                <span id="dsq-author-user-15712">nonu</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-15712" class="dsq-comment-body">
+            <div id="dsq-comment-message-15712" class="dsq-comment-message"><p>see <a href="http://code.google.com/p/self-balancing-avl-tree/" rel="nofollow">http://code.google.com/p/self-balancing-avl-tree/</a></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-13821">
+        <div id="dsq-comment-header-13821" class="dsq-comment-header">
+            <cite id="dsq-cite-13821">
+                <span id="dsq-author-user-13821">radheshyam</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-13821" class="dsq-comment-body">
+            <div id="dsq-comment-message-13821" class="dsq-comment-message"><p>i am getting some error(logical not syntax) in left rotate and right right rotate function named lrotate and rrotate please do tell me the error<br />
+/*#include<br />
+#include&#8221;malloc.h&#8221;<br />
+#include<br />
+struct node<br />
+{<br />
+    int a,height;<br />
+    struct node *left,*right;<br />
+};<br />
+int a[10][10],b[10];<br />
+void makeup()<br />
+{<br />
+    int i,j;<br />
+    for(i=0;i&lt;10;i++)<br />
+    {<br />
+        b[i]=0;<br />
+        for(j=0;j&lt;10;j++)<br />
+        {<br />
+            a[i][j]=0;<br />
+        }<br />
+    }<br />
+}<br />
+void swap(struct node**,struct node**);<br />
+void insert(struct node**,int);<br />
+struct node* lrotate(struct node*);<br />
+struct node* rrotate(struct node*);<br />
+void inorder(struct node*);<br />
+int getmax(int,int);<br />
+void main()<br />
+{<br />
+    int m,n,i,j;<br />
+    struct node *p;<br />
+    p=NULL;<br />
+    makeup();<br />
+    printf(&quot;%d\n&quot;,getmax(2,3));<br />
+    printf(&quot;enter the number of terms&quot;);<br />
+    scanf(&quot;%d&quot;,&amp;n);<br />
+    for(i=0;ia=a;<br />
+        temp-&gt;height=0;<br />
+        temp-&gt;left=temp-&gt;right=NULL;<br />
+        *p=temp;<br />
+    }<br />
+    else<br />
+    {<br />
+        if((*p)-&gt;a&gt;a)<br />
+        {<br />
+            insert(&amp;((*p)-&gt;left),a);<br />
+        }<br />
+        if((*p)-&gt;a<a>right),a);<br />
+        }<br />
+        if((*p)-&gt;left==NULL&amp;&amp;(*p)-&gt;right!=NULL)<br />
+        (*p)-&gt;height=(*p)-&gt;right-&gt;height+1;<br />
+        if((*p)-&gt;left!=NULL&amp;&amp;(*p)-&gt;right==NULL)<br />
+        (*p)-&gt;height=(*p)-&gt;left-&gt;height+1;<br />
+        if((*p)-&gt;left!=NULL&amp;&amp;(*p)-&gt;right!=NULL)<br />
+        (*p)-&gt;height=getmax((*p)-&gt;left-&gt;height,(*p)-&gt;right-&gt;height)+1;<br />
+        temp=*p;<br />
+        if((*p)-&gt;height&gt;=2)<br />
+        {<br />
+            if(temp-&gt;left==NULL)<br />
+            l=-1;<br />
+            else<br />
+            l=temp-&gt;left-&gt;height;<br />
+            if(temp-&gt;right==NULL)<br />
+            r=-1;<br />
+            else<br />
+            r=temp-&gt;right-&gt;height;<br />
+            //printf(&#8220;radhe&#8221;);<br />
+            if(l-r&gt;=2)<br />
+            {<br />
+                if(temp-&gt;left-&gt;a&gt;a)<br />
+                {<br />
+                    printf(&#8220;a&#8221;);<br />
+                    temp=rrotate(temp);<br />
+                }<br />
+                else<br />
+                {<br />
+                    printf(&#8220;b&#8221;);<br />
+                    temp-&gt;right=lrotate(temp-&gt;right);<br />
+                    temp=rrotate(temp);<br />
+                }<br />
+            }<br />
+            if(l-rright-&gt;a</a><a>left=rrotate(temp-&gt;left);<br />
+                    temp=lrotate(temp);<br />
+                }<br />
+            }<br />
+        }<br />
+    }<br />
+}<br />
+int getmax(int a,int b)<br />
+{<br />
+    return(a&gt;b?a:b);<br />
+}<br />
+struct node* lrotate(struct node *x)<br />
+{<br />
+    struct node *y,temp1;<br />
+    y=x-&gt;right;<br />
+    x-&gt;right=y-&gt;left;<br />
+    y-&gt;left=x;<br />
+    y-&gt;height=y-&gt;height+1;<br />
+    y-&gt;right-&gt;height=y-&gt;right-&gt;height-1;<br />
+    return(y);<br />
+}<br />
+struct node* rrotate(struct node *p)<br />
+{<br />
+    struct node *temp;<br />
+    temp=p-&gt;left;<br />
+    p-&gt;left=temp-&gt;right;<br />
+    temp-&gt;right=p;<br />
+    temp-&gt;height=temp-&gt;height+1;<br />
+    temp-&gt;left-&gt;height=temp-&gt;left-&gt;height-1;<br />
+    return(temp);<br />
+}<br />
+void inorder(struct node *p)<br />
+{<br />
+    if(p==NULL)<br />
+    return;<br />
+    inorder(p-&gt;left);<br />
+    printf(&#8220;%d,%d\n&#8221;,p-&gt;a,p-&gt;height);<br />
+    //a[p-&gt;height][b[p-&gt;height]]=p-&gt;a;<br />
+    //b[p-&gt;height]=b[p-&gt;height]+1;<br />
+    inorder(p-&gt;right);<br />
+}<br />
+void swap(struct node **p,struct node **q)<br />
+{<br />
+    struct node *a;<br />
+    a=*p;<br />
+    *p=*q;<br />
+    *q=a;<br />
+}<br />
+*/</a></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-9739">
+        <div id="dsq-comment-header-9739" class="dsq-comment-header">
+            <cite id="dsq-cite-9739">
+                <span id="dsq-author-user-9739">hedy</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-9739" class="dsq-comment-body">
+            <div id="dsq-comment-message-9739" class="dsq-comment-message"><p>It&#8217;s a nice tutorial. I&#8217;ve seen the hyper link of &#8220;IITD Video Lecture on AVL Tree Insertion and Deletion&#8221; in your reference part. But I have a question, how do you find the first unbalanced node from the new inserted node. In the insert function, it seems you only check the balance factor of one node. Do I miss something? Thanks in advance.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-9717">
+        <div id="dsq-comment-header-9717" class="dsq-comment-header">
+            <cite id="dsq-cite-9717">
+                <span id="dsq-author-user-9717">anonymous</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-9717" class="dsq-comment-body">
+            <div id="dsq-comment-message-9717" class="dsq-comment-message"><p>Awesome <img src="http://d2o58evtke57tz.cloudfront.net/wp-includes/images/smilies/icon_smile.gif" alt=":)" class="wp-smiley" /></p>
+<pre> <code language="C">
+/* Paste your code here (You may delete these lines if not writing code) */
+</code> </pre>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-9365">
+        <div id="dsq-comment-header-9365" class="dsq-comment-header">
+            <cite id="dsq-cite-9365">
+                <span id="dsq-author-user-9365">Sankarshan Mridha</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-9365" class="dsq-comment-body">
+            <div id="dsq-comment-message-9365" class="dsq-comment-message"><p>sorry i have made somthing wrong.<br />
+here is my code with a different approach taking help from book.</p>
+<pre> <code language="C">
+/* Paste your code here (You may delete these lines if not writing code) */
+#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;math.h&gt;
+#define true 1
+#define false 0
+#define log2(a) log((a))/log(2)
+
+typedef struct node* nodeptr;
+
+typedef struct node
+{
+        int val;
+        nodeptr leftchild;
+        nodeptr rightchild;
+        int bf;
+}node;
+
+void insert(nodeptr *parent,int *unbalanced,int key);
+void leftRotation(nodeptr *pparent,int *unbalanced);//..means if left subtree grows larger then rotate this left subtree
+void rightrotation(nodeptr *,int *);//................vice versa
+int height(node* node);
+void inorder(node *proot);
+
+int main(void)
+{
+    node *root,*cur;
+    root=NULL;
+    int balancedState=true;
+    //int num[]={1,2,3,4,5,6,8,9,10,7};//..input series..{8,7,2,9},{8,7,2,9,10},{8,7,2,9,10,11}
+    int num[]={10,9,8,7,6,5,3,2,1,4,15,14,16,12};
+    int size=sizeof(num)/sizeof(int);
+    int i=0;
+    for(i=0;i&lt;size;i++)
+    {
+                   printf(&quot;\nheight before insertion of %d is %d\n&quot;,num[i],height(root)-1);    
+                   insert(&amp;root,&amp;balancedState,num[i]);
+                   printf(&quot;\n%d is inserted.\nHeight after insertion is: %d&quot;,num[i],height(root)-1);
+                   
+                   printf(&quot;\n\n****************************************************&quot;);
+    }
+    
+    printf(&quot;\n\nfinal height is: %d&quot;,height(root)-1);
+    printf(&quot;\nno of nodes are %d.\nAnd log2(%d) is %f.&quot;,size,size,log2(size));
+    printf(&quot;\nSo Height is almost equal to log2(%d))\n&quot;,size);
+    printf(&quot;\noutput&lt;inorder traversal of tree: &quot;);
+    if(root==NULL)
+                  printf(&quot;\nnull&quot;);
+    inorder(root);
+    getch();
+    //return 0;
+}
+
+void insert(nodeptr *parent,int *unbalanced,int key)
+{
+     if(!(*parent))
+     {
+                   //printf(&quot;mhere 1&quot;);
+          node *newnode;
+          newnode=(node *)malloc(sizeof(node));
+          newnode-&gt;leftchild=newnode-&gt;rightchild=NULL;
+          newnode-&gt;val=key;
+          newnode-&gt;bf=0;
+          *unbalanced=true;
+          *parent=newnode;
+          //printf(&quot;mhere 1&quot;);
+          //return newnode;
+     }
+     else if(key&lt;(*parent)-&gt;val)
+     {
+          //printf(&quot;\nm here2&quot;);
+          insert(&amp;(*parent)-&gt;leftchild,unbalanced,key);
+          if(*unbalanced)
+          {
+             switch((*parent)-&gt;bf)
+             {
+              case -1: (*parent)-&gt;bf=0;
+                       //printf(&quot;\nreset bf&quot;);
+                       *unbalanced=false;
+                       break;
+              case 0: (*parent)-&gt;bf=1;
+                      //printf(&quot;\nset bf&quot;);
+                       break;
+              case 1: leftRotation(parent,unbalanced);
+                      //printf(&quot;\n**LEFT ROTATION DONE**\n&quot;);
+                       break;////////////////////////////////////
+              }
+          }
+          
+     }
+     else if(key&gt;(*parent)-&gt;val)
+     {
+          //printf(&quot;m here3&quot;);
+          insert(&amp;(*parent)-&gt;rightchild,unbalanced,key);
+          //printf(&quot;m here4&quot;);
+          if(*unbalanced)
+          {
+           switch((*parent)-&gt;bf)
+           {
+              case 1: (*parent)-&gt;bf=0;
+                        *unbalanced=false;
+                        break;
+              case 0: (*parent)-&gt;bf=-1;
+                        break;
+              case -1: //printf(&quot;going to rightrOTATE&quot;);
+                       rightrotation(parent,unbalanced);
+                       //printf(&quot;\n**RIGHT ROTATION DONE**\n&quot;);
+                       break;
+           }
+        }
+        else
+        {
+            *unbalanced=false;
+            //printf(&quot;the key is already in the tree&quot;);
+        }
+     }
+}
+
+void leftRotation(nodeptr *pparent,int *unbalanced)
+{
+     nodeptr child,grandchild;
+     child=(*pparent)-&gt;leftchild;
+     if(child-&gt;bf==1)
+     {
+                     printf(&quot;\nsimple left rotation.&quot;);
+        (*pparent)-&gt;leftchild=child-&gt;rightchild;
+        child-&gt;rightchild=(*pparent);
+        (*pparent)-&gt;bf=0;
+        (*pparent)=child;
+     }
+     else
+     {
+         printf(&quot;\nDOUBLE leftROTATION&quot;);
+      grandchild=child-&gt;rightchild;
+      child-&gt;rightchild=grandchild-&gt;leftchild;
+      grandchild-&gt;leftchild=child;
+      (*pparent)-&gt;leftchild=grandchild-&gt;rightchild;
+      grandchild-&gt;rightchild=*pparent;
+      switch(grandchild-&gt;bf)
+        {
+             case 1:(*pparent )-&gt;bf=-1;child-&gt;bf=0;break;
+             case 0:(*pparent)-&gt;bf=child-&gt;bf=0;break;
+             case -1:(*pparent)-&gt;bf=0;
+                      child-&gt;bf=1;
+             break;
+        }
+        *pparent=grandchild;
+     }
+     (*pparent)-&gt;bf=0;
+     *unbalanced=false;
+     return;
+}
+
+void rightrotation(nodeptr *pparent,int *unbalanced)
+{
+     nodeptr child,grandchild;
+     child=(*pparent)-&gt;rightchild;
+     if(child-&gt;bf==-1)
+     {
+                      printf(&quot;\nSIMPLE RIGHTROTATION&quot;);
+         (*pparent)-&gt;rightchild=child-&gt;leftchild;
+         child-&gt;leftchild=*pparent;
+         (*pparent)-&gt;bf=0;
+         (*pparent)=child;
+     }
+     else
+     {
+         printf(&quot;\nDOUBLE rightROTATION.&quot;);
+         grandchild=child-&gt;leftchild;
+         child-&gt;leftchild=grandchild-&gt;rightchild;
+         grandchild-&gt;rightchild=child;
+         (*pparent)-&gt;rightchild=grandchild-&gt;leftchild;
+         grandchild-&gt;leftchild=*pparent;
+         switch(grandchild-&gt;bf){
+         case 1:(*pparent)-&gt;bf=-1;
+                 child-&gt;bf=0;
+                 break;
+         case 0: (*pparent)-&gt;bf=child-&gt;bf=0;
+                 break;
+         case -1:(*pparent)-&gt;bf=0;
+                  child-&gt;bf=1;break;
+         }
+         *pparent=grandchild;
+     }
+     (*pparent)-&gt;bf=0;
+     *unbalanced=false;
+     return;
+}
+
+int height(node* node) 
+{
+   if (node==NULL) 
+       return 0;
+   else
+   {
+       ///* compute the depth of each subtree 
+       int lDepth = height(node-&gt;leftchild);
+       int rDepth = height(node-&gt;rightchild);
+ 
+       ///* use the larger one 
+       if (lDepth &gt; rDepth) 
+           return(lDepth+1);
+       else return(rDepth+1);
+   }
+} 
+
+void inorder(node *proot)
+{
+     if(proot==NULL)return;
+     inorder(proot-&gt;leftchild);
+     printf(&quot;\nkey:%3d\tbalancefactor:%3d&quot;,proot-&gt;val,proot-&gt;bf);
+     inorder(proot-&gt;rightchild);
+     
+}    
+</code> </pre>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-9364">
+        <div id="dsq-comment-header-9364" class="dsq-comment-header">
+            <cite id="dsq-cite-9364">
+                <span id="dsq-author-user-9364">Sankarshan Mridha</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-9364" class="dsq-comment-body">
+            <div id="dsq-comment-message-9364" class="dsq-comment-message"><p>#include<br />
+#include<br />
+#include<br />
+#define true 1<br />
+#define false 0<br />
+#define log2(a) log((a))/log(2)</p>
+<p>typedef struct node* nodeptr;</p>
+<p>typedef struct node<br />
+{<br />
+        int val;<br />
+        nodeptr leftchild;<br />
+        nodeptr rightchild;<br />
+        int bf;<br />
+}node;</p>
+<p>void insert(nodeptr *parent,int *unbalanced,int key);<br />
+void leftRotation(nodeptr *pparent,int *unbalanced);//..means if left subtree grows larger then rotate this left subtree<br />
+void rightrotation(nodeptr *,int *);//&#8230;&#8230;&#8230;&#8230;&#8230;.vice versa<br />
+int height(node* node);<br />
+void inorder(node *proot);</p>
+<p>int main(void)<br />
+{<br />
+    node *root,*cur;<br />
+    root=NULL;<br />
+    int balancedState=true;<br />
+    //int num[]={1,2,3,4,5,6,8,9,10,7};//..input series..{8,7,2,9},{8,7,2,9,10},{8,7,2,9,10,11}<br />
+    int num[]={10,9,8,7,6,5,3,2,1,4,15,14,16,12};<br />
+    int size=sizeof(num)/sizeof(int);<br />
+    int i=0;<br />
+    for(i=0;i&lt;size;i++)<br />
+    {<br />
+                   printf(&quot;\nheight before insertion of %d is %d\n&quot;,num[i],height(root)-1);<br />
+                   insert(&amp;root,&amp;balancedState,num[i]);<br />
+                   printf(&quot;\n%d is inserted.\nHeight after insertion is: %d&quot;,num[i],height(root)-1);</p>
+<p>                   printf(&quot;\n\n****************************************************&quot;);<br />
+    }</p>
+<p>    printf(&quot;\n\nfinal height is: %d&quot;,height(root)-1);<br />
+    printf(&quot;\nno of nodes are %d.\nAnd log2(%d) is %f.&quot;,size,size,log2(size));<br />
+    printf(&quot;\nSo Height is almost equal to log2(%d))\n&quot;,size);<br />
+    printf(&quot;\noutputleftchild=newnode-&gt;rightchild=NULL;<br />
+          newnode-&gt;val=key;<br />
+          newnode-&gt;bf=0;<br />
+          *unbalanced=true;<br />
+          *parent=newnode;<br />
+          //printf(&#8220;mhere 1&#8243;);<br />
+          //return newnode;<br />
+     }<br />
+     else if(keyval)<br />
+     {<br />
+          //printf(&#8220;\nm here2&#8243;);<br />
+          insert(&amp;(*parent)-&gt;leftchild,unbalanced,key);<br />
+          if(*unbalanced)<br />
+          {<br />
+             switch((*parent)-&gt;bf)<br />
+             {<br />
+              case -1: (*parent)-&gt;bf=0;<br />
+                       //printf(&#8220;\nreset bf&#8221;);<br />
+                       *unbalanced=false;<br />
+                       break;<br />
+              case 0: (*parent)-&gt;bf=1;<br />
+                      //printf(&#8220;\nset bf&#8221;);<br />
+                       break;<br />
+              case 1: leftRotation(parent,unbalanced);<br />
+                      //printf(&#8220;\n**LEFT ROTATION DONE**\n&#8221;);<br />
+                       break;////////////////////////////////////<br />
+              }<br />
+          }</p>
+<p>     }<br />
+     else if(key&gt;(*parent)-&gt;val)<br />
+     {<br />
+          //printf(&#8220;m here3&#8243;);<br />
+          insert(&amp;(*parent)-&gt;rightchild,unbalanced,key);<br />
+          //printf(&#8220;m here4&#8243;);<br />
+          if(*unbalanced)<br />
+          {<br />
+           switch((*parent)-&gt;bf)<br />
+           {<br />
+              case 1: (*parent)-&gt;bf=0;<br />
+                        *unbalanced=false;<br />
+                        break;<br />
+              case 0: (*parent)-&gt;bf=-1;<br />
+                        break;<br />
+              case -1: //printf(&#8220;going to rightrOTATE&#8221;);<br />
+                       rightrotation(parent,unbalanced);<br />
+                       //printf(&#8220;\n**RIGHT ROTATION DONE**\n&#8221;);<br />
+                       break;<br />
+           }<br />
+        }<br />
+        else<br />
+        {<br />
+            *unbalanced=false;<br />
+            //printf(&#8220;the key is already in the tree&#8221;);<br />
+        }<br />
+     }<br />
+}</p>
+<p>void leftRotation(nodeptr *pparent,int *unbalanced)<br />
+{<br />
+     nodeptr child,grandchild;<br />
+     child=(*pparent)-&gt;leftchild;<br />
+     if(child-&gt;bf==1)<br />
+     {<br />
+                     printf(&#8220;\nsimple left rotation.&#8221;);<br />
+        (*pparent)-&gt;leftchild=child-&gt;rightchild;<br />
+        child-&gt;rightchild=(*pparent);<br />
+        (*pparent)-&gt;bf=0;<br />
+        (*pparent)=child;<br />
+     }<br />
+     else<br />
+     {<br />
+         printf(&#8220;\nDOUBLE leftROTATION&#8221;);<br />
+      grandchild=child-&gt;rightchild;<br />
+      child-&gt;rightchild=grandchild-&gt;leftchild;<br />
+      grandchild-&gt;leftchild=child;<br />
+      (*pparent)-&gt;leftchild=grandchild-&gt;rightchild;<br />
+      grandchild-&gt;rightchild=*pparent;<br />
+      switch(grandchild-&gt;bf)<br />
+        {<br />
+             case 1:(*pparent )-&gt;bf=-1;child-&gt;bf=0;break;<br />
+             case 0:(*pparent)-&gt;bf=child-&gt;bf=0;break;<br />
+             case -1:(*pparent)-&gt;bf=0;<br />
+                      child-&gt;bf=1;<br />
+             break;<br />
+        }<br />
+        *pparent=grandchild;<br />
+     }<br />
+     (*pparent)-&gt;bf=0;<br />
+     *unbalanced=false;<br />
+     return;<br />
+}</p>
+<p>void rightrotation(nodeptr *pparent,int *unbalanced)<br />
+{<br />
+     nodeptr child,grandchild;<br />
+     child=(*pparent)-&gt;rightchild;<br />
+     if(child-&gt;bf==-1)<br />
+     {<br />
+                      printf(&#8220;\nSIMPLE RIGHTROTATION&#8221;);<br />
+         (*pparent)-&gt;rightchild=child-&gt;leftchild;<br />
+         child-&gt;leftchild=*pparent;<br />
+         (*pparent)-&gt;bf=0;<br />
+         (*pparent)=child;<br />
+     }<br />
+     else<br />
+     {<br />
+         printf(&#8220;\nDOUBLE rightROTATION.&#8221;);<br />
+         grandchild=child-&gt;leftchild;<br />
+         child-&gt;leftchild=grandchild-&gt;rightchild;<br />
+         grandchild-&gt;rightchild=child;<br />
+         (*pparent)-&gt;rightchild=grandchild-&gt;leftchild;<br />
+         grandchild-&gt;leftchild=*pparent;<br />
+         switch(grandchild-&gt;bf){<br />
+         case 1:(*pparent)-&gt;bf=-1;<br />
+                 child-&gt;bf=0;<br />
+                 break;<br />
+         case 0: (*pparent)-&gt;bf=child-&gt;bf=0;<br />
+                 break;<br />
+         case -1:(*pparent)-&gt;bf=0;<br />
+                  child-&gt;bf=1;break;<br />
+         }<br />
+         *pparent=grandchild;<br />
+     }<br />
+     (*pparent)-&gt;bf=0;<br />
+     *unbalanced=false;<br />
+     return;<br />
+}</p>
+<p>int height(node* node)<br />
+{<br />
+   if (node==NULL)<br />
+       return 0;<br />
+   else<br />
+   {<br />
+       ///* compute the depth of each subtree<br />
+       int lDepth = height(node-&gt;leftchild);<br />
+       int rDepth = height(node-&gt;rightchild);</p>
+<p>       ///* use the larger one<br />
+       if (lDepth &gt; rDepth)<br />
+           return(lDepth+1);<br />
+       else return(rDepth+1);<br />
+   }<br />
+} </p>
+<p>void inorder(node *proot)<br />
+{<br />
+     if(proot==NULL)return;<br />
+     inorder(proot-&gt;leftchild);<br />
+     printf(&#8220;\nkey:%3d\tbalancefactor:%3d&#8221;,proot-&gt;val,proot-&gt;bf);<br />
+     inorder(proot-&gt;rightchild);</p>
+<p>}</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-8123">
+        <div id="dsq-comment-header-8123" class="dsq-comment-header">
+            <cite id="dsq-cite-8123">
+                <span id="dsq-author-user-8123">Anurag</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-8123" class="dsq-comment-body">
+            <div id="dsq-comment-message-8123" class="dsq-comment-message"><p>Brilliant!<br />
+Such easy explaination.<br />
+Thanks.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-7680">
+        <div id="dsq-comment-header-7680" class="dsq-comment-header">
+            <cite id="dsq-cite-7680">
+                <span id="dsq-author-user-7680">sparco</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-7680" class="dsq-comment-body">
+            <div id="dsq-comment-message-7680" class="dsq-comment-message"><p>How should the algo be modified for Deletion of node in Avl tree ?</p>
+<pre> <code language="C">
+
+</code> </pre>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment byuser comment-author-geeksforgeeks bypostauthor even depth-2" id="dsq-comment-7681">
+        <div id="dsq-comment-header-7681" class="dsq-comment-header">
+            <cite id="dsq-cite-7681">
+                <span id="dsq-author-user-7681">GeeksforGeeks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-7681" class="dsq-comment-body">
+            <div id="dsq-comment-message-7681" class="dsq-comment-message"><p>@sparco:  We will soon be publshing another post on deletion.  In the mean time, you can refer video lectures in the reference section.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-7665">
+        <div id="dsq-comment-header-7665" class="dsq-comment-header">
+            <cite id="dsq-cite-7665">
+                <span id="dsq-author-user-7665">sparco</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-7665" class="dsq-comment-body">
+            <div id="dsq-comment-message-7665" class="dsq-comment-message"><p>I have a doubt in the left rotate function ..<br />
+Wouldnt T2-&gt; height also be changed due to the rotation ???</p>
+<pre> <code language="C">
+/* Paste your code here (You may delete these lines if not writing code) */
+
+struct node *leftRotate(struct node *x)
+{
+    struct node *y = x-&gt;right;
+    struct node *T2 = y-&gt;left;
+ 
+    // Perform rotation
+    y-&gt;left = x;
+    x-&gt;right = T2;
+ 
+    //  Update heights
+    x-&gt;height = max(height(x-&gt;left), height(x-&gt;right))+1;
+    y-&gt;height = max(height(y-&gt;left), height(y-&gt;right))+1;
+ 
+    // Return new root
+    return y;
+}
+ 
+</code> </pre>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-7666">
+        <div id="dsq-comment-header-7666" class="dsq-comment-header">
+            <cite id="dsq-cite-7666">
+                <span id="dsq-author-user-7666">sparco</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-7666" class="dsq-comment-body">
+            <div id="dsq-comment-message-7666" class="dsq-comment-message"><p>Thanks i got it clarified..</p>
+<p>Since T2 &#8216;s left and right are undisturbed , the height remains the same</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-7654">
+        <div id="dsq-comment-header-7654" class="dsq-comment-header">
+            <cite id="dsq-cite-7654">
+                <span id="dsq-author-user-7654">Vimal</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-7654" class="dsq-comment-body">
+            <div id="dsq-comment-message-7654" class="dsq-comment-message"><p>Excellent tutorial..<br />
+Keep it up !!</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-7650">
+        <div id="dsq-comment-header-7650" class="dsq-comment-header">
+            <cite id="dsq-cite-7650">
+                <span id="dsq-author-user-7650">shareef</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-7650" class="dsq-comment-body">
+            <div id="dsq-comment-message-7650" class="dsq-comment-message"><p>nice material</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://www.geeksforgeeks.org/avl-tree-set-1-insertion/';
+var disqus_identifier = '17679 http://www.geeksforgeeks.org/?p=17679';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'geeksforgeeks';
+var disqus_title = "AVL Tree | Set 1 (Insertion)";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+			</div>
+	
+					
+			
+			
+
+		</div> <!-- end post -->	
+
+<br></br>
+	
+</div> <!-- end content -->
+
+<ul id="sidebar">
+	<li id="text-19" class="widget widget_text">			<div class="textwidget"><script>
+  (function() {
+    var cx = '009682134359037907028:tj6eafkv_be';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+
+<style type="text/css">
+  .gsc-control-cse {
+    font-family: "Trebuchet MS", sans-serif;
+    border-color: #E1F3DA;
+    background-color: #E1F3DA;
+  }
+  input.gsc-input {
+    border-color: #94CC7A;
+  }
+  input.gsc-search-button {
+    border-color: #94CC7A;
+    background-color: #AADA92;
+  }
+  .gsc-tabHeader.gsc-tabhInactive {
+    border-color: #A9DA92;
+    background-color: #FFFFFF;
+  }
+  .gsc-tabHeader.gsc-tabhActive {
+    border-color: #A9DA92;
+    background-color: #A9DA92;
+  }
+  .gsc-tabsArea {
+    border-color: #A9DA92;
+  }
+  .gsc-webResult.gsc-result {
+    border-color: #A9DA92;
+    background-color: #FFFFFF;
+  }
+  .gsc-webResult.gsc-result:hover {
+    border-color: #A9DA92;
+    background-color: #FFFFFF;
+  }
+  .gs-webResult.gs-result a.gs-title:link,
+  .gs-webResult.gs-result a.gs-title:link b {
+    color: #009900;
+  }
+  .gs-webResult.gs-result a.gs-title:visited,
+  .gs-webResult.gs-result a.gs-title:visited b {
+    color: #009900;
+  }
+  .gs-webResult.gs-result a.gs-title:hover,
+  .gs-webResult.gs-result a.gs-title:hover b {
+    color: #003300;
+  }
+  .gs-webResult.gs-result a.gs-title:active,
+  .gs-webResult.gs-result a.gs-title:active b {
+    color: #009900;
+  }
+  .gsc-cursor-page {
+    color: #009900;
+  }
+  a.gsc-trailing-more-results:link {
+    color: #009900;
+  }
+  .gs-webResult.gs-result .gs-snippet {
+    color: #454545;
+  }
+  .gs-webResult.gs-result .gs-visibleUrl {
+    color: #33cc00;
+  }
+  .gs-webResult.gs-result .gs-visibleUrl-short {
+    color: #33cc00;
+  }
+  .gs-webResult.gs-result .gs-visibleUrl-short {
+    display: none;
+  }
+  .gs-webResult.gs-result .gs-visibleUrl-long {
+    display: block;
+  }
+  .gsc-cursor-box {
+    border-color: #A9DA92;
+  }
+  .gsc-results .gsc-cursor-page {
+    border-color: #A9DA92;
+    background-color: #FFFFFF;
+  }
+  .gsc-results .gsc-cursor-page.gsc-cursor-current-page {
+    border-color: #A9DA92;
+    background-color: #A9DA92;
+  }
+  .gs-promotion.gs-result {
+    border-color: #94CC7A;
+    background-color: #CBE8B4;
+  }
+  .gs-promotion.gs-result a.gs-title:link {
+    color: #0066CC;
+  }
+  .gs-promotion.gs-result a.gs-title:visited {
+    color: #0066CC;
+  }
+  .gs-promotion.gs-result a.gs-title:hover {
+    color: #0066CC;
+  }
+  .gs-promotion.gs-result a.gs-title:active {
+    color: #0066CC;
+  }
+  .gs-promotion.gs-result .gs-snippet {
+    color: #454545;
+  }
+  .gs-promotion.gs-result .gs-visibleUrl,
+  .gs-promotion.gs-result .gs-visibleUrl-short {
+    color: #815FA7;
+  }
+</style>    </div>
+		</li>
+<li id="text-9" class="widget widget_text">			<div class="textwidget"><div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=138031159685820";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<div class="fb-like-box" data-href="https://www.facebook.com/pages/GeeksforGeeks/316764689022" data-width="250" data-height="170" data-colorscheme="light" data-show-faces="true" data-header="false" data-stream="false" data-show-border="false"></div></div>
+		</li>
+<li id="text-18" class="widget widget_text">			<div class="textwidget"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- LargeRectangleSide -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:336px;height:280px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="1884636833"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
+		</li>
+<li id="text-13" class="widget widget_text">			<div class="textwidget"><ul><li><a href="http://www.geeksforgeeks.org/category/interview-experiences/">Interview Experiences</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/advance-data-structures">Advanced Data Structures</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/dynamic-programming">Dynamic Programming</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/Greedy-Algorithm/">Greedy Algorithms</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/backtracking">Backtracking</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/pattern-searching">Pattern Searching</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/divide-and-conquer">Divide & Conquer</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/MathematicalAlgo">Mathematical Algorithms</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/recursion">Recursion</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/geometric-algorithms/">Geometric Algorithms</a></li>
+</ul></div>
+		</li>
+<li id="text-17" class="widget widget_text">			<div class="textwidget"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Big 300x600 Sidebar -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:600px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="4402736037"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
+		</li>
+<li id="text-14" class="widget widget_text"><h2 class="widgettitle">Popular Posts</h2>
+			<div class="textwidget"><ul>
+<li><a href="http://www.geeksforgeeks.org/write-a-c-program-to-print-all-permutations-of-a-given-string/">  All permutations of a given string </a></li>
+<li><a href="http://www.geeksforgeeks.org/memory-layout-of-c-program/"> Memory Layout of C Programs</a> </li>
+<li><a href="http://www.geeksforgeeks.org/understanding-extern-keyword-in-c/"> Understanding “extern” keyword in C</a> </li>
+<li><a href="http://www.geeksforgeeks.org/median-of-two-sorted-arrays/">Median of two sorted arrays</a> </li>
+<li><a href="http://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion-and-without-stack/"> Tree traversal without recursion and without stack! </a></li>
+<li><a href="http://www.geeksforgeeks.org/structure-member-alignment-padding-and-data-packing/"> Structure Member Alignment, Padding and Data Packing</a> </li>
+<li><a href="http://www.geeksforgeeks.org/write-a-function-to-get-the-intersection-point-of-two-linked-lists/"> Intersection point of two Linked Lists</a> </li>
+<li><a href="http://www.geeksforgeeks.org/lowest-common-ancestor-in-a-binary-search-tree/"> Lowest Common Ancestor in a BST.</span></a> </li>
+<li><a href="http://www.geeksforgeeks.org/a-program-to-check-if-a-binary-tree-is-bst-or-not/"> Check if a binary tree is BST or not</a> </li>
+<li><a href="http://www.geeksforgeeks.org/sorted-linked-list-to-balanced-bst/"> Sorted Linked List to Balanced BST</a></li>
+</ul></div>
+		</li>
+<li id="text-3" class="widget widget_text">			<div class="textwidget"><a href="https://twitter.com/GeeksforGeeks" class="twitter-follow-button" data-show-count="false">Follow @GeeksforGeeks</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>         
+
+
+<!-- GOOGLE FEEDBURNER BUTTON-->
+<a href="http://feeds.feedburner.com/Geeksforgeeks" title="Subscribe to my feed" rel="alternate" type="application/rss+xml"><img src="http://www.feedburner.com/fb/images/pub/feed-icon32x32.png" alt="" style="border:0"/></a><a href="http://feeds.feedburner.com/Geeksforgeeks" title="Subscribe to my feed" rel="alternate" type="application/rss+xml">Subscribe</a>
+
+</div>
+		</li>
+<li id="text-21" class="widget widget_text"><h2 class="widgettitle">Recent Comments</h2>
+			<div class="textwidget"><script type="text/javascript" src="http://geeksforgeeks.disqus.com//recent_comments_widget.js?num_items=6&hide_avatars=1&excerpt_length=50&hide_mods=0"></script></div>
+		</li>
+<li id="text-22" class="widget widget_text">			<div class="textwidget"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- LinkAd -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:90px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="2606115235"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- LinkAd -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:90px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="2606115235"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- LinkAd -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:90px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="2606115235"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
+		</li>
+
+</ul>					  
+		<div class="clear"></div>
+
+		<div id="footer">
+		
+		    <div class="xhtml">
+                        @geeksforgeeks, <a href="http://creativecommons.org/licenses/by-nc-nd/2.5/in/deed.en_US" title="Valid XHTML Strict 1.0">Some rights reserved</a>  <a href="http://www.geeksforgeeks.org/about/contact-us/"> &nbsp; &nbsp; &nbsp; &nbsp;Contact Us!</a>
+
+		    </div>
+		    
+		    <div class="credits">
+			  Powered by <a href="http://wordpress.org">WordPress </a> &amp; <a href="http://mootools.net/" title="Mootools JavaScript Framework">MooTools</a>, customized by geeksforgeeks team </div>
+			  
+		   <div class="clear"></div>						                            
+		   
+		</div> <!--end footer-->  
+        
+		        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'geeksforgeeks';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1) {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('rel'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script'); 
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shCore.js?ver=3.0.9'></script>
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shBrushCpp.js?ver=3.0.9'></script>
+<script type='text/javascript'>
+	(function(){
+		var corecss = document.createElement('link');
+		var themecss = document.createElement('link');
+		var corecssurl = "http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCore.css?ver=3.0.9";
+		if ( corecss.setAttribute ) {
+				corecss.setAttribute( "rel", "stylesheet" );
+				corecss.setAttribute( "type", "text/css" );
+				corecss.setAttribute( "href", corecssurl );
+		} else {
+				corecss.rel = "stylesheet";
+				corecss.href = corecssurl;
+		}
+		document.getElementsByTagName("head")[0].insertBefore( corecss, document.getElementById("syntaxhighlighteranchor") );
+		var themecssurl = "http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shThemeDefault.css?ver=3.0.9";
+		if ( themecss.setAttribute ) {
+				themecss.setAttribute( "rel", "stylesheet" );
+				themecss.setAttribute( "type", "text/css" );
+				themecss.setAttribute( "href", themecssurl );
+		} else {
+				themecss.rel = "stylesheet";
+				themecss.href = themecssurl;
+		}
+		//document.getElementById("syntaxhighlighteranchor").appendChild(themecss);
+		document.getElementsByTagName("head")[0].insertBefore( themecss, document.getElementById("syntaxhighlighteranchor") );
+	})();
+	SyntaxHighlighter.config.strings.expandSource = '+ expand source';
+	SyntaxHighlighter.config.strings.help = '?';
+	SyntaxHighlighter.config.strings.alert = 'SyntaxHighlighter\n\n';
+	SyntaxHighlighter.config.strings.noBrush = 'Can\'t find brush for: ';
+	SyntaxHighlighter.config.strings.brushNotHtmlScript = 'Brush wasn\'t configured for html-script option: ';
+	SyntaxHighlighter.defaults['gutter'] = false;
+	SyntaxHighlighter.defaults['pad-line-numbers'] = true;
+	SyntaxHighlighter.defaults['toolbar'] = false;
+	SyntaxHighlighter.all();
+</script>
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/bbpress/templates/default/js/editor.js?ver=2.5.4-5380'></script>
+				  
+		</div> <!--end wrapper-->
+        <div id="ajaxSpinner"></div> <!--For AJAX spinner holder-->
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-12148232-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+	</body>
+
+</html>
+<!-- Dynamic page generated in 0.212 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2014-11-27 23:24:53 -->
+
+<!-- Compression = gzip -->
+<!-- super cache -->

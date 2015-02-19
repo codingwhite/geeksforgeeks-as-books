@@ -1,0 +1,196 @@
+<body><div><div class="post" id="post">
+							<div class="post-info">			
+					<p class="post-title-info">
+						</p><h2 class="post-title">Trie | (Insert and Search)</h2>
+								
+					<p class="clear"></p>				  
+				<div class="post-content" id="post-content">
+					<p><a href="http://en.wikipedia.org/wiki/Trie" target="_blank">Trie</a> is an efficient information re<strong><em>trie</em></strong>val data structure. Using trie, search complexities can be brought to optimal limit (key length). <span id="more-13067"></span>If we store keys in binary search tree, a well balanced BST will need time&#194;&#160;proportional&#194;&#160;to <strong>M * log N</strong>, where M is maximum string length and N is number of keys in tree. Using trie, we can search the key in O(M) time. However the penalty is on trie storage requirements.</p>
+<p>Every node of trie consists of multiple branches. Each branch represents a possible character of keys. We need to mark the last node of every key as leaf node. A trie node field <em>value</em> will be used to distinguish the node as leaf node (there are other uses of the <em>value</em> field). A simple structure to represent nodes of English alphabet can be as following,</p>
+<p><code>struct</code> <code>trie_node</code></p>
+<p><code>{</code></p>
+<p><code>&#194;&#160;&#194;&#160;&#194;&#160;&#194;&#160;</code><code>int</code> <code>value; /* Used to mark leaf nodes */</code></p>
+<p><code>&#194;&#160;&#194;&#160;&#194;&#160;&#194;&#160;</code><code>trie_node_t *children[ALPHABET_SIZE];</code></p>
+<p><code>};</code></p>
+<p>Inserting a key into trie is simple approach. Every character of input key is inserted as an individual trie node. Note that the <em>children</em> is an array of pointers to next level trie nodes. The key character acts as an index into the array <em>children</em>. If the input key is new or an extension of existing key, we need to construct non-existing nodes of the key, and mark leaf node. If the input key is prefix of existing key in trie, we simply mark the last node of key as leaf. The key length determines trie depth.</p>
+<p>Searching for a key is similar to insert operation, however we only compare the characters and move down. The search can terminate due to end of string or lack of key in trie. In the&#194;&#160;former&#194;&#160;case, if the <em>value</em> field of last node is non-zero then the key exists in trie. In the second case, the search terminates without examining all the characters of key, since the key is not present in trie.</p>
+<p>The following picture explains construction of trie using keys given in the example below,</p>
+<pre>                       root
+                    /   \    \
+                    t   <span>a</span>     b
+                    |   |     |
+                    h   n     <span>y</span>
+                    |   |  \  |
+                    <span>e</span>   s  <span>y</span>  <span>e</span>
+                 /  |   |
+                 i  r   w
+                 |  |   |
+                 <span>r</span>  <span>e</span>   e
+                        |
+                        <span>r</span></pre>
+<p>In the picture, every character is of type&#194;&#160;<em>trie_node_t</em>. For example, the <em>root</em> is of type&#194;&#160;trie_node_t, and it&#8217;s children <em>a</em>, <em>b</em> and <em>t</em> are filled, all other nodes of root will be NULL. Similarly, &#8220;a&#8221; at the next level is having only one child (&#8220;n&#8221;), all other children are NULL. The leaf nodes are in <span>blue</span>.</p>
+<p>Insert and search costs <strong>O(key_length)</strong>, however the memory requirements of trie is <strong>O(ALPHABET_SIZE * key_length * N)</strong>&#194;&#160;where N is number of keys in trie. There are efficient representation of trie nodes (e.g. compressed trie,&#194;&#160;<a href="http://en.wikipedia.org/wiki/Ternary_search_tree" target="_blank">ternary&#194;&#160;search tree</a>, etc.) to&#194;&#160;minimize&#194;&#160;memory requirements of trie.</p>
+<pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+#define ARRAY_SIZE(a) sizeof(a)/sizeof(a[0])
+
+// Alphabet size (# of symbols)
+#define ALPHABET_SIZE (26)
+// Converts key current character into index
+// use only 'a' through 'z' and lower case
+#define CHAR_TO_INDEX(c) ((int)c - (int)'a')
+
+// trie node
+typedef struct trie_node trie_node_t;
+struct trie_node
+{
+    int value;
+    trie_node_t *children[ALPHABET_SIZE];
+};
+
+// trie ADT
+typedef struct trie trie_t;
+struct trie
+{
+    trie_node_t *root;
+    int count;
+};
+
+// Returns new trie node (initialized to NULLs)
+trie_node_t *getNode(void)
+{
+    trie_node_t *pNode = NULL;
+
+    pNode = (trie_node_t *)malloc(sizeof(trie_node_t));
+
+    if( pNode )
+    {
+        int i;
+
+        pNode-&gt;value = 0;
+
+        for(i = 0; i &lt; ALPHABET_SIZE; i++)
+        {
+            pNode-&gt;children[i] = NULL;
+        }
+    }
+
+    return pNode;
+}
+
+// Initializes trie (root is dummy node)
+void initialize(trie_t *pTrie)
+{
+    pTrie-&gt;root = getNode();
+    pTrie-&gt;count = 0;
+}
+
+// If not present, inserts key into trie
+// If the key is prefix of trie node, just marks leaf node
+void insert(trie_t *pTrie, char key[])
+{
+    int level;
+    int length = strlen(key);
+    int index;
+    trie_node_t *pCrawl;
+
+    pTrie-&gt;count++;
+    pCrawl = pTrie-&gt;root;
+
+    for( level = 0; level &lt; length; level++ )
+    {
+        index = CHAR_TO_INDEX(key[level]);
+        if( !pCrawl-&gt;children[index] )
+        {
+            pCrawl-&gt;children[index] = getNode();
+        }
+
+        pCrawl = pCrawl-&gt;children[index];
+    }
+
+    // mark last node as leaf
+    pCrawl-&gt;value = pTrie-&gt;count;
+}
+
+// Returns non zero, if key presents in trie
+int search(trie_t *pTrie, char key[])
+{
+    int level;
+    int length = strlen(key);
+    int index;
+    trie_node_t *pCrawl;
+
+    pCrawl = pTrie-&gt;root;
+
+    for( level = 0; level &lt; length; level++ )
+    {
+        index = CHAR_TO_INDEX(key[level]);
+
+        if( !pCrawl-&gt;children[index] )
+        {
+            return 0;
+        }
+
+        pCrawl = pCrawl-&gt;children[index];
+    }
+
+    return (0 != pCrawl &amp;&amp; pCrawl-&gt;value);
+}
+
+// Driver
+int main()
+{
+    // Input keys (use only 'a' through 'z' and lower case)
+    char keys[][8] = {"the", "a", "there", "answer", "any", "by", "bye", "their"};
+    trie_t trie;
+
+    char output[][32] = {"Not present in trie", "Present in trie"};
+
+    initialize(&amp;trie);
+
+    // Construct trie
+    for(int i = 0; i &lt; ARRAY_SIZE(keys); i++)
+    {
+        insert(&amp;trie, keys[i]);
+    }
+
+    // Search for different keys
+    printf("%s --- %s\n", "the", output[search(&amp;trie, "the")] );
+    printf("%s --- %s\n", "these", output[search(&amp;trie, "these")] );
+    printf("%s --- %s\n", "their", output[search(&amp;trie, "their")] );
+    printf("%s --- %s\n", "thaw", output[search(&amp;trie, "thaw")] );
+
+    return 0;
+}
+</pre>
+<p>&#8212;&#194;&#160;<strong><a href="http://www.linkedin.com/in/ramanawithu" target="_blank">Venki</a></strong>. Please write comments if you find anything incorrect, or you want to share more information about the topic discussed above.</p>
+		
+&#160;
+&#160;
+
+
+
+
+
+
+
+&#160;
+&#160;
+&#160;
+<p>Tags: <a href="http://www.geeksforgeeks.org/tag/advance-data-structures/" rel="tag">Advance Data Structures</a></p> 
+
+
+
+
+
+
+				<h3>Source:</h3><p><a href="http://www.geeksforgeeks.org/trie-insert-and-search/" rel="tag">http://www.geeksforgeeks.org/trie-insert-and-search/</a></p></div>		  
+			</div> 					
+						
+        
+			</div> 	
+
+</div></body>

@@ -1,0 +1,83 @@
+<body><div><h2>Binomial Heap</h2><div class="post-content" id="post-content">
+					<p>The main application of <a href="http://geeksquiz.com/binary-heap/" target="_blank">Binary Heap </a>is as implement priority queue. Binomial Heap is an extension of <a href="http://geeksquiz.com/binary-heap/" target="_blank">Binary Heap </a>that provides faster union or merge operation together with other operations provided by Binary Heap.<span id="more-132305"></span></p>
+<p><em>A Binomial Heap is a collection of Binomial Trees</em></p>
+<p><strong>What is a Binomial Tree?</strong><br>
+A Binomial Tree of order 0 has 1 node. A Binomial Tree of order k can be constructed by taking two binomial trees of order k-1, and making one as leftmost child of other.<br>
+A Binomial Tree of order k has following properties.<br>
+a) It has exactly 2<sup>k</sup> nodes.<br>
+b) It has depth as k.<br>
+c) There are exactly kCi nodes at depth i for i = 0, 1, . . . , k.<br>
+d) The root has degree k and children of root are themselves Binomial Trees with order k-1, k-2,.. 0 from left to right.</p>
+<p>The following diagram is taken from 2nd Edition of <a href="http://www.flipkart.com/introduction-algorithms-english-3rd/p/itmdwxyrafdburzg?pid=9788120340077&amp;affid=sandeepgfg">CLRS book</a>.</p>
+<p><a href="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/BinomialTree.png"><img class="aligncenter size-full wp-image-132308" src="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/BinomialTree.png" alt="BinomialTree" width="434" height="352"></a></p>
+<p><strong>Binomial Heap:</strong><br>
+A Binomial Heap is a set of Binomial Trees where each Binomial Tree follows Min Heap property. And there can be at-most one Binomial Tree of any degree.</p>
+<p><strong>Examples Binomial Heap:</strong></p>
+<pre>12------------10--------------------20
+             /  \                 /  | \
+           15    50             70  50  40
+           |                  / |    |
+           30               80  85  65
+                            |
+                           100
+A Binomial Heap with 13 nodes. It is a collection of 3
+Binomial Trees of orders 0, 2 and 3 from left to right.
+
+    10--------------------20
+   /  \                 /  | \
+ 15    50             70  50  40
+ |                  / |    |
+ 30               80  85  65
+                  |
+                 100</pre>
+<p>A Binomial Heap with 12 nodes. It is a collection of 2<br>
+Binomial Trees of orders 2 and 3 from left to right.</p>
+<p><strong>Binary Representation of a number and Binomial Heaps</strong><br>
+A Binomial Heap with n nodes has number of Binomial Trees equal to the number of set bits in Binary representation of n. For example let n be 13, there 3 set bits in binary representation of n (00001101), hence 3 Binomial Trees. We can also relate degree of these Binomial Trees with positions of set bits. With this relation we can conclude that there are O(Logn) Binomial Trees in a Binomial Heap with &#8216;n&#8217; nodes.</p>
+<p><strong>Operations of Binomial Heap:</strong><br>
+The main operation in Binomial Heap is union(), all other operations mainly use this operation. The union() operation is to combine two Binomial Heaps into one. Let us first discuss other operations, we will discuss union later.</p>
+<p><strong>1)</strong> insert(H, k): Inserts a key &#8216;k&#8217; to Binomial Heap &#8216;H&#8217;. This operation first creates a Binomial Heap with single key &#8216;k&#8217;, then calls union on H and the new Binomial heap.</p>
+<p><strong>2) </strong>getMin(H): A simple way to getMin() is to traverse the list of root of Binomial Trees and return the minimum key. This implementation requires O(Logn) time. It can be optimized to O(1) by maintaining a pointer to minimum key root.</p>
+<p><strong>3)</strong> extractMin(H): This operation also uses union(). We first call getMin() to find the minimum key Binomial Tree, then we remove the node and create a new Binomial Heap by connecting all subtrees of the removed minimum node. Finally we call union() on H and the newly created Binomial Heap. This operation requires O(Logn) time.</p>
+<p><strong>4)</strong> delete(H): Like Binary Heap, delete operation first reduces the key to minus infinite, then calls extractMin().</p>
+<p><strong>5)</strong> decreaseKey(H): decreaseKey() is also similar to Binary Heap. We compare the decreases key with it parent and if parent&#8217;s key is less, we swap keys and recur for parent. We stop when we either reach a node whose parent has smaller key or we hit the root node. Time complexity of decreaseKey() is O(Logn).</p>
+<p><strong>Union operation in Binomial Heap:</strong><br>
+Given two Binomial Heaps H1 and H2, union(H1, H2) creates a single Binomial Heap.<br>
+<strong>1)</strong> The first step is to simply merge the two Heaps in non-decreasing order of degrees. In the following diagram, figure(b) shows the result after merging.</p>
+<p><strong>2)</strong> After the simple merge, we need to make sure that there is at-most one Binomial Tree of any order. To do this, we need to combine Binomial Trees of same order. We traverse the list of merged roots, we keep track of three pointers, prev, x and next-x. There can be following 4 cases when we traverse the list of roots.<br>
+&#8212;&#8211;Case 1: Orders of x and next-x are not same, we simply move ahead.<br>
+In following 3 cases orders of x and next-x are same.<br>
+&#8212;&#8211;Case 2: If order of next-next-x is also same, move ahead.<br>
+&#8212;&#8211;Case 3: If key of x is smaller than or equal to key of next-x, then make next-x as a child of x by linking it with x.<br>
+&#8212;&#8211;Case 4: If key of x is greater, then make x as child of next.</p>
+<p>The following diagram is taken from 2nd Edition of <a href="http://www.flipkart.com/introduction-algorithms-english-3rd/p/itmdwxyrafdburzg?pid=9788120340077&amp;affid=sandeepgfg">CLRS book</a>.<br>
+<a href="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/BinomialHeapUnion.png"><img class="aligncenter size-full wp-image-132309" src="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/BinomialHeapUnion.png" alt="BinomialHeapUnion" width="501" height="708"></a></p>
+<p><strong>How to represent Binomial Heap?</strong><br>
+A Binomial Heap is a set of Binomial Trees. A Binomial Tree must be represented in a way that allows sequential access to all siblings, starting from the leftmost sibling (We need this in and extractMin() and delete()). The idea is to represent Binomial Trees as leftmost child and right-sibling representation, i.e., every node stores two pointers, one to the leftmost child and other to the right sibling.</p>
+<p>We will soon be discussing implementation of Binomial Heap.</p>
+<p><strong>Sources:</strong><br>
+<a href="http://www.flipkart.com/introduction-algorithms-8120340078/p/itmczynzhyhxv2gs?pid=9788120340077&amp;affid=sandeepgfg">Introduction to Algorithms by Clifford Stein, Thomas H. Cormen, Charles E. Leiserson, Ronald L.<br>
+</a></p>
+<p>This article is contributed by <strong>Shivam</strong>. Please write comments if you find anything incorrect, or you want to share more information about the topic discussed above</p>
+
+&#160;
+&#160;
+
+
+
+
+
+
+
+&#160;
+&#160;
+&#160;
+<p>Tags: <a href="http://www.geeksforgeeks.org/tag/advance-data-structures/" rel="tag">Advance Data Structures</a>, <a href="http://www.geeksforgeeks.org/tag/advanced-data-structures/" rel="tag">Advanced Data Structures</a></p>
+
+
+
+
+
+
+				<h3>Source:</h3><p><a href="http://www.geeksforgeeks.org/binomial-heap-2/" rel="tag">http://www.geeksforgeeks.org/binomial-heap-2/</a></p></div>
+			</div></body>

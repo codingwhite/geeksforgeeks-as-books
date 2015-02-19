@@ -1,0 +1,1766 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+       <title>Find the k most frequent words from a file - GeeksforGeeks</title>
+       <style type="text/css" media="screen">
+          @import url('http://d2o58evtke57tz.cloudfront.net/wp-content/themes/minimoo/style.css');
+    </style>
+      <link href="http://d2o58evtke57tz.cloudfront.net/wp-content/themes/minimoo/favicon.ico" rel="shortcut icon" />    
+    
+<!-- This site is optimized with the Yoast WordPress SEO plugin v1.7.1 - https://yoast.com/wordpress/plugins/seo/ -->
+<link rel="canonical" href="http://www.geeksforgeeks.org/find-the-k-most-frequent-words-from-a-file/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Find the k most frequent words from a file - GeeksforGeeks" />
+<meta property="og:description" content="Given a book of words. Assume you have enough main memory to accommodate all words. design a data structure to find top K maximum occurring words. The data structure should be dynamic so that new words can be added. A simple solution is to use Hashing. Hash all words one by one in a hash &hellip;" />
+<meta property="og:url" content="http://www.geeksforgeeks.org/find-the-k-most-frequent-words-from-a-file/" />
+<meta property="og:site_name" content="GeeksforGeeks" />
+<meta property="article:tag" content="Advance Data Structures" />
+<meta property="article:section" content="Misc" />
+<meta property="article:published_time" content="2012-09-26T10:49:36+00:00" />
+<meta property="article:modified_time" content="2012-10-20T21:11:27+00:00" />
+<meta property="og:updated_time" content="2012-10-20T21:11:27+00:00" />
+<!-- / Yoast WordPress SEO plugin. -->
+
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css?ver=4.0.1' type='text/css' media='all' />
+<link rel='stylesheet' id='bbp-default-css'  href='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/bbpress/templates/default/css/bbpress.css?ver=2.5.4-5380' type='text/css' media='screen' />
+<link rel='stylesheet' id='wp-pagenavi-css'  href='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/wp-pagenavi/pagenavi-css.css?ver=2.70' type='text/css' media='all' />
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-includes/js/jquery/jquery.js?ver=1.11.1'></script>
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1'></script>
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js?ver=1.0'></script>
+
+<!-- Bad Behavior 2.2.16 run time: 1.489 ms -->
+<script type="text/javascript">
+<!--
+function bb2_addLoadEvent(func) {
+	var oldonload = window.onload;
+	if (typeof window.onload != 'function') {
+		window.onload = func;
+	} else {
+		window.onload = function() {
+			oldonload();
+			func();
+		}
+	}
+}
+
+bb2_addLoadEvent(function() {
+	for ( i=0; i < document.forms.length; i++ ) {
+		if (document.forms[i].method == 'post') {
+			var myElement = document.createElement('input');
+			myElement.setAttribute('type', 'hidden');
+			myElement.name = 'bb2_screener_';
+			myElement.value = '1417110824 67.87.151.196';
+			document.forms[i].appendChild(myElement);
+		}
+	}
+});
+// --></script>
+		<style type="text/css" id="syntaxhighlighteranchor"></style>
+   <meta name="google-site-verification" content="rHK2v8_zzuAZQY8JHAzbllDN8u-aQxcn2Kqnp67Old0" />
+</head>
+
+<body>
+<!-- o4dI0sCXUgoSONabbd8mbZ4SA3E -->    
+    <div id="wrapper">
+        <div class="blog-info">
+                <h1 class="blog-title">
+                <a href="http://www.geeksforgeeks.org" title="GeeksforGeeks">GeeksforGeeks</a>
+            </h1>
+       
+            <div class="blog-description">
+                A computer science portal for geeks            </div>
+        </div>
+        <b><p>  <h2 align="right"> <a href="http://geeksquiz.com/">GeeksQuiz</a></h2> 
+   <a href="http://www.geeksforgeeks.org/wp-login.php">Login</a> 
+         </p></b>  
+         
+         <div class="clear"></div>         
+              
+                     
+            <div id="menu">   
+                 <ul>
+ <li><a href="http://www.geeksforgeeks.org">Home</a></li>
+  <li><a href="http://www.geeksforgeeks.org/fundamentals-of-algorithms/">Algorithms</a></li>
+ <li><a href="http://www.geeksforgeeks.org/data-structures/">DS</a></li>
+  <li><a href="http://www.geeksforgeeks.org/gate-corner/">GATE</a></li>
+  <li><a href="http://www.geeksforgeeks.org/about/interview-corner/">Interview Corner</a></li>
+  <li><a href="http://www.geeksforgeeks.org/forums/">Q&A</a></li>
+  <li><a href="http://www.geeksforgeeks.org/c/">C</a></li>
+  <li><a href="http://www.geeksforgeeks.org/c-plus-plus/">C++</a></li>
+  <li><a href="http://www.geeksforgeeks.org/java/">Java</a></li>
+  <li><a href="http://www.geeksforgeeks.org/books/">Books</a></li>
+  <li><a href="http://www.geeksforgeeks.org/contribute/">Contribute</a></li>
+  <li><a href="http://www.geeksforgeeks.org/contribute/ask-a-question/">Ask a Q</a></li>
+  <li><a href="http://www.geeksforgeeks.org/about/">About</a></li>
+            </ul>
+
+               
+            <div class="clear"></div>     
+        </div>
+             <div id="navmenu">
+				<ul id="menu" style="padding:0; margin:0;">
+						<li class="cat-item cat-item-3"><a href="http://www.geeksforgeeks.org/category/c-arrays/" title="Questions regarding Arrays">Array</a>
+</li>	
+
+	<li class="cat-item cat-item-17"><a href="http://www.geeksforgeeks.org/category/bit-magic/" title="View all posts filed under Bit Magic">Bit Magic</a>
+</li>
+	<li class="cat-item cat-item-14"><a href="http://www.geeksforgeeks.org/category/c-puzzles/" title="View all posts filed under C/C++ Puzzles">C/C++</a>
+</li>
+
+<li class="cat-item cat-item-18"><a href="http://www.geeksforgeeks.org/category/articles/" title="View all posts filed under Articles">Articles</a>
+</li>
+
+	<li class="cat-item cat-item-67"><a href="http://www.geeksforgeeks.org/category/gfact/" title="View all posts filed under GFacts">GFacts</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://www.geeksforgeeks.org/category/linked-list/" title="Linked List problems">Linked List</a>
+</li>
+	<li class="cat-item cat-item-66"><a href="http://www.geeksforgeeks.org/category/multiple-choice-question/" title="View all posts filed under MCQ">MCQ</a>
+
+</li>
+	<li class="cat-item cat-item-4"><a href="http://www.geeksforgeeks.org/category/c-programs/" title="Miscellaneous">Misc</a>
+</li>
+	<li class="cat-item cat-item-5"><a href="http://www.geeksforgeeks.org/category/program-output/" title="View all posts filed under Output">Output</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="http://www.geeksforgeeks.org/category/c-strings/" title="Questions related to strings">String</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://www.geeksforgeeks.org/category/tree/" title="View all posts filed under Trees">Tree</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://www.geeksforgeeks.org/category/graph/" title="View all posts filed under Graph">Graph</a>
+</li>
+</ul>
+        </div>
+             <div id="content">	   	
+	<div class="post" id="post">
+							<div class="post-info">			
+					<div class="post-title-info">
+						<h2 class="post-title">Find the k most frequent words from a file</h2>
+					</div>			
+					<div class="clear"></div>				  
+				<div class="post-content" id="post-content">
+					<p>Given a book of words. Assume you have enough main memory to accommodate all words. design a data structure to find top K maximum occurring words. The data structure should be dynamic so that new words can be added. <span id="more-24329"></span></p>
+<p>A simple solution is to <strong>use Hashing</strong>.  Hash all words one by one in a hash table. If a word is already present, then increment its count. Finally, traverse through the hash table and return the k words with maximum counts.</p>
+<p>We can <strong>use Trie and Min Heap</strong> to get the k most frequent words efficiently. The idea is to use Trie for searching existing words adding new words efficiently.  Trie also stores count of occurrences of words. A Min Heap of size k is used to keep track of k most frequent words at any point of time(Use of Min Heap is same as we used it to find k largest elements in <a href="http://www.geeksforgeeks.org/archives/2392">this</a> post).<br />
+Trie and Min Heap are linked with each other by storing an additional field in Trie &#8216;indexMinHeap&#8217; and a pointer &#8216;trNode&#8217; in Min Heap. The value of &#8216;indexMinHeap&#8217; is maintained as -1 for the words which are currently not in Min Heap (or currently not among the top k frequent words).  For the words which are present in Min Heap, &#8216;indexMinHeap&#8217; contains, index of the word in Min Heap.   The pointer &#8216;trNode&#8217; in Min Heap points to the leaf node corresponding to the word in Trie.</p>
+<p>Following is the complete process to print k most frequent words from a file.</p>
+<p>Read all words one by one.  For every word, insert it into Trie. Increase the counter of the word, if already exists.  Now, we need to insert this word in min heap also. For insertion in min heap, 3 cases arise:</p>
+<p><strong>1.</strong> The word is already present. We just increase the corresponding frequency value in min heap and call minHeapify() for the index obtained by &#8220;indexMinHeap&#8221; field in Trie. When the min heap nodes are being swapped, we change the corresponding minHeapIndex in the Trie. Remember each node of the min heap is also having pointer to Trie leaf node.</p>
+<p><strong>2.</strong> The minHeap is not full. we will insert the new word into min heap &#038; update the root node in the min heap node &#038; min heap index in Trie leaf node. Now, call buildMinHeap().</p>
+<p><strong>3.</strong> The min heap is full. Two sub-cases arise.<br />
+&#8230;.<strong>3.1</strong></strong>  The frequency of the new word inserted is less than the frequency of the word stored in the head of min heap. Do nothing.</p>
+<p>&#8230;.<strong>3.2</strong> The frequency of the new word inserted is greater than the frequency of the word stored in the head of min heap. Replace &#038; update the fields. Make sure to update the corresponding min heap index of the &#8220;word to be replaced&#8221; in Trie with -1 as the word is no longer in min heap.</p>
+<p><strong>4.</strong> Finally, Min Heap will have the k most frequent words of all words present in given file.  So we just need to print all words present in Min Heap.</p>
+<pre class="brush: cpp; highlight: [214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233]; title: ; notranslate" title="">
+// A program to find k most frequent words in a file
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;ctype.h&gt;
+
+# define MAX_CHARS 26
+# define MAX_WORD_SIZE 30
+
+// A Trie node
+struct TrieNode
+{
+    bool isEnd; // indicates end of word
+    unsigned frequency;  // the number of occurrences of a word
+    int indexMinHeap; // the index of the word in minHeap
+    TrieNode* child[MAX_CHARS]; // represents 26 slots each for 'a' to 'z'.
+};
+
+// A Min Heap node
+struct MinHeapNode
+{
+    TrieNode* root; // indicates the leaf node of TRIE
+    unsigned frequency; //  number of occurrences
+    char* word; // the actual word stored
+};
+
+// A Min Heap
+struct MinHeap
+{
+    unsigned capacity; // the total size a min heap
+    int count; // indicates the number of slots filled.
+    MinHeapNode* array; //  represents the collection of minHeapNodes
+};
+
+// A utility function to create a new Trie node
+TrieNode* newTrieNode()
+{
+    // Allocate memory for Trie Node
+    TrieNode* trieNode = new TrieNode;
+
+    // Initialize values for new node
+    trieNode-&gt;isEnd = 0;
+    trieNode-&gt;frequency = 0;
+    trieNode-&gt;indexMinHeap = -1;
+    for( int i = 0; i &lt; MAX_CHARS; ++i )
+        trieNode-&gt;child[i] = NULL;
+
+    return trieNode;
+}
+
+// A utility function to create a Min Heap of given capacity
+MinHeap* createMinHeap( int capacity )
+{
+    MinHeap* minHeap = new MinHeap;
+
+    minHeap-&gt;capacity = capacity;
+    minHeap-&gt;count  = 0;
+
+    // Allocate memory for array of min heap nodes
+    minHeap-&gt;array = new MinHeapNode [ minHeap-&gt;capacity ];
+
+    return minHeap;
+}
+
+// A utility function to swap two min heap nodes. This function
+// is needed in minHeapify
+void swapMinHeapNodes ( MinHeapNode* a, MinHeapNode* b )
+{
+    MinHeapNode temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+// This is the standard minHeapify function. It does one thing extra.
+// It updates the minHapIndex in Trie when two nodes are swapped in
+// in min heap
+void minHeapify( MinHeap* minHeap, int idx )
+{
+    int left, right, smallest;
+
+    left = 2 * idx + 1;
+    right = 2 * idx + 2;
+    smallest = idx;
+    if ( left &lt; minHeap-&gt;count &amp;&amp;
+         minHeap-&gt;array[ left ]. frequency &lt;
+         minHeap-&gt;array[ smallest ]. frequency
+       )
+        smallest = left;
+
+    if ( right &lt; minHeap-&gt;count &amp;&amp;
+         minHeap-&gt;array[ right ]. frequency &lt;
+         minHeap-&gt;array[ smallest ]. frequency
+       )
+        smallest = right;
+
+    if( smallest != idx )
+    {
+        // Update the corresponding index in Trie node.
+        minHeap-&gt;array[ smallest ]. root-&gt;indexMinHeap = idx;
+        minHeap-&gt;array[ idx ]. root-&gt;indexMinHeap = smallest;
+
+        // Swap nodes in min heap
+        swapMinHeapNodes (&amp;minHeap-&gt;array[ smallest ], &amp;minHeap-&gt;array[ idx ]);
+
+        minHeapify( minHeap, smallest );
+    }
+}
+
+// A standard function to build a heap
+void buildMinHeap( MinHeap* minHeap )
+{
+    int n, i;
+    n = minHeap-&gt;count - 1;
+
+    for( i = ( n - 1 ) / 2; i &gt;= 0; --i )
+        minHeapify( minHeap, i );
+}
+
+// Inserts a word to heap, the function handles the 3 cases explained above
+void insertInMinHeap( MinHeap* minHeap, TrieNode** root, const char* word )
+{
+    // Case 1: the word is already present in minHeap
+    if( (*root)-&gt;indexMinHeap != -1 )
+    {
+        ++( minHeap-&gt;array[ (*root)-&gt;indexMinHeap ]. frequency );
+
+        // percolate down
+        minHeapify( minHeap, (*root)-&gt;indexMinHeap );
+    }
+
+    // Case 2: Word is not present and heap is not full
+    else if( minHeap-&gt;count &lt; minHeap-&gt;capacity )
+    {
+        int count = minHeap-&gt;count;
+        minHeap-&gt;array[ count ]. frequency = (*root)-&gt;frequency;
+        minHeap-&gt;array[ count ]. word = new char [strlen( word ) + 1];
+        strcpy( minHeap-&gt;array[ count ]. word, word );
+
+        minHeap-&gt;array[ count ]. root = *root;
+        (*root)-&gt;indexMinHeap = minHeap-&gt;count;
+
+        ++( minHeap-&gt;count );
+        buildMinHeap( minHeap );
+    }
+
+    // Case 3: Word is not present and heap is full. And frequency of word
+    // is more than root. The root is the least frequent word in heap,
+    // replace root with new word
+    else if ( (*root)-&gt;frequency &gt; minHeap-&gt;array[0]. frequency )
+    {
+
+        minHeap-&gt;array[ 0 ]. root-&gt;indexMinHeap = -1;
+        minHeap-&gt;array[ 0 ]. root = *root;
+        minHeap-&gt;array[ 0 ]. root-&gt;indexMinHeap = 0;
+        minHeap-&gt;array[ 0 ]. frequency = (*root)-&gt;frequency;
+
+        // delete previously allocated memoory and
+        delete [] minHeap-&gt;array[ 0 ]. word;
+        minHeap-&gt;array[ 0 ]. word = new char [strlen( word ) + 1];
+        strcpy( minHeap-&gt;array[ 0 ]. word, word );
+
+        minHeapify ( minHeap, 0 );
+    }
+}
+
+// Inserts a new word to both Trie and Heap
+void insertUtil ( TrieNode** root, MinHeap* minHeap,
+                        const char* word, const char* dupWord )
+{
+    // Base Case
+    if ( *root == NULL )
+        *root = newTrieNode();
+
+    //  There are still more characters in word
+    if ( *word != '&#92;&#48;' )
+        insertUtil ( &amp;((*root)-&gt;child[ tolower( *word ) - 97 ]),
+                         minHeap, word + 1, dupWord );
+    else // The complete word is processed
+    {
+        // word is already present, increase the frequency
+        if ( (*root)-&gt;isEnd )
+            ++( (*root)-&gt;frequency );
+        else
+        {
+            (*root)-&gt;isEnd = 1;
+            (*root)-&gt;frequency = 1;
+        }
+
+        // Insert in min heap also
+        insertInMinHeap( minHeap, root, dupWord );
+    }
+}
+
+
+// add a word to Trie &amp; min heap.  A wrapper over the insertUtil
+void insertTrieAndHeap(const char *word, TrieNode** root, MinHeap* minHeap)
+{
+    insertUtil( root, minHeap, word, word );
+}
+
+// A utility function to show results, The min heap
+// contains k most frequent words so far, at any time
+void displayMinHeap( MinHeap* minHeap )
+{
+    int i;
+
+    // print top K word with frequency
+    for( i = 0; i &lt; minHeap-&gt;count; ++i )
+    {
+        printf( &quot;%s : %d\n&quot;, minHeap-&gt;array[i].word,
+                            minHeap-&gt;array[i].frequency );
+    }
+}
+
+// The main funtion that takes a file as input, add words to heap
+// and Trie, finally shows result from heap
+void printKMostFreq( FILE* fp, int k )
+{
+    // Create a Min Heap of Size k
+    MinHeap* minHeap = createMinHeap( k );
+   
+    // Create an empty Trie
+    TrieNode* root = NULL;
+
+    // A buffer to store one word at a time
+    char buffer[MAX_WORD_SIZE];
+
+    // Read words one by one from file.  Insert the word in Trie and Min Heap
+    while( fscanf( fp, &quot;%s&quot;, buffer ) != EOF )
+        insertTrieAndHeap(buffer, &amp;root, minHeap);
+
+    // The Min Heap will have the k most frequent words, so print Min Heap nodes
+    displayMinHeap( minHeap );
+}
+
+// Driver program to test above functions
+int main()
+{
+    int k = 5;
+    FILE *fp = fopen (&quot;file.txt&quot;, &quot;r&quot;);
+    if (fp == NULL)
+        printf (&quot;File doesn't exist &quot;);
+    else
+        printKMostFreq (fp, k);
+    return 0;
+}
+</pre>
+<p>Output:
+<pre>your : 3
+well : 3
+and : 4
+to : 4
+Geeks : 6
+</pre>
+<p>The above output is for a file with following content.
+<pre>Welcome to the world of Geeks 
+This portal has been created to provide well written well thought and well explained 
+solutions for selected questions If you like Geeks for Geeks and would like to contribute 
+here is your chance You can write article and mail your article to contribute at 
+geeksforgeeks org See your article appearing on the Geeks for Geeks main page and help 
+thousands of other Geeks
+</pre>
+<p></br><br />
+Please write comments if you find anything incorrect, or you want to share more information about the topic discussed above.</p>
+		
+&nbsp;
+&nbsp;
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Big Rectangle Blog Bottom -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:336px;height:280px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="4061219431"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+<h3>Related Topics:</h3><ul><li><a href="http://www.geeksforgeeks.org/job-sequencing-problem-set-1-greedy-algorithm/" title="Job Sequencing Problem | Set 1 (Greedy Algorithm)">Job Sequencing Problem | Set 1 (Greedy Algorithm)</a></li><li><a href="http://www.geeksforgeeks.org/multiply-two-polynomials-2/" title="Multiply two polynomials">Multiply two polynomials</a></li><li><a href="http://www.geeksforgeeks.org/algorithm-practice-question-beginners-set-1/" title="Algorithm Practice Question for Beginners | Set 1">Algorithm Practice Question for Beginners | Set 1</a></li><li><a href="http://www.geeksforgeeks.org/count-distinct-non-negative-pairs-x-y-satisfy-inequality-xx-yy-n-2/" title="Count Distinct Non-Negative Integer Pairs (x, y) that Satisfy the Inequality x*x + y*y &lt; n">Count Distinct Non-Negative Integer Pairs (x, y) that Satisfy the Inequality x*x + y*y < n</a></li><li><a href="http://www.geeksforgeeks.org/binomial-heap-2/" title="Binomial Heap">Binomial Heap</a></li><li><a href="http://www.geeksforgeeks.org/print-increasing-sequences-length-k-first-n-natural-numbers/" title="Print all increasing sequences of length k from first n natural numbers">Print all increasing sequences of length k from first n natural numbers</a></li><li><a href="http://www.geeksforgeeks.org/find-nth-number-number-system-3-4/" title="Find n&#8217;th number in a number system with only 3 and 4">Find n&#8217;th number in a number system with only 3 and 4</a></li><li><a href="http://www.geeksforgeeks.org/minimum-cost-polygon-triangulation/" title="Minimum Cost Polygon Triangulation">Minimum Cost Polygon Triangulation</a></li></ul>
+<p>Tags: <a href="http://www.geeksforgeeks.org/tag/advance-data-structures/" rel="tag">Advance Data Structures</a></p> 
+<div>
+<iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.geeksforgeeks.org%2Ffind-the-k-most-frequent-words-from-a-file%2F&layout=button_count&show_faces=false&width=90&action=like&colorscheme=light" scrolling="no" frameborder="0" allowTransparency="true" style="border:none; overflow:hidden; width:90px; height:20px"></iframe>
+<a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.geeksforgeeks.org/find-the-k-most-frequent-words-from-a-file/" data-text="Find the k most frequent words from a file" data-count="horizontal" data-via="jakerutter">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+<g:plusone size="medium" href="http://www.geeksforgeeks.org/find-the-k-most-frequent-words-from-a-file/"></g:plusone>
+<!-- Place this render call where appropriate -->
+<script type="text/javascript">
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script></div>
+
+
+
+
+
+				</div>		  
+			</div> <!-- end post main -->					
+			<div class="post-meta">
+				<div class="left"></div>				
+				<div class="clear"></div>
+			</div>			
+        
+			<div class="comments-main">		
+ <b>Writing code in comment?</b> Please use <b><a href="http://ideone.com/">ideone.com</a></b> and share the link here.
+				
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-30488">
+        <div id="dsq-comment-header-30488" class="dsq-comment-header">
+            <cite id="dsq-cite-30488">
+                <span id="dsq-author-user-30488">john</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-30488" class="dsq-comment-body">
+            <div id="dsq-comment-message-30488" class="dsq-comment-message"><p>how we run it i copy it and paste it give me error?<br />
+please help me</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-30490">
+        <div id="dsq-comment-header-30490" class="dsq-comment-header">
+            <cite id="dsq-cite-30490">
+                <span id="dsq-author-user-30490">rahul</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-30490" class="dsq-comment-body">
+            <div id="dsq-comment-message-30490" class="dsq-comment-message"><p>just copy the content of file written in a paragraphn below&#8230;.and name of the file should be same as given in program n then run it.,</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-30491">
+        <div id="dsq-comment-header-30491" class="dsq-comment-header">
+            <cite id="dsq-cite-30491">
+                <span id="dsq-author-user-30491">john</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-30491" class="dsq-comment-body">
+            <div id="dsq-comment-message-30491" class="dsq-comment-message"><p>thanks for reply<br />
+i need the c code above how i run it?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-30492">
+        <div id="dsq-comment-header-30492" class="dsq-comment-header">
+            <cite id="dsq-cite-30492">
+                <span id="dsq-author-user-30492">john</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-30492" class="dsq-comment-body">
+            <div id="dsq-comment-message-30492" class="dsq-comment-message"><p>i copy it from beginning to main and it give me syntax error i used codeblock?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-5" id="dsq-comment-30493">
+        <div id="dsq-comment-header-30493" class="dsq-comment-header">
+            <cite id="dsq-cite-30493">
+                <span id="dsq-author-user-30493">rahul</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-30493" class="dsq-comment-body">
+            <div id="dsq-comment-message-30493" class="dsq-comment-message"><p>dude copy the entire program in dev/turbo/any compiler..copy all the content in a file named file.txt in same folder/desktop and run this&#8230;<br />
+else<br />
+i am not getting wat u are asking:)</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-30494">
+        <div id="dsq-comment-header-30494" class="dsq-comment-header">
+            <cite id="dsq-cite-30494">
+                <span id="dsq-author-user-30494">rahul</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-30494" class="dsq-comment-body">
+            <div id="dsq-comment-message-30494" class="dsq-comment-message"><p>u need to save the following in file.txt</p>
+<p>&#8220;Welcome to the world of Geeks </p>
+<p>This portal has been created to provide well written well thought and well explained<br />
+solutions for selected questions If you like Geeks for Geeks and would like to contribute<br />
+here is your chance You can write article and mail your article to contribute at<br />
+geeksforgeeks org See your article appearing on the Geeks for Geeks main page and help<br />
+thousands of other Geeks&#8221;</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-30495">
+        <div id="dsq-comment-header-30495" class="dsq-comment-header">
+            <cite id="dsq-cite-30495">
+                <span id="dsq-author-user-30495">john</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-30495" class="dsq-comment-body">
+            <div id="dsq-comment-message-30495" class="dsq-comment-message"><p>i copy this directly to the code blocks program<br />
+and it give syntax error??<br />
+/ A program to find k most frequent words in a file</p>
+<p>#include </p>
+<p>#include </p>
+<p>#include </p>
+<p># define MAX_CHARS 26</p>
+<p># define MAX_WORD_SIZE 30</p>
+<p>// A Trie node</p>
+<p>struct TrieNode</p>
+<p>{</p>
+<p>    bool isEnd; // indicates end of word</p>
+<p>    unsigned frequency;  // the number of occurrences of a word</p>
+<p>    int indexMinHeap; // the index of the word in minHeap</p>
+<p>    TrieNode* child[MAX_CHARS]; // represents 26 slots each for &#8216;a&#8217; to &#8216;z&#8217;.</p>
+<p>};</p>
+<p>// A Min Heap node</p>
+<p>struct MinHeapNode</p>
+<p>{</p>
+<p>    TrieNode* root; // indicates the leaf node of TRIE</p>
+<p>    unsigned frequency; //  number of occurrences</p>
+<p>    char* word; // the actual word stored</p>
+<p>};</p>
+<p>// A Min Heap</p>
+<p>struct MinHeap</p>
+<p>{</p>
+<p>    unsigned capacity; // the total size a min heap</p>
+<p>    int count; // indicates the number of slots filled.</p>
+<p>    MinHeapNode* array; //  represents the collection of minHeapNodes</p>
+<p>};</p>
+<p>// A utility function to create a new Trie node</p>
+<p>TrieNode* newTrieNode()</p>
+<p>{</p>
+<p>    // Allocate memory for Trie Node</p>
+<p>    TrieNode* trieNode = new TrieNode;</p>
+<p>    // Initialize values for new node</p>
+<p>    trieNode-&gt;isEnd = 0;</p>
+<p>    trieNode-&gt;frequency = 0;</p>
+<p>    trieNode-&gt;indexMinHeap = -1;</p>
+<p>    for( int i = 0; i child[i] = NULL;</p>
+<p>    return trieNode;</p>
+<p>}</p>
+<p>// A utility function to create a Min Heap of given capacity</p>
+<p>MinHeap* createMinHeap( int capacity )</p>
+<p>{</p>
+<p>    MinHeap* minHeap = new MinHeap;</p>
+<p>    minHeap-&gt;capacity = capacity;</p>
+<p>    minHeap-&gt;count  = 0;</p>
+<p>    // Allocate memory for array of min heap nodes</p>
+<p>    minHeap-&gt;array = new MinHeapNode [ minHeap-&gt;capacity ];</p>
+<p>    return minHeap;</p>
+<p>}</p>
+<p>// A utility function to swap two min heap nodes. This function</p>
+<p>// is needed in minHeapify</p>
+<p>void swapMinHeapNodes ( MinHeapNode* a, MinHeapNode* b )</p>
+<p>{</p>
+<p>    MinHeapNode temp = *a;</p>
+<p>    *a = *b;</p>
+<p>    *b = temp;</p>
+<p>}</p>
+<p>// This is the standard minHeapify function. It does one thing extra.</p>
+<p>// It updates the minHapIndex in Trie when two nodes are swapped in</p>
+<p>// in min heap</p>
+<p>void minHeapify( MinHeap* minHeap, int idx )</p>
+<p>{</p>
+<p>    int left, right, smallest;</p>
+<p>    left = 2 * idx + 1;</p>
+<p>    right = 2 * idx + 2;</p>
+<p>    smallest = idx;</p>
+<p>    if ( left count &amp;&amp;</p>
+<p>         minHeap-&gt;array[ left ]. frequency array[ smallest ]. frequency</p>
+<p>       )</p>
+<p>        smallest = left;</p>
+<p>    if ( right count &amp;&amp;</p>
+<p>         minHeap-&gt;array[ right ]. frequency array[ smallest ]. frequency</p>
+<p>       )</p>
+<p>        smallest = right;</p>
+<p>    if( smallest != idx )</p>
+<p>    {</p>
+<p>        // Update the corresponding index in Trie node.</p>
+<p>        minHeap-&gt;array[ smallest ]. root-&gt;indexMinHeap = idx;</p>
+<p>        minHeap-&gt;array[ idx ]. root-&gt;indexMinHeap = smallest;</p>
+<p>        // Swap nodes in min heap</p>
+<p>        swapMinHeapNodes (&amp;minHeap-&gt;array[ smallest ], &amp;minHeap-&gt;array[ idx ]);</p>
+<p>        minHeapify( minHeap, smallest );</p>
+<p>    }</p>
+<p>}</p>
+<p>// A standard function to build a heap</p>
+<p>void buildMinHeap( MinHeap* minHeap )</p>
+<p>{</p>
+<p>    int n, i;</p>
+<p>    n = minHeap-&gt;count &#8211; 1;</p>
+<p>    for( i = ( n &#8211; 1 ) / 2; i &gt;= 0; &#8211;i )</p>
+<p>        minHeapify( minHeap, i );</p>
+<p>}</p>
+<p>// Inserts a word to heap, the function handles the 3 cases explained above</p>
+<p>void insertInMinHeap( MinHeap* minHeap, TrieNode** root, const char* word )</p>
+<p>{</p>
+<p>    // Case 1: the word is already present in minHeap</p>
+<p>    if( (*root)-&gt;indexMinHeap != -1 )</p>
+<p>    {</p>
+<p>        ++( minHeap-&gt;array[ (*root)-&gt;indexMinHeap ]. frequency );</p>
+<p>        // percolate down</p>
+<p>        minHeapify( minHeap, (*root)-&gt;indexMinHeap );</p>
+<p>    }</p>
+<p>    // Case 2: Word is not present and heap is not full</p>
+<p>    else if( minHeap-&gt;count capacity )</p>
+<p>    {</p>
+<p>        int count = minHeap-&gt;count;</p>
+<p>        minHeap-&gt;array[ count ]. frequency = (*root)-&gt;frequency;</p>
+<p>        minHeap-&gt;array[ count ]. word = new char [strlen( word ) + 1];</p>
+<p>        strcpy( minHeap-&gt;array[ count ]. word, word );</p>
+<p>        minHeap-&gt;array[ count ]. root = *root;</p>
+<p>        (*root)-&gt;indexMinHeap = minHeap-&gt;count;</p>
+<p>        ++( minHeap-&gt;count );</p>
+<p>        buildMinHeap( minHeap );</p>
+<p>    }</p>
+<p>    // Case 3: Word is not present and heap is full. And frequency of word</p>
+<p>    // is more than root. The root is the least frequent word in heap,</p>
+<p>    // replace root with new word</p>
+<p>    else if ( (*root)-&gt;frequency &gt; minHeap-&gt;array[0]. frequency )</p>
+<p>    {</p>
+<p>        minHeap-&gt;array[ 0 ]. root-&gt;indexMinHeap = -1;</p>
+<p>        minHeap-&gt;array[ 0 ]. root = *root;</p>
+<p>        minHeap-&gt;array[ 0 ]. root-&gt;indexMinHeap = 0;</p>
+<p>        minHeap-&gt;array[ 0 ]. frequency = (*root)-&gt;frequency;</p>
+<p>        // delete previously allocated memoory and</p>
+<p>        delete [] minHeap-&gt;array[ 0 ]. word;</p>
+<p>        minHeap-&gt;array[ 0 ]. word = new char [strlen( word ) + 1];</p>
+<p>        strcpy( minHeap-&gt;array[ 0 ]. word, word );</p>
+<p>        minHeapify ( minHeap, 0 );</p>
+<p>    }</p>
+<p>}</p>
+<p>// Inserts a new word to both Trie and Heap</p>
+<p>void insertUtil ( TrieNode** root, MinHeap* minHeap,</p>
+<p>                        const char* word, const char* dupWord )</p>
+<p>{</p>
+<p>    // Base Case</p>
+<p>    if ( *root == NULL )</p>
+<p>        *root = newTrieNode();</p>
+<p>    //  There are still more characters in word</p>
+<p>    if ( *word != &#8221; )</p>
+<p>        insertUtil ( &amp;((*root)-&gt;child[ tolower( *word ) &#8211; 97 ]),</p>
+<p>                         minHeap, word + 1, dupWord );</p>
+<p>    else // The complete word is processed</p>
+<p>    {</p>
+<p>        // word is already present, increase the frequency</p>
+<p>        if ( (*root)-&gt;isEnd )</p>
+<p>            ++( (*root)-&gt;frequency );</p>
+<p>        else</p>
+<p>        {</p>
+<p>            (*root)-&gt;isEnd = 1;</p>
+<p>            (*root)-&gt;frequency = 1;</p>
+<p>        }</p>
+<p>        // Insert in min heap also</p>
+<p>        insertInMinHeap( minHeap, root, dupWord );</p>
+<p>    }</p>
+<p>}</p>
+<p>// add a word to Trie &amp; min heap.  A wrapper over the insertUtil</p>
+<p>void insertTrieAndHeap(const char *word, TrieNode** root, MinHeap* minHeap)</p>
+<p>{</p>
+<p>    insertUtil( root, minHeap, word, word );</p>
+<p>}</p>
+<p>// A utility function to show results, The min heap</p>
+<p>// contains k most frequent words so far, at any time</p>
+<p>void displayMinHeap( MinHeap* minHeap )</p>
+<p>{</p>
+<p>    int i;</p>
+<p>    // print top K word with frequency</p>
+<p>    for( i = 0; i count; ++i )</p>
+<p>    {</p>
+<p>        printf( &#8220;%s : %dn&#8221;, minHeap-&gt;array[i].word,</p>
+<p>                            minHeap-&gt;array[i].frequency );</p>
+<p>    }</p>
+<p>}</p>
+<p>// The main funtion that takes a file as input, add words to heap</p>
+<p>// and Trie, finally shows result from heap</p>
+<p>void printKMostFreq( FILE* fp, int k )</p>
+<p>{</p>
+<p>    // Create a Min Heap of Size k</p>
+<p>    MinHeap* minHeap = createMinHeap( k );</p>
+<p>    // Create an empty Trie</p>
+<p>    TrieNode* root = NULL;</p>
+<p>    // A buffer to store one word at a time</p>
+<p>    char buffer[MAX_WORD_SIZE];</p>
+<p>    // Read words one by one from file.  Insert the word in Trie and Min Heap</p>
+<p>    while( fscanf( fp, &#8220;%s&#8221;, buffer ) != EOF )</p>
+<p>        insertTrieAndHeap(buffer, &amp;root, minHeap);</p>
+<p>    // The Min Heap will have the k most frequent words, so print Min Heap nodes</p>
+<p>    displayMinHeap( minHeap );</p>
+<p>}</p>
+<p>// Driver program to test above functions</p>
+<p>int main()</p>
+<p>{</p>
+<p>    int k = 5;</p>
+<p>    FILE *fp = fopen (&#8220;file.txt&#8221;, &#8220;r&#8221;);</p>
+<p>    if (fp == NULL)</p>
+<p>        printf (&#8220;File doesn&#8217;t exist &#8220;);</p>
+<p>    else</p>
+<p>        printKMostFreq (fp, k);</p>
+<p>    return 0;</p>
+<p>}</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-30496">
+        <div id="dsq-comment-header-30496" class="dsq-comment-header">
+            <cite id="dsq-cite-30496">
+                <span id="dsq-author-user-30496">rahul</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-30496" class="dsq-comment-body">
+            <div id="dsq-comment-message-30496" class="dsq-comment-message"><p>@john&#8230;please dnt copy n paste code here..its looks clumsy..copy n paste on ideone.com and share the link..anyways it will work in c++..c has no bool data type..u need to use some header file to use bool in c&#8230;and also..u need to use struct keyword before structure to access in c..so it will run fine in c++ but for c..u need to modify it a bit so that it will be compatible with c..hope m clear..</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-30497">
+        <div id="dsq-comment-header-30497" class="dsq-comment-header">
+            <cite id="dsq-cite-30497">
+                <span id="dsq-author-user-30497">john</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-30497" class="dsq-comment-body">
+            <div id="dsq-comment-message-30497" class="dsq-comment-message"><p>i copy it in <a href="http://ideone.com/146zcR" rel="nofollow">http://ideone.com/146zcR</a><br />
+it give me a lot of error<br />
+and this is c syntax not c++<br />
+can you modified it to work in c?<br />
+thanks in advanced</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-30498">
+        <div id="dsq-comment-header-30498" class="dsq-comment-header">
+            <cite id="dsq-cite-30498">
+                <span id="dsq-author-user-30498">rahul</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-30498" class="dsq-comment-body">
+            <div id="dsq-comment-message-30498" class="dsq-comment-message"><p>john..please go through my prev comment..its a c++ syntax&#8230;<br />
+whr ever u have used trie node..add prefix struct and do #include.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-30500">
+        <div id="dsq-comment-header-30500" class="dsq-comment-header">
+            <cite id="dsq-cite-30500">
+                <span id="dsq-author-user-30500">john</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-30500" class="dsq-comment-body">
+            <div id="dsq-comment-message-30500" class="dsq-comment-message"><p>i add struct before trie node and i  #include<br />
+but i still have error<br />
+can you modified it to?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-30501">
+        <div id="dsq-comment-header-30501" class="dsq-comment-header">
+            <cite id="dsq-cite-30501">
+                <span id="dsq-author-user-30501">rahul</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-30501" class="dsq-comment-body">
+            <div id="dsq-comment-message-30501" class="dsq-comment-message"><p>u add strcut keyword before trienode n minheap structures and convert every new to malloc as new is c++&#8230;shre the ideone for the same..i will do the remaining for u:)</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-30502">
+        <div id="dsq-comment-header-30502" class="dsq-comment-header">
+            <cite id="dsq-cite-30502">
+                <span id="dsq-author-user-30502">john</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-30502" class="dsq-comment-body">
+            <div id="dsq-comment-message-30502" class="dsq-comment-message"><p>i do as you say but have errors<br />
+<a href="http://ideone.com/DtKi07" rel="nofollow">http://ideone.com/DtKi07</a><br />
+so if you help me i will consider this portal best ever.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt depth-5" id="dsq-comment-30503">
+        <div id="dsq-comment-header-30503" class="dsq-comment-header">
+            <cite id="dsq-cite-30503">
+                <span id="dsq-author-user-30503">rahul</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-30503" class="dsq-comment-body">
+            <div id="dsq-comment-message-30503" class="dsq-comment-message"><p><a href="http://ideone.com/xt7QbU" rel="nofollow">http://ideone.com/xt7QbU</a></p>
+<p>here is the C version&#8230;bye&#8230;..</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-5" id="dsq-comment-30504">
+        <div id="dsq-comment-header-30504" class="dsq-comment-header">
+            <cite id="dsq-cite-30504">
+                <span id="dsq-author-user-30504">john</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-30504" class="dsq-comment-body">
+            <div id="dsq-comment-message-30504" class="dsq-comment-message"><p>thank you very much<br />
+you are the best.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-29839">
+        <div id="dsq-comment-header-29839" class="dsq-comment-header">
+            <cite id="dsq-cite-29839">
+                <span id="dsq-author-user-29839">Code_Addict</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-29839" class="dsq-comment-body">
+            <div id="dsq-comment-message-29839" class="dsq-comment-message"><p>Can someone post Java version of above implementation?</p>
+<p>Thanks</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-29838">
+        <div id="dsq-comment-header-29838" class="dsq-comment-header">
+            <cite id="dsq-cite-29838">
+                <span id="dsq-author-user-29838">Guest</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-29838" class="dsq-comment-body">
+            <div id="dsq-comment-message-29838" class="dsq-comment-message"><p>I have written java version of above code, but null pointer exception is coming:<br />
+if possible have a look at the code:</p>
+<p>package kfrequentwords;</p>
+<p>import java.io.*;<br />
+import java.util.Scanner;<br />
+import java.util.logging.Level;<br />
+import java.util.logging.Logger;</p>
+<p>class TrieNode<br />
+{<br />
+     public static final int MAX_CHARS=26;   </p>
+<p>   int indexMinHeap; // the index of the word in minHeap<br />
+    TrieNode[] child=new TrieNode[MAX_CHARS]; // represents 26 slots each for &#8216;a&#8217; to &#8216;z&#8217;.<br />
+    int isEnd;  // indicates end of word<br />
+    int freq;   // frequency of occurence of a word</p>
+<p>    public void TrieNode()<br />
+    {<br />
+         // Allocate memory for Trie Node<br />
+  //  TrieNode trieNode = new TrieNode();</p>
+<p>    // Initialize values for new node<br />
+    isEnd = 0;<br />
+    freq = 0;<br />
+    indexMinHeap = -1;</p>
+<p>//    for( int i = 0; i &lt; MAX_CHARS; ++i )<br />
+//        trieNode.child[i] = NULL;</p>
+<p>  //  return trieNode;<br />
+    }</p>
+<p>}</p>
+<p>class MinHeapNode<br />
+{</p>
+<p>   TrieNode root= new TrieNode(); // indicates the leaf node of TRIE </p>
+<p>    int frequency; //  number of occurrences<br />
+    char[] word; // the actual word stored</p>
+<p>    public MinHeapNode()<br />
+    {<br />
+        frequency=0;<br />
+        word =new char[30];<br />
+    }<br />
+}</p>
+<p>class MinHeap<br />
+{<br />
+  int capacity; //  total size of min Heap<br />
+   int count; // indicates the number of slots filled.<br />
+   MinHeapNode[] array; //  represents the collection of minHeapNodes</p>
+<p>   public MinHeap(int capacity)<br />
+   {<br />
+     //  MinHeap minHeap=new MinHeap();<br />
+        this.capacity=capacity;<br />
+       count=0;</p>
+<p>        // Allocate memory for array of min heap nodes<br />
+       array=new MinHeapNode[capacity];</p>
+<p>       //return minHeap;</p>
+<p>   }<br />
+   // A utility function to swap two min heap nodes. This function<br />
+    // is needed in minHeapify<br />
+   public void swapMinHeapNodes(MinHeapNode a,MinHeapNode b)<br />
+   {<br />
+    MinHeapNode t=a;<br />
+    a=b;<br />
+    b=t;<br />
+   }</p>
+<p>   // This is the standard minHeapify function. It does one thing extra.<br />
+// It updates the minHapIndex in Trie when two nodes are swapped in<br />
+// in min heap<br />
+   public void minHeapify(MinHeap minHeap,int idx)<br />
+   {<br />
+        int left, right, smallest;</p>
+<p>    left = 2 * idx + 1;<br />
+    right = 2 * idx + 2;</p>
+<p>      smallest = idx;<br />
+    if ( left &lt; minHeap.count &amp;&amp; minHeap.array[left].frequency &lt;minHeap.array[smallest].frequency)<br />
+        smallest = left;</p>
+<p>    if ( right &lt; minHeap.count &amp;&amp; minHeap.array[ right ]. frequency = 0; &#8211;i )<br />
+        minHeapify( minHeap, i );<br />
+}</p>
+<p>// Inserts a word to heap, the function handles the 3 cases explained above<br />
+void insertInMinHeap( MinHeap minHeap, TrieNode root, char[] word )<br />
+{<br />
+    // Case 1: the word is already present in minHeap<br />
+    if( (root).indexMinHeap != -1 )<br />
+    {<br />
+       System.out.println(&#8220;Freq = &#8220;+minHeap.array[ (root).indexMinHeap ].frequency);</p>
+<p>        minHeap.array[ (root).indexMinHeap ]. frequency =minHeap.array[ (root).indexMinHeap ]. frequency+1;</p>
+<p>        // percolate down<br />
+        minHeapify( minHeap, (root).indexMinHeap );<br />
+    }</p>
+<p>    // Case 2: Word is not present and heap is not full<br />
+    else if( minHeap.count  minHeap.array[0]. frequency )<br />
+    {</p>
+<p>        minHeap.array[ 0 ]. root.indexMinHeap = -1;<br />
+        minHeap.array[ 0 ]. root = root;<br />
+        minHeap.array[ 0 ]. root.indexMinHeap = 0;<br />
+        minHeap.array[ 0 ]. frequency = (root).freq;</p>
+<p>        // delete previously allocated memoory and<br />
+        minHeap.array[ 0 ]. word=null;</p>
+<p>        minHeap.array[ 0 ]. word = new char [( word.length ) + 1];<br />
+        minHeap.array[ 0 ]. word=word.clone() ;</p>
+<p>        minHeapify ( minHeap, 0 );<br />
+    }</p>
+<p>}</p>
+<p>    // A utility function to show results, The min heap<br />
+// contains k most frequent words so far, at any time<br />
+public void displayMinHeap( MinHeap minHeap )<br />
+{<br />
+    int i;</p>
+<p>    // print top K word with frequency<br />
+    for( i = 0; i &lt; minHeap.count; ++i )<br />
+    {<br />
+        System.out.println(  minHeap.array[i].word +&quot; , &quot;+<br />
+                            minHeap.array[i].frequency );<br />
+    }<br />
+}</p>
+<p> void insertTrieAndHeap(char[] word,TrieNode root,MinHeap minHeap)<br />
+    {<br />
+        insertUtil(root, minHeap, word, word, 0);<br />
+    }</p>
+<p>    void insertUtil( TrieNode root, MinHeap minHeap,<br />
+                         char[] word,  char[] dupWord,int i)<br />
+{<br />
+    // Base Case<br />
+    if ( root == null )<br />
+        root = new TrieNode();</p>
+<p>    //  There are still more characters in word<br />
+    if (i&lt;word.length)<br />
+    {<br />
+       // System.out.println(&quot;Address = &quot;+ ((int)word[i]  &#8211; 97));<br />
+        insertUtil ( (root.child[ (int)word[i]  &#8211; 97 ]),<br />
+                         minHeap, word, dupWord,i+1 );<br />
+    }<br />
+    else // The complete word is processed<br />
+    {<br />
+        // word is already present, increase the frequency<br />
+        if ( (root).isEnd==1)<br />
+            (root).freq +=1;<br />
+        else<br />
+        {<br />
+            (root).isEnd = 1;<br />
+            (root).freq= 1;<br />
+        }</p>
+<p>        // Insert in min heap also<br />
+      //  MinHeap mH=new MinHeap();<br />
+        insertInMinHeap( minHeap, root, dupWord );<br />
+    }<br />
+}</p>
+<p> // The main funtion that takes a file as input, add words to heap<br />
+// and Trie, finally shows result from heap<br />
+void printKMostFreq(String filename, int k )<br />
+{<br />
+    int MAX_WORD_SIZE=30;<br />
+    // Create a Min Heap of Size k<br />
+    MinHeap minHeap= new MinHeap(k);</p>
+<p>    // Create an empty Trie<br />
+    TrieNode root = null;</p>
+<p>    // A buffer to store one word at a time<br />
+   // char buffer[]=new char[MAX_WORD_SIZE];</p>
+<p>    // Read words one by one from file.  Insert the word in Trie and Min Heap<br />
+   // while( fscanf( fp, &quot;%s&quot;, buffer ) != EOF )<br />
+    File fname=new File(filename);<br />
+       FileReader fr = null;</p>
+<p>        try {<br />
+            fr = new FileReader(fname);<br />
+        } catch (FileNotFoundException ex) {<br />
+            Logger.getLogger(MinHeap.class.getName()).log(Level.SEVERE, null, ex);<br />
+        }</p>
+<p>            Scanner scanner = new Scanner(fr);</p>
+<p>       while (scanner.hasNextLine())<br />
+       {<br />
+         String nextToken = scanner.next();<br />
+          insertTrieAndHeap(nextToken.toCharArray(), root, minHeap);  </p>
+<p>    }</p>
+<p>    // The Min Heap will have the k most frequent words, so print Min Heap nodes<br />
+    displayMinHeap(minHeap);<br />
+}   </p>
+<p>}</p>
+<p>public class KFrequentWords {</p>
+<p>    public static void main(String[] args) {</p>
+<p>        int k=5;<br />
+         String fname=&quot;C:\Users\N1K$$\Desktop\dict.txt&quot;;<br />
+       MinHeap mH=new MinHeap(k);<br />
+        mH.printKMostFreq(fname, k);</p>
+<p>    }<br />
+}</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-29837">
+        <div id="dsq-comment-header-29837" class="dsq-comment-header">
+            <cite id="dsq-cite-29837">
+                <span id="dsq-author-user-29837">Guest</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-29837" class="dsq-comment-body">
+            <div id="dsq-comment-message-29837" class="dsq-comment-message"><p>I have written Java version of above code , but still null pointer Exception is coming:</p>
+<p>If possible have a look at the code:</p>
+<p>package kfrequentwords;</p>
+<p>import java.io.*;<br />
+import java.util.Scanner;<br />
+import java.util.logging.Level;<br />
+import java.util.logging.Logger;</p>
+<p>class TrieNode<br />
+{<br />
+     public static final int MAX_CHARS=26;   </p>
+<p>   int indexMinHeap; // the index of the word in minHeap<br />
+    TrieNode[] child=new TrieNode[MAX_CHARS]; // represents 26 slots each for &#8216;a&#8217; to &#8216;z&#8217;.<br />
+    int isEnd;  // indicates end of word<br />
+    int freq;   // frequency of occurence of a word</p>
+<p>    public void TrieNode()<br />
+    {<br />
+         // Allocate memory for Trie Node<br />
+  //  TrieNode trieNode = new TrieNode();</p>
+<p>    // Initialize values for new node<br />
+    isEnd = 0;<br />
+    freq = 0;<br />
+    indexMinHeap = -1;</p>
+<p>//    for( int i = 0; i &lt; MAX_CHARS; ++i )<br />
+//        trieNode.child[i] = NULL;</p>
+<p>  //  return trieNode;<br />
+    }</p>
+<p>}</p>
+<p>class MinHeapNode<br />
+{</p>
+<p>   TrieNode root= new TrieNode(); // indicates the leaf node of TRIE </p>
+<p>    int frequency; //  number of occurrences<br />
+    char[] word; // the actual word stored</p>
+<p>    public MinHeapNode()<br />
+    {<br />
+        frequency=0;<br />
+        word =new char[30];<br />
+    }<br />
+}</p>
+<p>class MinHeap<br />
+{<br />
+  int capacity; //  total size of min Heap<br />
+   int count; // indicates the number of slots filled.<br />
+   MinHeapNode[] array; //  represents the collection of minHeapNodes</p>
+<p>   public MinHeap(int capacity)<br />
+   {<br />
+     //  MinHeap minHeap=new MinHeap();<br />
+        this.capacity=capacity;<br />
+       count=0;</p>
+<p>        // Allocate memory for array of min heap nodes<br />
+       array=new MinHeapNode[capacity];</p>
+<p>       //return minHeap;</p>
+<p>   }<br />
+   // A utility function to swap two min heap nodes. This function<br />
+    // is needed in minHeapify<br />
+   public void swapMinHeapNodes(MinHeapNode a,MinHeapNode b)<br />
+   {<br />
+    MinHeapNode t=a;<br />
+    a=b;<br />
+    b=t;<br />
+   }</p>
+<p>   // This is the standard minHeapify function. It does one thing extra.<br />
+// It updates the minHapIndex in Trie when two nodes are swapped in<br />
+// in min heap<br />
+   public void minHeapify(MinHeap minHeap,int idx)<br />
+   {<br />
+        int left, right, smallest;</p>
+<p>    left = 2 * idx + 1;<br />
+    right = 2 * idx + 2;</p>
+<p>      smallest = idx;<br />
+    if ( left &lt; minHeap.count &amp;&amp; minHeap.array[left].frequency &lt;minHeap.array[smallest].frequency)<br />
+        smallest = left;</p>
+<p>    if ( right &lt; minHeap.count &amp;&amp; minHeap.array[ right ]. frequency = 0; &#8211;i )<br />
+        minHeapify( minHeap, i );<br />
+}</p>
+<p>// Inserts a word to heap, the function handles the 3 cases explained above<br />
+void insertInMinHeap( MinHeap minHeap, TrieNode root, char[] word )<br />
+{<br />
+    // Case 1: the word is already present in minHeap<br />
+    if( (root).indexMinHeap != -1 )<br />
+    {<br />
+       System.out.println(&#8220;Freq = &#8220;+minHeap.array[ (root).indexMinHeap ].frequency);</p>
+<p>        minHeap.array[ (root).indexMinHeap ]. frequency =minHeap.array[ (root).indexMinHeap ]. frequency+1;</p>
+<p>        // percolate down<br />
+        minHeapify( minHeap, (root).indexMinHeap );<br />
+    }</p>
+<p>    // Case 2: Word is not present and heap is not full<br />
+    else if( minHeap.count  minHeap.array[0]. frequency )<br />
+    {</p>
+<p>        minHeap.array[ 0 ]. root.indexMinHeap = -1;<br />
+        minHeap.array[ 0 ]. root = root;<br />
+        minHeap.array[ 0 ]. root.indexMinHeap = 0;<br />
+        minHeap.array[ 0 ]. frequency = (root).freq;</p>
+<p>        // delete previously allocated memoory and<br />
+        minHeap.array[ 0 ]. word=null;</p>
+<p>        minHeap.array[ 0 ]. word = new char [( word.length ) + 1];<br />
+        minHeap.array[ 0 ]. word=word.clone() ;</p>
+<p>        minHeapify ( minHeap, 0 );<br />
+    }</p>
+<p>}</p>
+<p>    // A utility function to show results, The min heap<br />
+// contains k most frequent words so far, at any time<br />
+public void displayMinHeap( MinHeap minHeap )<br />
+{<br />
+    int i;</p>
+<p>    // print top K word with frequency<br />
+    for( i = 0; i &lt; minHeap.count; ++i )<br />
+    {<br />
+        System.out.println(  minHeap.array[i].word +&quot; , &quot;+<br />
+                            minHeap.array[i].frequency );<br />
+    }<br />
+}</p>
+<p> void insertTrieAndHeap(char[] word,TrieNode root,MinHeap minHeap)<br />
+    {<br />
+        insertUtil(root, minHeap, word, word, 0);<br />
+    }</p>
+<p>    void insertUtil( TrieNode root, MinHeap minHeap,<br />
+                         char[] word,  char[] dupWord,int i)<br />
+{<br />
+    // Base Case<br />
+    if ( root == null )<br />
+        root = new TrieNode();</p>
+<p>    //  There are still more characters in word<br />
+    if (i&lt;word.length)<br />
+    {<br />
+       // System.out.println(&quot;Address = &quot;+ ((int)word[i]  &#8211; 97));<br />
+        insertUtil ( (root.child[ (int)word[i]  &#8211; 97 ]),<br />
+                         minHeap, word, dupWord,i+1 );<br />
+    }<br />
+    else // The complete word is processed<br />
+    {<br />
+        // word is already present, increase the frequency<br />
+        if ( (root).isEnd==1)<br />
+            (root).freq +=1;<br />
+        else<br />
+        {<br />
+            (root).isEnd = 1;<br />
+            (root).freq= 1;<br />
+        }</p>
+<p>        // Insert in min heap also<br />
+      //  MinHeap mH=new MinHeap();<br />
+        insertInMinHeap( minHeap, root, dupWord );<br />
+    }<br />
+}</p>
+<p> // The main funtion that takes a file as input, add words to heap<br />
+// and Trie, finally shows result from heap<br />
+void printKMostFreq(String filename, int k )<br />
+{<br />
+    int MAX_WORD_SIZE=30;<br />
+    // Create a Min Heap of Size k<br />
+    MinHeap minHeap= new MinHeap(k);</p>
+<p>    // Create an empty Trie<br />
+    TrieNode root = null;</p>
+<p>    // A buffer to store one word at a time<br />
+   // char buffer[]=new char[MAX_WORD_SIZE];</p>
+<p>    // Read words one by one from file.  Insert the word in Trie and Min Heap<br />
+   // while( fscanf( fp, &quot;%s&quot;, buffer ) != EOF )<br />
+    File fname=new File(filename);<br />
+       FileReader fr = null;</p>
+<p>        try {<br />
+            fr = new FileReader(fname);<br />
+        } catch (FileNotFoundException ex) {<br />
+            Logger.getLogger(MinHeap.class.getName()).log(Level.SEVERE, null, ex);<br />
+        }</p>
+<p>            Scanner scanner = new Scanner(fr);</p>
+<p>       while (scanner.hasNextLine())<br />
+       {<br />
+         String nextToken = scanner.next();<br />
+          insertTrieAndHeap(nextToken.toCharArray(), root, minHeap);  </p>
+<p>    }</p>
+<p>    // The Min Heap will have the k most frequent words, so print Min Heap nodes<br />
+    displayMinHeap(minHeap);<br />
+}   </p>
+<p>}</p>
+<p>public class KFrequentWords {</p>
+<p>    public static void main(String[] args) {</p>
+<p>        int k=5;<br />
+         String fname=&quot;C:\Users\N1K$$\Desktop\dict.txt&quot;;<br />
+       MinHeap mH=new MinHeap(k);<br />
+        mH.printKMostFreq(fname, k);</p>
+<p>    }<br />
+}</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-11142">
+        <div id="dsq-comment-header-11142" class="dsq-comment-header">
+            <cite id="dsq-cite-11142">
+                <span id="dsq-author-user-11142">chintan</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-11142" class="dsq-comment-body">
+            <div id="dsq-comment-message-11142" class="dsq-comment-message"><p>What is the advantage of using tries over Hashing? In fact the insert&#8217;s take longer. We can have pointer from min heap into the hashtable.  </p>
+<pre> <code language="C">
+/* Paste your code here (You may delete these lines if not writing code) */
+</code> </pre>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-11144">
+        <div id="dsq-comment-header-11144" class="dsq-comment-header">
+            <cite id="dsq-cite-11144">
+                <span id="dsq-author-user-11144">Kartik</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-11144" class="dsq-comment-body">
+            <div id="dsq-comment-message-11144" class="dsq-comment-message"><p>Following are the advantages of Trie over hash table.  From Wiki page of Trie.</p>
+<p>Tries support ordered iteration, whereas iteration over a hash table will result in a pseudorandom order given by the hash function (and further affected by the order of hash collisions, which is determined by the implementation).</p>
+<p>Tries facilitate longest-prefix matching, but hashing does not, as a consequence of the above. Performing such a &#8220;closest fit&#8221; find can, depending on implementation, be as quick as an exact find.</p>
+<p>Tries tend to be faster on average at insertion than hash tables because hash tables must rebuild their index when it becomes full &#8211; a very expensive operation. Tries therefore have much better bounded worst-case time costs, which is important for latency-sensitive programs.<br />
+Since no hash function is used, tries are generally faster than hash tables for small keys.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-2" id="dsq-comment-11147">
+        <div id="dsq-comment-header-11147" class="dsq-comment-header">
+            <cite id="dsq-cite-11147">
+                <span id="dsq-author-user-11147">Anmol</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-11147" class="dsq-comment-body">
+            <div id="dsq-comment-message-11147" class="dsq-comment-message"><p>Trie is always better for dictionary operations like in this problem. search and insert operations for Trie take O(word_length), much better than any hashing technique.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-11138">
+        <div id="dsq-comment-header-11138" class="dsq-comment-header">
+            <cite id="dsq-cite-11138">
+                <span id="dsq-author-user-11138">chinmay</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-11138" class="dsq-comment-body">
+            <div id="dsq-comment-message-11138" class="dsq-comment-message"><p>Kindly add the complexity too of each method and conditions under which a particular method is favourable</p>
+<pre> <code language="C">
+/* Paste your code here (You may delete these lines if not writing code) */
+</code> </pre>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-11127">
+        <div id="dsq-comment-header-11127" class="dsq-comment-header">
+            <cite id="dsq-cite-11127">
+                <span id="dsq-author-user-11127">vamshig</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-11127" class="dsq-comment-body">
+            <div id="dsq-comment-message-11127" class="dsq-comment-message"><p>When the first word is inserted, buildMinHeap is called. Again, when the second word is inserted, buildMinHeap is called. This happens till the heap is full, giving a complexity of O(1+2+&#8230;+k). Instead, we can let the heap get to maximum capacity before calling buildMinHeap only once!!<br />
+In this way, minHeap initialization only takes O(k) time. The rest of the algorithm is same.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-11132">
+        <div id="dsq-comment-header-11132" class="dsq-comment-header">
+            <cite id="dsq-cite-11132">
+                <span id="dsq-author-user-11132">Aashish</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-11132" class="dsq-comment-body">
+            <div id="dsq-comment-message-11132" class="dsq-comment-message"><p>Nice observation. BuildMinHeap() is called to keep the code simple. It also handles the cases where the input is less than K words. Again, it can be done calling BuildMinHeap() only once. But to avoid including many conditions, we are calling BuildMinHeap() to make it easy to follow.<br />
+Thanks.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-11135">
+        <div id="dsq-comment-header-11135" class="dsq-comment-header">
+            <cite id="dsq-cite-11135">
+                <span id="dsq-author-user-11135">vivek</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-11135" class="dsq-comment-body">
+            <div id="dsq-comment-message-11135" class="dsq-comment-message"><p>what about complexity?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-4" id="dsq-comment-11148">
+        <div id="dsq-comment-header-11148" class="dsq-comment-header">
+            <cite id="dsq-cite-11148">
+                <span id="dsq-author-user-11148">Kartik</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-11148" class="dsq-comment-body">
+            <div id="dsq-comment-message-11148" class="dsq-comment-message"><p>I think the time complexity should be </p>
+<p>n + NLogk</p>
+<p>Where N is number of words in file, n is number of characters in file.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://www.geeksforgeeks.org/find-the-k-most-frequent-words-from-a-file/';
+var disqus_identifier = '24329 http://www.geeksforgeeks.org/?p=24329';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'geeksforgeeks';
+var disqus_title = "Find the k most frequent words from a file";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+			</div>
+	
+					
+			
+			
+
+		</div> <!-- end post -->	
+
+<br></br>
+	
+</div> <!-- end content -->
+
+<ul id="sidebar">
+	<li id="text-19" class="widget widget_text">			<div class="textwidget"><script>
+  (function() {
+    var cx = '009682134359037907028:tj6eafkv_be';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+
+<style type="text/css">
+  .gsc-control-cse {
+    font-family: "Trebuchet MS", sans-serif;
+    border-color: #E1F3DA;
+    background-color: #E1F3DA;
+  }
+  input.gsc-input {
+    border-color: #94CC7A;
+  }
+  input.gsc-search-button {
+    border-color: #94CC7A;
+    background-color: #AADA92;
+  }
+  .gsc-tabHeader.gsc-tabhInactive {
+    border-color: #A9DA92;
+    background-color: #FFFFFF;
+  }
+  .gsc-tabHeader.gsc-tabhActive {
+    border-color: #A9DA92;
+    background-color: #A9DA92;
+  }
+  .gsc-tabsArea {
+    border-color: #A9DA92;
+  }
+  .gsc-webResult.gsc-result {
+    border-color: #A9DA92;
+    background-color: #FFFFFF;
+  }
+  .gsc-webResult.gsc-result:hover {
+    border-color: #A9DA92;
+    background-color: #FFFFFF;
+  }
+  .gs-webResult.gs-result a.gs-title:link,
+  .gs-webResult.gs-result a.gs-title:link b {
+    color: #009900;
+  }
+  .gs-webResult.gs-result a.gs-title:visited,
+  .gs-webResult.gs-result a.gs-title:visited b {
+    color: #009900;
+  }
+  .gs-webResult.gs-result a.gs-title:hover,
+  .gs-webResult.gs-result a.gs-title:hover b {
+    color: #003300;
+  }
+  .gs-webResult.gs-result a.gs-title:active,
+  .gs-webResult.gs-result a.gs-title:active b {
+    color: #009900;
+  }
+  .gsc-cursor-page {
+    color: #009900;
+  }
+  a.gsc-trailing-more-results:link {
+    color: #009900;
+  }
+  .gs-webResult.gs-result .gs-snippet {
+    color: #454545;
+  }
+  .gs-webResult.gs-result .gs-visibleUrl {
+    color: #33cc00;
+  }
+  .gs-webResult.gs-result .gs-visibleUrl-short {
+    color: #33cc00;
+  }
+  .gs-webResult.gs-result .gs-visibleUrl-short {
+    display: none;
+  }
+  .gs-webResult.gs-result .gs-visibleUrl-long {
+    display: block;
+  }
+  .gsc-cursor-box {
+    border-color: #A9DA92;
+  }
+  .gsc-results .gsc-cursor-page {
+    border-color: #A9DA92;
+    background-color: #FFFFFF;
+  }
+  .gsc-results .gsc-cursor-page.gsc-cursor-current-page {
+    border-color: #A9DA92;
+    background-color: #A9DA92;
+  }
+  .gs-promotion.gs-result {
+    border-color: #94CC7A;
+    background-color: #CBE8B4;
+  }
+  .gs-promotion.gs-result a.gs-title:link {
+    color: #0066CC;
+  }
+  .gs-promotion.gs-result a.gs-title:visited {
+    color: #0066CC;
+  }
+  .gs-promotion.gs-result a.gs-title:hover {
+    color: #0066CC;
+  }
+  .gs-promotion.gs-result a.gs-title:active {
+    color: #0066CC;
+  }
+  .gs-promotion.gs-result .gs-snippet {
+    color: #454545;
+  }
+  .gs-promotion.gs-result .gs-visibleUrl,
+  .gs-promotion.gs-result .gs-visibleUrl-short {
+    color: #815FA7;
+  }
+</style>    </div>
+		</li>
+<li id="text-9" class="widget widget_text">			<div class="textwidget"><div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=138031159685820";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<div class="fb-like-box" data-href="https://www.facebook.com/pages/GeeksforGeeks/316764689022" data-width="250" data-height="170" data-colorscheme="light" data-show-faces="true" data-header="false" data-stream="false" data-show-border="false"></div></div>
+		</li>
+<li id="text-18" class="widget widget_text">			<div class="textwidget"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- LargeRectangleSide -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:336px;height:280px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="1884636833"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
+		</li>
+<li id="text-13" class="widget widget_text">			<div class="textwidget"><ul><li><a href="http://www.geeksforgeeks.org/category/interview-experiences/">Interview Experiences</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/advance-data-structures">Advanced Data Structures</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/dynamic-programming">Dynamic Programming</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/Greedy-Algorithm/">Greedy Algorithms</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/backtracking">Backtracking</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/pattern-searching">Pattern Searching</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/divide-and-conquer">Divide & Conquer</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/MathematicalAlgo">Mathematical Algorithms</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/recursion">Recursion</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/geometric-algorithms/">Geometric Algorithms</a></li>
+</ul></div>
+		</li>
+<li id="text-17" class="widget widget_text">			<div class="textwidget"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Big 300x600 Sidebar -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:600px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="4402736037"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
+		</li>
+<li id="text-14" class="widget widget_text"><h2 class="widgettitle">Popular Posts</h2>
+			<div class="textwidget"><ul>
+<li><a href="http://www.geeksforgeeks.org/write-a-c-program-to-print-all-permutations-of-a-given-string/">  All permutations of a given string </a></li>
+<li><a href="http://www.geeksforgeeks.org/memory-layout-of-c-program/"> Memory Layout of C Programs</a> </li>
+<li><a href="http://www.geeksforgeeks.org/understanding-extern-keyword-in-c/"> Understanding “extern” keyword in C</a> </li>
+<li><a href="http://www.geeksforgeeks.org/median-of-two-sorted-arrays/">Median of two sorted arrays</a> </li>
+<li><a href="http://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion-and-without-stack/"> Tree traversal without recursion and without stack! </a></li>
+<li><a href="http://www.geeksforgeeks.org/structure-member-alignment-padding-and-data-packing/"> Structure Member Alignment, Padding and Data Packing</a> </li>
+<li><a href="http://www.geeksforgeeks.org/write-a-function-to-get-the-intersection-point-of-two-linked-lists/"> Intersection point of two Linked Lists</a> </li>
+<li><a href="http://www.geeksforgeeks.org/lowest-common-ancestor-in-a-binary-search-tree/"> Lowest Common Ancestor in a BST.</span></a> </li>
+<li><a href="http://www.geeksforgeeks.org/a-program-to-check-if-a-binary-tree-is-bst-or-not/"> Check if a binary tree is BST or not</a> </li>
+<li><a href="http://www.geeksforgeeks.org/sorted-linked-list-to-balanced-bst/"> Sorted Linked List to Balanced BST</a></li>
+</ul></div>
+		</li>
+<li id="text-3" class="widget widget_text">			<div class="textwidget"><a href="https://twitter.com/GeeksforGeeks" class="twitter-follow-button" data-show-count="false">Follow @GeeksforGeeks</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>         
+
+
+<!-- GOOGLE FEEDBURNER BUTTON-->
+<a href="http://feeds.feedburner.com/Geeksforgeeks" title="Subscribe to my feed" rel="alternate" type="application/rss+xml"><img src="http://www.feedburner.com/fb/images/pub/feed-icon32x32.png" alt="" style="border:0"/></a><a href="http://feeds.feedburner.com/Geeksforgeeks" title="Subscribe to my feed" rel="alternate" type="application/rss+xml">Subscribe</a>
+
+</div>
+		</li>
+<li id="text-21" class="widget widget_text"><h2 class="widgettitle">Recent Comments</h2>
+			<div class="textwidget"><script type="text/javascript" src="http://geeksforgeeks.disqus.com//recent_comments_widget.js?num_items=6&hide_avatars=1&excerpt_length=50&hide_mods=0"></script></div>
+		</li>
+<li id="text-22" class="widget widget_text">			<div class="textwidget"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- LinkAd -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:90px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="2606115235"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- LinkAd -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:90px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="2606115235"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- LinkAd -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:90px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="2606115235"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
+		</li>
+
+</ul>					  
+		<div class="clear"></div>
+
+		<div id="footer">
+		
+		    <div class="xhtml">
+                        @geeksforgeeks, <a href="http://creativecommons.org/licenses/by-nc-nd/2.5/in/deed.en_US" title="Valid XHTML Strict 1.0">Some rights reserved</a>  <a href="http://www.geeksforgeeks.org/about/contact-us/"> &nbsp; &nbsp; &nbsp; &nbsp;Contact Us!</a>
+
+		    </div>
+		    
+		    <div class="credits">
+			  Powered by <a href="http://wordpress.org">WordPress </a> &amp; <a href="http://mootools.net/" title="Mootools JavaScript Framework">MooTools</a>, customized by geeksforgeeks team </div>
+			  
+		   <div class="clear"></div>						                            
+		   
+		</div> <!--end footer-->  
+        
+		        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'geeksforgeeks';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1) {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('rel'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script'); 
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shCore.js?ver=3.0.9'></script>
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shBrushCpp.js?ver=3.0.9'></script>
+<script type='text/javascript'>
+	(function(){
+		var corecss = document.createElement('link');
+		var themecss = document.createElement('link');
+		var corecssurl = "http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCore.css?ver=3.0.9";
+		if ( corecss.setAttribute ) {
+				corecss.setAttribute( "rel", "stylesheet" );
+				corecss.setAttribute( "type", "text/css" );
+				corecss.setAttribute( "href", corecssurl );
+		} else {
+				corecss.rel = "stylesheet";
+				corecss.href = corecssurl;
+		}
+		document.getElementsByTagName("head")[0].insertBefore( corecss, document.getElementById("syntaxhighlighteranchor") );
+		var themecssurl = "http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shThemeDefault.css?ver=3.0.9";
+		if ( themecss.setAttribute ) {
+				themecss.setAttribute( "rel", "stylesheet" );
+				themecss.setAttribute( "type", "text/css" );
+				themecss.setAttribute( "href", themecssurl );
+		} else {
+				themecss.rel = "stylesheet";
+				themecss.href = themecssurl;
+		}
+		//document.getElementById("syntaxhighlighteranchor").appendChild(themecss);
+		document.getElementsByTagName("head")[0].insertBefore( themecss, document.getElementById("syntaxhighlighteranchor") );
+	})();
+	SyntaxHighlighter.config.strings.expandSource = '+ expand source';
+	SyntaxHighlighter.config.strings.help = '?';
+	SyntaxHighlighter.config.strings.alert = 'SyntaxHighlighter\n\n';
+	SyntaxHighlighter.config.strings.noBrush = 'Can\'t find brush for: ';
+	SyntaxHighlighter.config.strings.brushNotHtmlScript = 'Brush wasn\'t configured for html-script option: ';
+	SyntaxHighlighter.defaults['gutter'] = false;
+	SyntaxHighlighter.defaults['pad-line-numbers'] = true;
+	SyntaxHighlighter.defaults['toolbar'] = false;
+	SyntaxHighlighter.all();
+</script>
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/bbpress/templates/default/js/editor.js?ver=2.5.4-5380'></script>
+				  
+		</div> <!--end wrapper-->
+        <div id="ajaxSpinner"></div> <!--For AJAX spinner holder-->
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-12148232-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+	</body>
+
+</html>
+<!-- Dynamic page generated in 0.215 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2014-11-27 23:23:44 -->
+
+<!-- Compression = gzip -->
+<!-- super cache -->

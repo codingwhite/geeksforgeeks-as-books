@@ -1,0 +1,581 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+       <title>Binomial Heap - GeeksforGeeks</title>
+       <style type="text/css" media="screen">
+          @import url('http://d2o58evtke57tz.cloudfront.net/wp-content/themes/minimoo/style.css');
+    </style>
+      <link href="http://d2o58evtke57tz.cloudfront.net/wp-content/themes/minimoo/favicon.ico" rel="shortcut icon" />    
+    
+<!-- This site is optimized with the Yoast WordPress SEO plugin v1.7.1 - https://yoast.com/wordpress/plugins/seo/ -->
+<link rel="canonical" href="http://www.geeksforgeeks.org/binomial-heap-2/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Binomial Heap - GeeksforGeeks" />
+<meta property="og:description" content="The main application of Binary Heap is as implement priority queue. Binomial Heap is an extension of Binary Heap that provides faster union or merge operation together with other operations provided by Binary Heap. A Binomial Heap is a collection of Binomial Trees What is a Binomial Tree? A Binomial Tree of order 0 has &hellip;" />
+<meta property="og:url" content="http://www.geeksforgeeks.org/binomial-heap-2/" />
+<meta property="og:site_name" content="GeeksforGeeks" />
+<meta property="article:tag" content="Advance Data Structures" />
+<meta property="article:tag" content="Advanced Data Structures" />
+<meta property="article:section" content="Misc" />
+<meta property="article:published_time" content="2014-11-03T18:13:49+00:00" />
+<meta property="article:modified_time" content="2014-11-22T08:17:18+00:00" />
+<meta property="og:updated_time" content="2014-11-22T08:17:18+00:00" />
+<meta property="og:image" content="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/BinomialTree.png" />
+<meta property="og:image" content="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/BinomialHeapUnion.png" />
+<!-- / Yoast WordPress SEO plugin. -->
+
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css?ver=4.0.1' type='text/css' media='all' />
+<link rel='stylesheet' id='bbp-default-css'  href='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/bbpress/templates/default/css/bbpress.css?ver=2.5.4-5380' type='text/css' media='screen' />
+<link rel='stylesheet' id='wp-pagenavi-css'  href='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/wp-pagenavi/pagenavi-css.css?ver=2.70' type='text/css' media='all' />
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-includes/js/jquery/jquery.js?ver=1.11.1'></script>
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1'></script>
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js?ver=1.0'></script>
+
+<!-- Bad Behavior 2.2.16 run time: 1.519 ms -->
+<script type="text/javascript">
+<!--
+function bb2_addLoadEvent(func) {
+	var oldonload = window.onload;
+	if (typeof window.onload != 'function') {
+		window.onload = func;
+	} else {
+		window.onload = function() {
+			oldonload();
+			func();
+		}
+	}
+}
+
+bb2_addLoadEvent(function() {
+	for ( i=0; i < document.forms.length; i++ ) {
+		if (document.forms[i].method == 'post') {
+			var myElement = document.createElement('input');
+			myElement.setAttribute('type', 'hidden');
+			myElement.name = 'bb2_screener_';
+			myElement.value = '1417111285 210.212.53.139 172.19.11.169';
+			document.forms[i].appendChild(myElement);
+		}
+	}
+});
+// --></script>
+		<style type="text/css" id="syntaxhighlighteranchor"></style>
+   <meta name="google-site-verification" content="rHK2v8_zzuAZQY8JHAzbllDN8u-aQxcn2Kqnp67Old0" />
+</head>
+
+<body>
+<!-- o4dI0sCXUgoSONabbd8mbZ4SA3E -->    
+    <div id="wrapper">
+        <div class="blog-info">
+                <h1 class="blog-title">
+                <a href="http://www.geeksforgeeks.org" title="GeeksforGeeks">GeeksforGeeks</a>
+            </h1>
+       
+            <div class="blog-description">
+                A computer science portal for geeks            </div>
+        </div>
+        <b><p>  <h2 align="right"> <a href="http://geeksquiz.com/">GeeksQuiz</a></h2> 
+   <a href="http://www.geeksforgeeks.org/wp-login.php">Login</a> 
+         </p></b>  
+         
+         <div class="clear"></div>         
+              
+                     
+            <div id="menu">   
+                 <ul>
+ <li><a href="http://www.geeksforgeeks.org">Home</a></li>
+  <li><a href="http://www.geeksforgeeks.org/fundamentals-of-algorithms/">Algorithms</a></li>
+ <li><a href="http://www.geeksforgeeks.org/data-structures/">DS</a></li>
+  <li><a href="http://www.geeksforgeeks.org/gate-corner/">GATE</a></li>
+  <li><a href="http://www.geeksforgeeks.org/about/interview-corner/">Interview Corner</a></li>
+  <li><a href="http://www.geeksforgeeks.org/forums/">Q&A</a></li>
+  <li><a href="http://www.geeksforgeeks.org/c/">C</a></li>
+  <li><a href="http://www.geeksforgeeks.org/c-plus-plus/">C++</a></li>
+  <li><a href="http://www.geeksforgeeks.org/java/">Java</a></li>
+  <li><a href="http://www.geeksforgeeks.org/books/">Books</a></li>
+  <li><a href="http://www.geeksforgeeks.org/contribute/">Contribute</a></li>
+  <li><a href="http://www.geeksforgeeks.org/contribute/ask-a-question/">Ask a Q</a></li>
+  <li><a href="http://www.geeksforgeeks.org/about/">About</a></li>
+            </ul>
+
+               
+            <div class="clear"></div>     
+        </div>
+             <div id="navmenu">
+				<ul id="menu" style="padding:0; margin:0;">
+						<li class="cat-item cat-item-3"><a href="http://www.geeksforgeeks.org/category/c-arrays/" title="Questions regarding Arrays">Array</a>
+</li>	
+
+	<li class="cat-item cat-item-17"><a href="http://www.geeksforgeeks.org/category/bit-magic/" title="View all posts filed under Bit Magic">Bit Magic</a>
+</li>
+	<li class="cat-item cat-item-14"><a href="http://www.geeksforgeeks.org/category/c-puzzles/" title="View all posts filed under C/C++ Puzzles">C/C++</a>
+</li>
+
+<li class="cat-item cat-item-18"><a href="http://www.geeksforgeeks.org/category/articles/" title="View all posts filed under Articles">Articles</a>
+</li>
+
+	<li class="cat-item cat-item-67"><a href="http://www.geeksforgeeks.org/category/gfact/" title="View all posts filed under GFacts">GFacts</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://www.geeksforgeeks.org/category/linked-list/" title="Linked List problems">Linked List</a>
+</li>
+	<li class="cat-item cat-item-66"><a href="http://www.geeksforgeeks.org/category/multiple-choice-question/" title="View all posts filed under MCQ">MCQ</a>
+
+</li>
+	<li class="cat-item cat-item-4"><a href="http://www.geeksforgeeks.org/category/c-programs/" title="Miscellaneous">Misc</a>
+</li>
+	<li class="cat-item cat-item-5"><a href="http://www.geeksforgeeks.org/category/program-output/" title="View all posts filed under Output">Output</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="http://www.geeksforgeeks.org/category/c-strings/" title="Questions related to strings">String</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://www.geeksforgeeks.org/category/tree/" title="View all posts filed under Trees">Tree</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://www.geeksforgeeks.org/category/graph/" title="View all posts filed under Graph">Graph</a>
+</li>
+</ul>
+        </div>
+             <div id="content">	   	
+	<div class="post" id="post">
+							<div class="post-info">			
+					<div class="post-title-info">
+						<h2 class="post-title">Binomial Heap</h2>
+					</div>			
+					<div class="clear"></div>				  
+				<div class="post-content" id="post-content">
+					<p>The main application of <a href="http://geeksquiz.com/binary-heap/" target="_blank">Binary Heap </a>is as implement priority queue. Binomial Heap is an extension of <a href="http://geeksquiz.com/binary-heap/" target="_blank">Binary Heap </a>that provides faster union or merge operation together with other operations provided by Binary Heap.<span id="more-132305"></span></p>
+<p><em>A Binomial Heap is a collection of Binomial Trees</em></p>
+<p><strong>What is a Binomial Tree?</strong><br />
+A Binomial Tree of order 0 has 1 node. A Binomial Tree of order k can be constructed by taking two binomial trees of order k-1, and making one as leftmost child of other.<br />
+A Binomial Tree of order k has following properties.<br />
+a) It has exactly 2<sup>k</sup> nodes.<br />
+b) It has depth as k.<br />
+c) There are exactly kCi nodes at depth i for i = 0, 1, . . . , k.<br />
+d) The root has degree k and children of root are themselves Binomial Trees with order k-1, k-2,.. 0 from left to right.</p>
+<p>The following diagram is taken from 2nd Edition of <a href="http://www.flipkart.com/introduction-algorithms-english-3rd/p/itmdwxyrafdburzg?pid=9788120340077&#038;affid=sandeepgfg">CLRS book</a>.</p>
+<p><a href="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/BinomialTree.png"><img class="aligncenter size-full wp-image-132308" src="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/BinomialTree.png" alt="BinomialTree" width="434" height="352" /></a></p>
+<p><strong>Binomial Heap:</strong><br />
+A Binomial Heap is a set of Binomial Trees where each Binomial Tree follows Min Heap property. And there can be at-most one Binomial Tree of any degree.</p>
+<p><strong>Examples Binomial Heap:</strong></p>
+<pre>12------------10--------------------20
+             /  \                 /  | \
+           15    50             70  50  40
+           |                  / |    |     
+           30               80  85  65 
+                            |
+                           100
+A Binomial Heap with 13 nodes. It is a collection of 3 
+Binomial Trees of orders 0, 2 and 3 from left to right. 
+
+    10--------------------20
+   /  \                 /  | \
+ 15    50             70  50  40
+ |                  / |    |     
+ 30               80  85  65 
+                  |
+                 100</pre>
+<p>A Binomial Heap with 12 nodes. It is a collection of 2<br />
+Binomial Trees of orders 2 and 3 from left to right.</p>
+<p><strong>Binary Representation of a number and Binomial Heaps</strong><br />
+A Binomial Heap with n nodes has number of Binomial Trees equal to the number of set bits in Binary representation of n. For example let n be 13, there 3 set bits in binary representation of n (00001101), hence 3 Binomial Trees. We can also relate degree of these Binomial Trees with positions of set bits. With this relation we can conclude that there are O(Logn) Binomial Trees in a Binomial Heap with &#8216;n&#8217; nodes.</p>
+<p><strong>Operations of Binomial Heap:</strong><br />
+The main operation in Binomial Heap is union(), all other operations mainly use this operation. The union() operation is to combine two Binomial Heaps into one. Let us first discuss other operations, we will discuss union later.</p>
+<p><strong>1)</strong> insert(H, k): Inserts a key &#8216;k&#8217; to Binomial Heap &#8216;H&#8217;. This operation first creates a Binomial Heap with single key &#8216;k&#8217;, then calls union on H and the new Binomial heap.</p>
+<p><strong>2) </strong>getMin(H): A simple way to getMin() is to traverse the list of root of Binomial Trees and return the minimum key. This implementation requires O(Logn) time. It can be optimized to O(1) by maintaining a pointer to minimum key root.</p>
+<p><strong>3)</strong> extractMin(H): This operation also uses union(). We first call getMin() to find the minimum key Binomial Tree, then we remove the node and create a new Binomial Heap by connecting all subtrees of the removed minimum node. Finally we call union() on H and the newly created Binomial Heap. This operation requires O(Logn) time.</p>
+<p><strong>4)</strong> delete(H): Like Binary Heap, delete operation first reduces the key to minus infinite, then calls extractMin().</p>
+<p><strong>5)</strong> decreaseKey(H): decreaseKey() is also similar to Binary Heap. We compare the decreases key with it parent and if parent&#8217;s key is less, we swap keys and recur for parent. We stop when we either reach a node whose parent has smaller key or we hit the root node. Time complexity of decreaseKey() is O(Logn).</p>
+<p><strong>Union operation in Binomial Heap:</strong><br />
+Given two Binomial Heaps H1 and H2, union(H1, H2) creates a single Binomial Heap.<br />
+<strong>1)</strong> The first step is to simply merge the two Heaps in non-decreasing order of degrees. In the following diagram, figure(b) shows the result after merging.</p>
+<p><strong>2)</strong> After the simple merge, we need to make sure that there is at-most one Binomial Tree of any order. To do this, we need to combine Binomial Trees of same order. We traverse the list of merged roots, we keep track of three pointers, prev, x and next-x. There can be following 4 cases when we traverse the list of roots.<br />
+&#8212;&#8211;Case 1: Orders of x and next-x are not same, we simply move ahead.<br />
+In following 3 cases orders of x and next-x are same.<br />
+&#8212;&#8211;Case 2: If order of next-next-x is also same, move ahead.<br />
+&#8212;&#8211;Case 3: If key of x is smaller than or equal to key of next-x, then make next-x as a child of x by linking it with x.<br />
+&#8212;&#8211;Case 4: If key of x is greater, then make x as child of next.</p>
+<p>The following diagram is taken from 2nd Edition of <a href="http://www.flipkart.com/introduction-algorithms-english-3rd/p/itmdwxyrafdburzg?pid=9788120340077&#038;affid=sandeepgfg">CLRS book</a>.<br />
+<a href="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/BinomialHeapUnion.png"><img class="aligncenter size-full wp-image-132309" src="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/BinomialHeapUnion.png" alt="BinomialHeapUnion" width="501" height="708" /></a></p>
+<p><strong>How to represent Binomial Heap?</strong><br />
+A Binomial Heap is a set of Binomial Trees. A Binomial Tree must be represented in a way that allows sequential access to all siblings, starting from the leftmost sibling (We need this in and extractMin() and delete()). The idea is to represent Binomial Trees as leftmost child and right-sibling representation, i.e., every node stores two pointers, one to the leftmost child and other to the right sibling.</p>
+<p>We will soon be discussing implementation of Binomial Heap.</p>
+<p><strong>Sources:</strong><br />
+<a href="http://www.flipkart.com/introduction-algorithms-8120340078/p/itmczynzhyhxv2gs?pid=9788120340077&amp;affid=sandeepgfg">Introduction to Algorithms by Clifford Stein, Thomas H. Cormen, Charles E. Leiserson, Ronald L.<br />
+</a></p>
+<p>This article is contributed by <strong>Shivam</strong>. Please write comments if you find anything incorrect, or you want to share more information about the topic discussed above</p>
+		
+&nbsp;
+&nbsp;
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Big Rectangle Blog Bottom -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:336px;height:280px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="4061219431"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+<h3>Related Topics:</h3><ul><li><a href="http://www.geeksforgeeks.org/job-sequencing-problem-set-1-greedy-algorithm/" title="Job Sequencing Problem | Set 1 (Greedy Algorithm)">Job Sequencing Problem | Set 1 (Greedy Algorithm)</a></li><li><a href="http://www.geeksforgeeks.org/multiply-two-polynomials-2/" title="Multiply two polynomials">Multiply two polynomials</a></li><li><a href="http://www.geeksforgeeks.org/algorithm-practice-question-beginners-set-1/" title="Algorithm Practice Question for Beginners | Set 1">Algorithm Practice Question for Beginners | Set 1</a></li><li><a href="http://www.geeksforgeeks.org/count-distinct-non-negative-pairs-x-y-satisfy-inequality-xx-yy-n-2/" title="Count Distinct Non-Negative Integer Pairs (x, y) that Satisfy the Inequality x*x + y*y &lt; n">Count Distinct Non-Negative Integer Pairs (x, y) that Satisfy the Inequality x*x + y*y < n</a></li><li><a href="http://www.geeksforgeeks.org/print-increasing-sequences-length-k-first-n-natural-numbers/" title="Print all increasing sequences of length k from first n natural numbers">Print all increasing sequences of length k from first n natural numbers</a></li><li><a href="http://www.geeksforgeeks.org/find-nth-number-number-system-3-4/" title="Find n&#8217;th number in a number system with only 3 and 4">Find n&#8217;th number in a number system with only 3 and 4</a></li><li><a href="http://www.geeksforgeeks.org/minimum-cost-polygon-triangulation/" title="Minimum Cost Polygon Triangulation">Minimum Cost Polygon Triangulation</a></li><li><a href="http://www.geeksforgeeks.org/mobile-numeric-keypad-problem/" title="Mobile Numeric Keypad Problem">Mobile Numeric Keypad Problem</a></li></ul>
+<p>Tags: <a href="http://www.geeksforgeeks.org/tag/advance-data-structures/" rel="tag">Advance Data Structures</a>, <a href="http://www.geeksforgeeks.org/tag/advanced-data-structures/" rel="tag">Advanced Data Structures</a></p> 
+<div>
+<iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.geeksforgeeks.org%2Fbinomial-heap-2%2F&layout=button_count&show_faces=false&width=90&action=like&colorscheme=light" scrolling="no" frameborder="0" allowTransparency="true" style="border:none; overflow:hidden; width:90px; height:20px"></iframe>
+<a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.geeksforgeeks.org/binomial-heap-2/" data-text="Binomial Heap" data-count="horizontal" data-via="jakerutter">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+<g:plusone size="medium" href="http://www.geeksforgeeks.org/binomial-heap-2/"></g:plusone>
+<!-- Place this render call where appropriate -->
+<script type="text/javascript">
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script></div>
+
+
+
+
+
+				</div>		  
+			</div> <!-- end post main -->					
+			<div class="post-meta">
+				<div class="left"></div>				
+				<div class="clear"></div>
+			</div>			
+        
+			<div class="comments-main">		
+ <b>Writing code in comment?</b> Please use <b><a href="http://ideone.com/">ideone.com</a></b> and share the link here.
+				
+<div id="disqus_thread">
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://www.geeksforgeeks.org/binomial-heap-2/';
+var disqus_identifier = '132305 http://www.geeksforgeeks.org/?p=132305';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'geeksforgeeks';
+var disqus_title = "Binomial Heap";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+			</div>
+	
+					
+			
+			
+
+		</div> <!-- end post -->	
+
+<br></br>
+	
+</div> <!-- end content -->
+
+<ul id="sidebar">
+	<li id="text-19" class="widget widget_text">			<div class="textwidget"><script>
+  (function() {
+    var cx = '009682134359037907028:tj6eafkv_be';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+
+<style type="text/css">
+  .gsc-control-cse {
+    font-family: "Trebuchet MS", sans-serif;
+    border-color: #E1F3DA;
+    background-color: #E1F3DA;
+  }
+  input.gsc-input {
+    border-color: #94CC7A;
+  }
+  input.gsc-search-button {
+    border-color: #94CC7A;
+    background-color: #AADA92;
+  }
+  .gsc-tabHeader.gsc-tabhInactive {
+    border-color: #A9DA92;
+    background-color: #FFFFFF;
+  }
+  .gsc-tabHeader.gsc-tabhActive {
+    border-color: #A9DA92;
+    background-color: #A9DA92;
+  }
+  .gsc-tabsArea {
+    border-color: #A9DA92;
+  }
+  .gsc-webResult.gsc-result {
+    border-color: #A9DA92;
+    background-color: #FFFFFF;
+  }
+  .gsc-webResult.gsc-result:hover {
+    border-color: #A9DA92;
+    background-color: #FFFFFF;
+  }
+  .gs-webResult.gs-result a.gs-title:link,
+  .gs-webResult.gs-result a.gs-title:link b {
+    color: #009900;
+  }
+  .gs-webResult.gs-result a.gs-title:visited,
+  .gs-webResult.gs-result a.gs-title:visited b {
+    color: #009900;
+  }
+  .gs-webResult.gs-result a.gs-title:hover,
+  .gs-webResult.gs-result a.gs-title:hover b {
+    color: #003300;
+  }
+  .gs-webResult.gs-result a.gs-title:active,
+  .gs-webResult.gs-result a.gs-title:active b {
+    color: #009900;
+  }
+  .gsc-cursor-page {
+    color: #009900;
+  }
+  a.gsc-trailing-more-results:link {
+    color: #009900;
+  }
+  .gs-webResult.gs-result .gs-snippet {
+    color: #454545;
+  }
+  .gs-webResult.gs-result .gs-visibleUrl {
+    color: #33cc00;
+  }
+  .gs-webResult.gs-result .gs-visibleUrl-short {
+    color: #33cc00;
+  }
+  .gs-webResult.gs-result .gs-visibleUrl-short {
+    display: none;
+  }
+  .gs-webResult.gs-result .gs-visibleUrl-long {
+    display: block;
+  }
+  .gsc-cursor-box {
+    border-color: #A9DA92;
+  }
+  .gsc-results .gsc-cursor-page {
+    border-color: #A9DA92;
+    background-color: #FFFFFF;
+  }
+  .gsc-results .gsc-cursor-page.gsc-cursor-current-page {
+    border-color: #A9DA92;
+    background-color: #A9DA92;
+  }
+  .gs-promotion.gs-result {
+    border-color: #94CC7A;
+    background-color: #CBE8B4;
+  }
+  .gs-promotion.gs-result a.gs-title:link {
+    color: #0066CC;
+  }
+  .gs-promotion.gs-result a.gs-title:visited {
+    color: #0066CC;
+  }
+  .gs-promotion.gs-result a.gs-title:hover {
+    color: #0066CC;
+  }
+  .gs-promotion.gs-result a.gs-title:active {
+    color: #0066CC;
+  }
+  .gs-promotion.gs-result .gs-snippet {
+    color: #454545;
+  }
+  .gs-promotion.gs-result .gs-visibleUrl,
+  .gs-promotion.gs-result .gs-visibleUrl-short {
+    color: #815FA7;
+  }
+</style>    </div>
+		</li>
+<li id="text-9" class="widget widget_text">			<div class="textwidget"><div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=138031159685820";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<div class="fb-like-box" data-href="https://www.facebook.com/pages/GeeksforGeeks/316764689022" data-width="250" data-height="170" data-colorscheme="light" data-show-faces="true" data-header="false" data-stream="false" data-show-border="false"></div></div>
+		</li>
+<li id="text-18" class="widget widget_text">			<div class="textwidget"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- LargeRectangleSide -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:336px;height:280px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="1884636833"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
+		</li>
+<li id="text-13" class="widget widget_text">			<div class="textwidget"><ul><li><a href="http://www.geeksforgeeks.org/category/interview-experiences/">Interview Experiences</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/advance-data-structures">Advanced Data Structures</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/dynamic-programming">Dynamic Programming</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/Greedy-Algorithm/">Greedy Algorithms</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/backtracking">Backtracking</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/pattern-searching">Pattern Searching</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/divide-and-conquer">Divide & Conquer</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/MathematicalAlgo">Mathematical Algorithms</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/recursion">Recursion</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/geometric-algorithms/">Geometric Algorithms</a></li>
+</ul></div>
+		</li>
+<li id="text-17" class="widget widget_text">			<div class="textwidget"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Big 300x600 Sidebar -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:600px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="4402736037"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
+		</li>
+<li id="text-14" class="widget widget_text"><h2 class="widgettitle">Popular Posts</h2>
+			<div class="textwidget"><ul>
+<li><a href="http://www.geeksforgeeks.org/write-a-c-program-to-print-all-permutations-of-a-given-string/">  All permutations of a given string </a></li>
+<li><a href="http://www.geeksforgeeks.org/memory-layout-of-c-program/"> Memory Layout of C Programs</a> </li>
+<li><a href="http://www.geeksforgeeks.org/understanding-extern-keyword-in-c/"> Understanding “extern” keyword in C</a> </li>
+<li><a href="http://www.geeksforgeeks.org/median-of-two-sorted-arrays/">Median of two sorted arrays</a> </li>
+<li><a href="http://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion-and-without-stack/"> Tree traversal without recursion and without stack! </a></li>
+<li><a href="http://www.geeksforgeeks.org/structure-member-alignment-padding-and-data-packing/"> Structure Member Alignment, Padding and Data Packing</a> </li>
+<li><a href="http://www.geeksforgeeks.org/write-a-function-to-get-the-intersection-point-of-two-linked-lists/"> Intersection point of two Linked Lists</a> </li>
+<li><a href="http://www.geeksforgeeks.org/lowest-common-ancestor-in-a-binary-search-tree/"> Lowest Common Ancestor in a BST.</span></a> </li>
+<li><a href="http://www.geeksforgeeks.org/a-program-to-check-if-a-binary-tree-is-bst-or-not/"> Check if a binary tree is BST or not</a> </li>
+<li><a href="http://www.geeksforgeeks.org/sorted-linked-list-to-balanced-bst/"> Sorted Linked List to Balanced BST</a></li>
+</ul></div>
+		</li>
+<li id="text-3" class="widget widget_text">			<div class="textwidget"><a href="https://twitter.com/GeeksforGeeks" class="twitter-follow-button" data-show-count="false">Follow @GeeksforGeeks</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>         
+
+
+<!-- GOOGLE FEEDBURNER BUTTON-->
+<a href="http://feeds.feedburner.com/Geeksforgeeks" title="Subscribe to my feed" rel="alternate" type="application/rss+xml"><img src="http://www.feedburner.com/fb/images/pub/feed-icon32x32.png" alt="" style="border:0"/></a><a href="http://feeds.feedburner.com/Geeksforgeeks" title="Subscribe to my feed" rel="alternate" type="application/rss+xml">Subscribe</a>
+
+</div>
+		</li>
+<li id="text-21" class="widget widget_text"><h2 class="widgettitle">Recent Comments</h2>
+			<div class="textwidget"><script type="text/javascript" src="http://geeksforgeeks.disqus.com//recent_comments_widget.js?num_items=6&hide_avatars=1&excerpt_length=50&hide_mods=0"></script></div>
+		</li>
+<li id="text-22" class="widget widget_text">			<div class="textwidget"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- LinkAd -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:90px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="2606115235"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- LinkAd -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:90px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="2606115235"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- LinkAd -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:90px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="2606115235"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
+		</li>
+
+</ul>					  
+		<div class="clear"></div>
+
+		<div id="footer">
+		
+		    <div class="xhtml">
+                        @geeksforgeeks, <a href="http://creativecommons.org/licenses/by-nc-nd/2.5/in/deed.en_US" title="Valid XHTML Strict 1.0">Some rights reserved</a>  <a href="http://www.geeksforgeeks.org/about/contact-us/"> &nbsp; &nbsp; &nbsp; &nbsp;Contact Us!</a>
+
+		    </div>
+		    
+		    <div class="credits">
+			  Powered by <a href="http://wordpress.org">WordPress </a> &amp; <a href="http://mootools.net/" title="Mootools JavaScript Framework">MooTools</a>, customized by geeksforgeeks team </div>
+			  
+		   <div class="clear"></div>						                            
+		   
+		</div> <!--end footer-->  
+        
+		        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'geeksforgeeks';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1) {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('rel'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script'); 
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/bbpress/templates/default/js/editor.js?ver=2.5.4-5380'></script>
+				  
+		</div> <!--end wrapper-->
+        <div id="ajaxSpinner"></div> <!--For AJAX spinner holder-->
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-12148232-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+	</body>
+
+</html>
+<!-- Dynamic page generated in 0.182 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2014-11-27 23:31:25 -->
+
+<!-- Compression = gzip -->
+<!-- super cache -->

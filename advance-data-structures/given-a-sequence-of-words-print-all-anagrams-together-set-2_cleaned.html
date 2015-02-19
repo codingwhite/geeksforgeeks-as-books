@@ -1,0 +1,191 @@
+<body><div><div class="post" id="post">
+							<div class="post-info">			
+					<p class="post-title-info">
+						</p><h2 class="post-title">Given a sequence of words, print all anagrams together | Set 2</h2>
+								
+					<p class="clear"></p>				  
+				<div class="post-content" id="post-content">
+					<p>Given an array of words, print all anagrams together. For example, if the given array is {&#226;&#128;&#156;cat&#226;&#128;&#157;, &#226;&#128;&#156;dog&#226;&#128;&#157;, &#226;&#128;&#156;tac&#226;&#128;&#157;, &#226;&#128;&#156;god&#226;&#128;&#157;, &#226;&#128;&#156;act&#226;&#128;&#157;}, then output may be &#226;&#128;&#156;cat tac act dog god&#226;&#128;&#157;.<span id="more-26180"></span></p>
+<p>We have discussed two different methods in the <a href="http://www.geeksforgeeks.org/archives/26125">previous post</a>. In this post, a more efficient solution is discussed.</p>
+<p>Trie data structure can be used for a more efficient solution.  Insert the sorted order of each word in the trie. Since all the anagrams will end at the same leaf node. We can start a linked list at the leaf nodes where each node represents the index of the original array of words. Finally, traverse the Trie. While traversing the Trie, traverse each linked list one line at a time. Following are the detailed steps.</p>
+<p><strong>1)</strong> Create an empty Trie<br>
+<strong>2)</strong> One by one take all words of input sequence.  Do following for each word<br>
+&#8230;<strong>a)</strong> Copy the word to a buffer.<br>
+&#8230;<strong>b)</strong> Sort the buffer<br>
+&#8230;<strong>c)</strong> Insert the sorted buffer and index of this word to Trie. Each leaf node of Trie is head of a Index list. The Index list stores index of words in original sequence.  If sorted buffe is already present, we insert index of this word to the index list.<br>
+<strong>3) </strong>Traverse Trie. While traversing, if you reach a leaf node, traverse the index list. And print all words using the index obtained from Index list.</p>
+<pre class="brush: cpp; highlight: [79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128]; title: ; notranslate" title="">
+// An efficient program to print all anagrams together
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;ctype.h&gt;
+
+#define NO_OF_CHARS 26
+
+// Structure to represent list node for indexes of words in
+// the given sequence. The list nodes are used to connect
+// anagrams at leaf nodes of Trie
+struct IndexNode
+{
+    int index;
+    struct IndexNode* next;
+};
+
+// Structure to represent a Trie Node
+struct TrieNode
+{
+    bool isEnd;  // indicates end of word
+    struct TrieNode* child[NO_OF_CHARS]; // 26 slots each for 'a' to 'z'
+    struct IndexNode* head; // head of the index list
+};
+
+
+// A utility function to create a new Trie node
+struct TrieNode* newTrieNode()
+{
+    struct TrieNode* temp = new TrieNode;
+    temp-&gt;isEnd = 0;
+	temp-&gt;head = NULL;
+	for (int i = 0; i &lt; NO_OF_CHARS; ++i)
+		temp-&gt;child[i] = NULL;
+	return temp;
+}
+
+/* Following function is needed for library function qsort(). Refer
+   http://www.cplusplus.com/reference/clibrary/cstdlib/qsort/ */
+int compare(const void* a, const void* b)
+{  return *(char*)a - *(char*)b; }
+
+/* A utility function to create a new linked list node */
+struct IndexNode* newIndexNode(int index)
+{
+	struct IndexNode* temp = new IndexNode;
+	temp-&gt;index = index;
+	temp-&gt;next = NULL;
+	return temp;
+}
+
+// A utility function to insert a word to Trie
+void insert(struct TrieNode** root, char* word, int index)
+{
+    // Base case
+	if (*root == NULL)
+		*root = newTrieNode();
+
+	if (*word != '\0')
+		insert( &amp;( (*root)-&gt;child[tolower(*word) - 'a'] ), word+1, index );
+	else  // If end of the word reached
+	{
+	    // Insert index of this word to end of index linked list
+		if ((*root)-&gt;isEnd)
+		{
+			IndexNode* pCrawl = (*root)-&gt;head;
+			while( pCrawl-&gt;next )
+				pCrawl = pCrawl-&gt;next;
+			pCrawl-&gt;next = newIndexNode(index);
+		}
+		else  // If Index list is empty
+		{
+			(*root)-&gt;isEnd = 1;
+			(*root)-&gt;head = newIndexNode(index);
+		}
+	}
+}
+
+// This function traverses the built trie. When a leaf node is reached,
+// all words connected at that leaf node are anagrams. So it traverses
+// the list at leaf node and uses stored index to print original words
+void printAnagramsUtil(struct TrieNode* root, char *wordArr[])
+{
+	if (root == NULL)
+		return;
+
+	// If a lead node is reached, print all anagrams using the indexes
+	// stored in index linked list
+	if (root-&gt;isEnd)
+	{
+		// traverse the list
+		IndexNode* pCrawl = root-&gt;head;
+		while (pCrawl != NULL)
+		{
+			printf( "%s \n", wordArr[ pCrawl-&gt;index ] );
+			pCrawl = pCrawl-&gt;next;
+		}
+	}
+
+	for (int i = 0; i &lt; NO_OF_CHARS; ++i)
+		printAnagramsUtil(root-&gt;child[i], wordArr);
+}
+
+// The main function that prints all anagrams together. wordArr[] is input
+// sequence of words.
+void printAnagramsTogether(char* wordArr[], int size)
+{
+    // Create an empty Trie
+	struct TrieNode* root = NULL;
+
+	// Iterate through all input words
+	for (int i = 0; i &lt; size; ++i)
+	{
+	    // Create a buffer for this word and copy the word to buffer
+		int len = strlen(wordArr[i]);
+	    char *buffer = new char[len+1];
+		strcpy(buffer, wordArr[i]);
+
+		// Sort the buffer
+		qsort( (void*)buffer, strlen(buffer), sizeof(char), compare );
+
+        // Insert the sorted buffer and its original index to Trie
+		insert(&amp;root,  buffer, i);
+	}
+
+    // Traverse the built Trie and print all anagrms together
+	printAnagramsUtil(root, wordArr);
+}
+
+
+// Driver program to test above functions
+int main()
+{
+    char* wordArr[] = {"cat", "dog", "tac", "god", "act", "gdo"};
+    int size = sizeof(wordArr) / sizeof(wordArr[0]);
+    printAnagramsTogether(wordArr, size);
+    return 0;
+}
+</pre>
+<p>Output:
+</p><pre>cat
+tac
+act
+dog
+god
+gdo</pre>
+<p>Please write comments if you find anything incorrect, or you want to share more information about the topic discussed above.</p>
+		
+&#160;
+&#160;
+
+
+
+
+
+
+
+&#160;
+&#160;
+&#160;
+<p>Tags: <a href="http://www.geeksforgeeks.org/tag/advance-data-structures/" rel="tag">Advance Data Structures</a></p> 
+
+
+
+
+
+
+				<h3>Source:</h3><p><a href="http://www.geeksforgeeks.org/given-a-sequence-of-words-print-all-anagrams-together-set-2/" rel="tag">http://www.geeksforgeeks.org/given-a-sequence-of-words-print-all-anagrams-together-set-2/</a></p></div>		  
+			</div> 					
+						
+        
+			</div> 	
+
+</div></body>

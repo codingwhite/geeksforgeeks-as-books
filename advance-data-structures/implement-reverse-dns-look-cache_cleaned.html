@@ -1,0 +1,168 @@
+<body><div><div class="post" id="post">
+							<div class="post-info">			
+					<p class="post-title-info">
+						</p><h2 class="post-title">How to Implement Reverse DNS Look Up Cache?</h2>
+								
+					<p class="clear"></p>				  
+				<div class="post-content" id="post-content">
+					<p>Reverse DNS look up is using an internet IP address to find a domain name.  For example, if you type 74.125.200.106 in browser, it automatically redirects to google.in. <span id="more-133039"></span></p>
+<p>How to implement Reverse DNS Look Up cache?  Following are the operations needed from cache.<br>
+1) Add a IP address to URL Mapping in cache.<br>
+2) Find URL for a given IP address.</p>
+<p>One solution is to use <a href="http://geeksquiz.com/hashing-set-1-introduction/">Hashing</a>.  </p>
+<p>In this post, a <a href="http://www.geeksforgeeks.org/trie-insert-and-search/">Trie </a>based solution is discussed. One advantage of Trie based solutions is, worst case upper bound is O(1) for Trie, for hashing, the best possible average case time complexity is O(1).  Also, with Trie we can implement prefix search (finding all urls for a common prefix of IP addresses).<br>
+The general disadvantage of Trie is large amount of memory requirement, this is not a major problem here as the alphabet size is only 11 here. Ten characters are needed for digits from &#8216;0&#8217; to &#8216;9&#8217; and one for dot (&#8216;.&#8217;).<br>
+The idea is to store IP addresses in Trie nodes and in the last node we store the corresponding domain name.  Following is C style implementation in C++.</p>
+<pre class="brush: cpp; highlight: [37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91]; title: ; notranslate" title="">
+// C based program to implement reverse DNS lookup
+#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;string.h&gt;
+
+// There are atmost 11 different chars in a valid IP address
+#define CHARS 11
+
+// Maximum length of a valid IP address
+#define MAX 50
+
+// A utility function to find index of child for a given character 'c'
+int getIndex(char c) { return (c == '.')? 10: (c - '0'); }
+
+// A utility function to find character for a given child index.
+char getCharFromIndex(int i) { return (i== 10)? '.' : ('0' + i); }
+
+// Trie Node.
+struct trieNode
+{
+    bool isLeaf;
+    char *URL;
+    struct trieNode *child[CHARS];
+};
+
+// Function to create a new trie node.
+struct trieNode *newTrieNode(void)
+{
+    struct trieNode *newNode = new trieNode;
+    newNode-&gt;isLeaf = false;
+    newNode-&gt;URL = NULL;
+    for (int i=0; i&lt;CHARS; i++)
+        newNode-&gt;child[i] = NULL;
+    return newNode;
+}
+
+// This method inserts an ip address and the corresponding
+// domain name in the trie. The last node in Trie contains the URL.
+void insert(struct trieNode *root, char *ipAdd, char *URL)
+{
+    // Length of the ip address
+    int len = strlen(ipAdd);
+    struct trieNode *pCrawl = root;
+
+    // Traversing over the length of the ip address.
+    for (int level=0; level&lt;len; level++)
+    {
+        // Get index of child node from current character
+        // in ipAdd[].  Index must be from 0 to 10 where
+        // 0 to 9 is used for digits and 10 for dot
+        int index = getIndex(ipAdd[level]);
+
+        // Create a new child if not exist already
+        if (!pCrawl-&gt;child[index])
+            pCrawl-&gt;child[index] = newTrieNode();
+
+        // Move to the child
+        pCrawl = pCrawl-&gt;child[index];
+    }
+
+    //Below needs to be carried out for the last node.
+    //Save the corresponding URL of the ip address in the
+    //last node of trie.
+    pCrawl-&gt;isLeaf = true;
+    pCrawl-&gt;URL = new char[strlen(URL) + 1];
+    strcpy(pCrawl-&gt;URL, URL);
+}
+
+// This function returns URL if given IP address is present in DNS cache.
+// Else returns NULL
+char  *searchDNSCache(struct trieNode *root, char *ipAdd)
+{
+    // Root node of trie.
+    struct trieNode *pCrawl = root;
+    int  len = strlen(ipAdd);
+
+    // Traversal over the length of ip address.
+    for (int level=0; level&lt;len; level++)
+    {
+        int index = getIndex(ipAdd[level]);
+        if (!pCrawl-&gt;child[index])
+            return NULL;
+        pCrawl = pCrawl-&gt;child[index];
+    }
+
+    // If we find the last node for a given ip address, print the URL.
+    if (pCrawl!=NULL &amp;&amp; pCrawl-&gt;isLeaf)
+        return pCrawl-&gt;URL;
+
+    return NULL;
+}
+
+//Driver function.
+int main()
+{
+    /* Change third ipAddress for validation */
+    char ipAdd[][MAX] = {"107.108.11.123", "107.109.123.255",
+                         "74.125.200.106"};
+    char URL[][50] = {"www.samsung.com", "www.samsung.net",
+                      "www.google.in"};
+    int n = sizeof(ipAdd)/sizeof(ipAdd[0]);
+    struct trieNode *root = newTrieNode();
+
+    // Inserts all the ip address and their corresponding
+    // domain name after ip address validation.
+    for (int i=0; i&lt;n; i++)
+        insert(root,ipAdd[i],URL[i]);
+
+    // If reverse DNS look up succeeds print the domain
+    // name along with DNS resolved.
+    char ip[] = "107.108.11.123";
+    char *res_url = searchDNSCache(root, ip);
+    if (res_url != NULL)
+        printf("Reverse DNS look up resolved in cache:\n%s --&gt; %s",
+                ip, res_url);
+    else
+        printf("Reverse DNS look up not resolved in cache ");
+    return 0;
+}
+</pre>
+<p>Output:
+</p><pre>Reverse DNS look up resolved in cache:
+107.108.11.123 --&gt; www.samsung.com</pre>
+<p>Note that the above implementation of Trie assumes that the given IP address does not contain characters other than {&#8216;0&#8242;, &#8216;1&#8217;,&#8230;.. &#8216;9&#8217;, &#8216;.&#8217;}.  What if a user gives an invalid IP address that contains some other characters?  This problem can be resolved by <a href="http://www.geeksforgeeks.org/program-to-validate-an-ip-address/" target="_blank">validating the input IP address</a> before inserting it into Trie.  We can use the approach discussed <a href="http://www.geeksforgeeks.org/program-to-validate-an-ip-address/" target="_blank">here </a>for IP address validation.</p>
+<p>This article is contributed by <strong>Kumar Gautam</strong>. Please write comments if you find anything incorrect, or you want to share more information about the topic discussed above</p>
+		
+&#160;
+&#160;
+
+
+
+
+
+
+
+&#160;
+&#160;
+&#160;
+<p>Tags: <a href="http://www.geeksforgeeks.org/tag/advance-data-structures/" rel="tag">Advance Data Structures</a>, <a href="http://www.geeksforgeeks.org/tag/advanced-data-structures/" rel="tag">Advanced Data Structures</a></p> 
+
+
+
+
+
+
+				<h3>Source:</h3><p><a href="http://www.geeksforgeeks.org/implement-reverse-dns-look-cache/" rel="tag">http://www.geeksforgeeks.org/implement-reverse-dns-look-cache/</a></p></div>		  
+			</div> 					
+						
+        
+			</div> 	
+
+</div></body>

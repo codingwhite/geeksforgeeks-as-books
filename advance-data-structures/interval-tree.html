@@ -1,0 +1,855 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+       <title>Interval Tree - GeeksforGeeks</title>
+       <style type="text/css" media="screen">
+          @import url('http://d2o58evtke57tz.cloudfront.net/wp-content/themes/minimoo/style.css');
+    </style>
+      <link href="http://d2o58evtke57tz.cloudfront.net/wp-content/themes/minimoo/favicon.ico" rel="shortcut icon" />    
+    
+<!-- This site is optimized with the Yoast WordPress SEO plugin v1.7.1 - https://yoast.com/wordpress/plugins/seo/ -->
+<link rel="canonical" href="http://www.geeksforgeeks.org/interval-tree/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Interval Tree - GeeksforGeeks" />
+<meta property="og:description" content="Consider a situation where we have a set of intervals and we need following operations to be implemented efficiently. 1) Add an interval 2) Remove an interval 3) Given an interval x, find if x overlaps with any of the existing intervals. Interval Tree: The idea is to augment a self-balancing Binary Search Tree (BST) &hellip;" />
+<meta property="og:url" content="http://www.geeksforgeeks.org/interval-tree/" />
+<meta property="og:site_name" content="GeeksforGeeks" />
+<meta property="article:tag" content="Advance Data Structures" />
+<meta property="article:tag" content="Advanced Data Structures" />
+<meta property="article:section" content="Trees" />
+<meta property="article:published_time" content="2014-03-19T10:07:31+00:00" />
+<meta property="article:modified_time" content="2014-12-08T09:00:50+00:00" />
+<meta property="og:updated_time" content="2014-12-08T09:00:50+00:00" />
+<meta property="og:image" content="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/IntervalSearcTree.png" />
+<!-- / Yoast WordPress SEO plugin. -->
+
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css?ver=4.1' type='text/css' media='all' />
+<link rel='stylesheet' id='bbp-default-css'  href='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/bbpress/templates/default/css/bbpress.css?ver=2.5.4-5380' type='text/css' media='screen' />
+<link rel='stylesheet' id='wp-pagenavi-css'  href='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/wp-pagenavi/pagenavi-css.css?ver=2.70' type='text/css' media='all' />
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-includes/js/jquery/jquery.js?ver=1.11.1'></script>
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1'></script>
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/google-captcha/js/script.js?ver=4.1'></script>
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js?ver=1.0'></script>
+
+<!-- Bad Behavior 2.2.16 run time: 1.482 ms -->
+<script type="text/javascript">
+<!--
+function bb2_addLoadEvent(func) {
+	var oldonload = window.onload;
+	if (typeof window.onload != 'function') {
+		window.onload = func;
+	} else {
+		window.onload = function() {
+			oldonload();
+			func();
+		}
+	}
+}
+
+bb2_addLoadEvent(function() {
+	for ( i=0; i < document.forms.length; i++ ) {
+		if (document.forms[i].method == 'post') {
+			var myElement = document.createElement('input');
+			myElement.setAttribute('type', 'hidden');
+			myElement.name = 'bb2_screener_';
+			myElement.value = '1423872421 188.110.56.108';
+			document.forms[i].appendChild(myElement);
+		}
+	}
+});
+// --></script>
+		<style type="text/css" id="syntaxhighlighteranchor"></style>
+   <meta name="google-site-verification" content="rHK2v8_zzuAZQY8JHAzbllDN8u-aQxcn2Kqnp67Old0" />
+</head>
+
+<body>
+<!-- o4dI0sCXUgoSONabbd8mbZ4SA3E -->    
+    <div id="wrapper">
+        <div class="blog-info">
+                <h1 class="blog-title">
+                <a href="http://www.geeksforgeeks.org" title="GeeksforGeeks">GeeksforGeeks</a>
+            </h1>
+       
+            <div class="blog-description">
+                A computer science portal for geeks            </div>
+        </div>
+        <b><p>  <h2 align="right">   <a href="https://play.google.com/store/apps/details?id=free.programming.programming"> Android App </a>
+<a href="http://geeksquiz.com/">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GeeksQuiz</a></h2> 
+   <a href="http://www.geeksforgeeks.org/wp-login.php">Login/Register</a> 
+         </p></b>  
+         
+         <div class="clear"></div>         
+              
+                     
+            <div id="menu">   
+                 <ul>
+ <li><a href="http://www.geeksforgeeks.org">Home</a></li>
+  <li><a href="http://www.geeksforgeeks.org/fundamentals-of-algorithms/">Algorithms</a></li>
+ <li><a href="http://www.geeksforgeeks.org/data-structures/">DS</a></li>
+  <li><a href="http://www.geeksforgeeks.org/gate-corner/">GATE</a></li>
+  <li><a href="http://www.geeksforgeeks.org/about/interview-corner/">Interview Corner</a></li>
+  <li><a href="http://www.geeksforgeeks.org/forums/">Q&A</a></li>
+  <li><a href="http://www.geeksforgeeks.org/c/">C</a></li>
+  <li><a href="http://www.geeksforgeeks.org/c-plus-plus/">C++</a></li>
+  <li><a href="http://www.geeksforgeeks.org/java/">Java</a></li>
+  <li><a href="http://www.geeksforgeeks.org/books/">Books</a></li>
+  <li><a href="http://www.geeksforgeeks.org/contribute/">Contribute</a></li>
+  <li><a href="http://www.geeksforgeeks.org/contribute/ask-a-question/">Ask a Q</a></li>
+  <li><a href="http://www.geeksforgeeks.org/about/">About</a></li>
+            </ul>
+
+               
+            <div class="clear"></div>     
+        </div>
+             <div id="navmenu">
+				<ul id="menu" style="padding:0; margin:0;">
+						<li class="cat-item cat-item-3"><a href="http://www.geeksforgeeks.org/category/c-arrays/" title="Questions regarding Arrays">Array</a>
+</li>	
+
+	<li class="cat-item cat-item-17"><a href="http://www.geeksforgeeks.org/category/bit-magic/" title="View all posts filed under Bit Magic">Bit Magic</a>
+</li>
+	<li class="cat-item cat-item-14"><a href="http://www.geeksforgeeks.org/category/c-puzzles/" title="View all posts filed under C/C++ Puzzles">C/C++</a>
+</li>
+
+<li class="cat-item cat-item-18"><a href="http://www.geeksforgeeks.org/category/articles/" title="View all posts filed under Articles">Articles</a>
+</li>
+
+	<li class="cat-item cat-item-67"><a href="http://www.geeksforgeeks.org/category/gfact/" title="View all posts filed under GFacts">GFacts</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://www.geeksforgeeks.org/category/linked-list/" title="Linked List problems">Linked List</a>
+</li>
+	<li class="cat-item cat-item-66"><a href="http://www.geeksforgeeks.org/category/multiple-choice-question/" title="View all posts filed under MCQ">MCQ</a>
+
+</li>
+	<li class="cat-item cat-item-4"><a href="http://www.geeksforgeeks.org/category/c-programs/" title="Miscellaneous">Misc</a>
+</li>
+	<li class="cat-item cat-item-5"><a href="http://www.geeksforgeeks.org/category/program-output/" title="View all posts filed under Output">Output</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="http://www.geeksforgeeks.org/category/c-strings/" title="Questions related to strings">String</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://www.geeksforgeeks.org/category/tree/" title="View all posts filed under Trees">Tree</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://www.geeksforgeeks.org/category/graph/" title="View all posts filed under Graph">Graph</a>
+</li>
+</ul>
+        </div>
+             <div id="content">	   	
+	<div class="post" id="post">
+							<div class="post-info">			
+					<div class="post-title-info">
+						<h2 class="post-title">Interval Tree</h2>
+					</div>			
+					<div class="clear"></div>				  
+				<div class="post-content" id="post-content">
+					<p>Consider a situation where we have a set of intervals and we need following operations to be implemented efficiently.  <span id="more-125741"></span><br />
+<strong>1) </strong>Add an interval<br />
+<strong>2) </strong>Remove an interval<br />
+<strong>3)</strong> Given an interval x, find if x overlaps with any of the existing intervals.</p>
+<p><em><strong>Interval Tree:</strong></em> The idea is to augment a self-balancing Binary Search Tree (BST) like <a href="http://www.geeksforgeeks.org/red-black-tree-set-1-introduction-2/" target="_blank">Red Black Tree</a>, <a href="http://www.geeksforgeeks.org/avl-tree-set-1-insertion/" target="_blank">AVL Tree</a>, etc to maintain set of intervals so that all operations can be done in O(Logn) time.  </p>
+<p>Every node of Interval Tree stores following information.<br />
+a) <strong>i</strong>: An interval which is represented as a pair <em>[low, high]</em><br />
+b) <strong>max</strong>: Maximum <em>high </em> value in subtree rooted with this node.</p>
+<p>The low value of an interval is used as key to maintain order in BST. The insert and delete operations are same as insert and delete in self-balancing BST used. </p>
+<p><a href="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/IntervalSearcTree.png"><img src="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/IntervalSearcTree.png" alt="IntervalSearcTree" width="416" height="250" class="aligncenter size-full wp-image-127586" /></a></p>
+<p>The main operation is to search for an overlapping interval.  Following is algorithm for searching an overlapping interval <em>x</em> in an Interval tree rooted with <em>root</em>.
+<pre>
+Interval overlappingIntervalSearch(root, x)
+<strong>1) </strong>If x overlaps with root's interval, return the root's interval.
+
+<strong>2)</strong> If left child of root is not empty and the <em>max </em> in left child 
+is greater than x's low value, recur for left child
+
+<strong>3)</strong> Else recur for right child.
+</pre>
+<p><em><strong>How does the above algorithm work?</strong></em><br />
+Let the interval to be searched be x. We need to prove this in for following two cases.</p>
+<p><em><strong>Case 1:</strong></em> <em>When we go to right subtree, one of the following must be true.</em><br />
+a) There is an overlap in right subtree: This is fine as we need to return one overlapping interval.<br />
+b) There is no overlap in either subtree: We go to right subtree only when either left is NULL or maximum value in left is smaller than <em>x.low</em>.  So the interval cannot be present in left subtree.</p>
+<p><em><strong>Case 2: </strong></em><em>When we go to left subtree, one of the following must be true.</em><br />
+a) There is an overlap in left subtree: This is fine as we need to return one overlapping interval.<br />
+b) There is no overlap in either subtree:  This is the most important part.  We need to consider following facts.<br />
+&#8230;  We went to left subtree because <em>x.low <= max</em> in left subtree<br />
+&#8230;. max in left subtree is a high of one of the intervals let us say <em>[a, max]</em> in left subtree.<br />
+&#8230;. Since <em>x</em> doesn&#8217;t overlap with any node in left subtree <em>x.low</em> must be smaller than &#8216;<em>a</em>&#8216;.<br />
+&#8230;. All nodes in BST are ordered by low value, so all nodes in right subtree must have low value greater than &#8216;<em>a</em>&#8216;.<br />
+&#8230;. From above two facts, we can say all intervals in right subtree have low value greater than <em>x.low</em>.  So<em> x</em> cannot overlap with any interval in right subtree.</p>
+<p><strong>Implementation of Interval Tree:</strong><br />
+Following is C++ implementation of Interval Tree. The implementation uses basic <a href="http://geeksquiz.com/binary-search-tree-set-1-search-and-insertion/" target="_blank">insert operation of BST</a> to keep things simple. Ideally it should be <a href="http://www.geeksforgeeks.org/avl-tree-set-1-insertion/" target="_blank">insertion of AVL Tree</a> or <a href="http://www.geeksforgeeks.org/avl-tree-set-1-insertion/" target="_blank">insertion of Red-Black Tree</a>.  <a href="http://geeksquiz.com/binary-search-tree-set-2-delete/" target="_blank">Deletion from BST</a> is left as an exercise.</p>
+<pre class="brush: cpp; highlight: [27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82]; title: ; notranslate" title="">
+#include &lt;iostream&gt;
+using namespace std;
+
+// Structure to represent an interval
+struct Interval
+{
+    int low, high;
+};
+
+// Structure to represent a node in Interval Search Tree
+struct ITNode
+{
+    Interval *i;  // 'i' could also be a normal variable
+    int max;
+    ITNode *left, *right;
+};
+
+// A utility function to create a new Interval Search Tree Node
+ITNode * newNode(Interval i)
+{
+    ITNode *temp = new ITNode;
+    temp-&gt;i = new Interval(i);
+    temp-&gt;max = i.high;
+    temp-&gt;left = temp-&gt;right = NULL;
+};
+
+// A utility function to insert a new Interval Search Tree Node
+// This is similar to BST Insert.  Here the low value of interval
+// is used tomaintain BST property
+ITNode *insert(ITNode *root, Interval i)
+{
+    // Base case: Tree is empty, new node becomes root
+    if (root == NULL)
+        return newNode(i);
+
+    // Get low value of interval at root
+    int l = root-&gt;i-&gt;low;
+
+    // If root's low value is smaller, then new interval goes to
+    // left subtree
+    if (i.low &lt; l)
+        root-&gt;left = insert(root-&gt;left, i);
+
+    // Else, new node goes to right subtree.
+    else
+        root-&gt;right = insert(root-&gt;right, i);
+
+    // Update the max value of this ancestor if needed
+    if (root-&gt;max &lt; i.high)
+        root-&gt;max = i.high;
+
+    return root;
+}
+
+// A utility function to check if given two intervals overlap
+bool doOVerlap(Interval i1, Interval i2)
+{
+    if (i1.low &lt;= i2.high &amp;&amp; i2.low &lt;= i1.high)
+        return true;
+    return false;
+}
+
+// The main function that searches a given interval i in a given
+// Interval Tree.
+Interval *overlapSearch(ITNode *root, Interval i)
+{
+    // Base Case, tree is empty
+    if (root == NULL) return NULL;
+
+    // If given interval overlaps with root
+    if (doOVerlap(*(root-&gt;i), i))
+        return root-&gt;i;
+
+    // If left child of root is present and max of left child is
+    // greater than or equal to given interval, then i may
+    // overlap with an interval is left subtree
+    if (root-&gt;left != NULL &amp;&amp; root-&gt;left-&gt;max &gt;= i.low)
+        return overlapSearch(root-&gt;left, i);
+
+    // Else interval can only overlap with right subtree
+    return overlapSearch(root-&gt;right, i);
+}
+
+void inorder(ITNode *root)
+{
+    if (root == NULL) return;
+
+    inorder(root-&gt;left);
+
+    cout &lt;&lt; &quot;[&quot; &lt;&lt; root-&gt;i-&gt;low &lt;&lt; &quot;, &quot; &lt;&lt; root-&gt;i-&gt;high &lt;&lt; &quot;]&quot;
+         &lt;&lt; &quot; max = &quot; &lt;&lt; root-&gt;max &lt;&lt; endl;
+
+    inorder(root-&gt;right);
+}
+
+// Driver program to test above functions
+int main()
+{
+    // Let us create interval tree shown in above figure
+    Interval ints[] = {{15, 20}, {10, 30}, {17, 19},
+        {5, 20}, {12, 15}, {30, 40}
+    };
+    int n = sizeof(ints)/sizeof(ints[0]);
+    ITNode *root = NULL;
+    for (int i = 0; i &lt; n; i++)
+        root = insert(root, ints[i]);
+
+    cout &lt;&lt; &quot;Inorder traversal of constructed Interval Tree is\n&quot;;
+    inorder(root);
+
+    Interval x = {6, 7};
+
+    cout &lt;&lt; &quot;\nSearching for interval [&quot; &lt;&lt; x.low &lt;&lt; &quot;,&quot; &lt;&lt; x.high &lt;&lt; &quot;]&quot;;
+    Interval *res = overlapSearch(root, x);
+    if (res == NULL)
+        cout &lt;&lt; &quot;\nNo Overlapping Interval&quot;;
+    else
+        cout &lt;&lt; &quot;\nOverlaps with [&quot; &lt;&lt; res-&gt;low &lt;&lt; &quot;, &quot; &lt;&lt; res-&gt;high &lt;&lt; &quot;]&quot;;
+    return 0;
+}
+</pre>
+<p>Output:
+<pre>Inorder traversal of constructed Interval Tree is
+[5, 20] max = 20
+[10, 30] max = 30
+[12, 15] max = 15
+[15, 20] max = 40
+[17, 19] max = 40
+[30, 40] max = 40
+
+Searching for interval [6,7]
+Overlaps with [5, 20]</pre>
+<p><strong>Applications of Interval Tree:</strong><br />
+Interval tree is mainly a geometric data structure and often used for windowing queries, for instance, to find all roads on a computerized map inside a rectangular viewport, or to find all visible elements inside a three-dimensional scene (Source <a href="http://en.wikipedia.org/wiki/Interval_tree" target="_blank">Wiki</a>).</p>
+<p><strong>Interval Tree vs <a href="http://www.geeksforgeeks.org/segment-tree-set-1-sum-of-given-range/" target="_blank">Segment Tree</a></strong><br />
+Both segment and interval trees store intervals.  Segment tree is mainly optimized for queries for a given point, and interval trees are mainly optimized for overlapping queries for a given interval.</p>
+<p><strong>Exercise:</strong><br />
+1) Implement delete operation for interval tree.<br />
+2) Extend the intervalSearch() to print all overlapping intervals instead of just one. </p>
+<p><a href="http://en.wikipedia.org/wiki/Interval_tree" target="_blank">http://en.wikipedia.org/wiki/Interval_tree</a><br />
+<a href="http://www.cse.unr.edu/~mgunes/cs302/IntervalTrees.pptx" target="_blank">http://www.cse.unr.edu/~mgunes/cs302/IntervalTrees.pptx</a><br />
+<a href="http://www.flipkart.com/introduction-algorithms-3rd/p/itmczynzhyhxv2gs?pid=9788120340077&amp;affid=sandeepgfg" target="_blank">Introduction to Algorithms 3rd Edition by Clifford Stein, Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest</a><br />
+<a href="https://www.youtube.com/watch?v=dQF0zyaym8A" target="_blank">https://www.youtube.com/watch?v=dQF0zyaym8A</a></p>
+<p>Please write comments if you find anything incorrect, or you want to share more information about the topic discussed above</p>
+		
+&nbsp;
+&nbsp;
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Big Rectangle Blog Bottom -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:336px;height:280px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="4061219431"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+<h3>Related Topics:</h3><ul><li><a href="http://www.geeksforgeeks.org/check-whether-binary-tree-full-binary-tree-not/" title="Check whether a binary tree is a full binary tree or not">Check whether a binary tree is a full binary tree or not</a></li><li><a href="http://www.geeksforgeeks.org/find-sum-left-leaves-given-binary-tree/" title="Find sum of all left leaves in a given Binary Tree">Find sum of all left leaves in a given Binary Tree</a></li><li><a href="http://www.geeksforgeeks.org/remove-nodes-root-leaf-paths-length-k/" title="Remove nodes on root to leaf paths of length &lt; K">Remove nodes on root to leaf paths of length < K</a></li><li><a href="http://www.geeksforgeeks.org/find-closest-leaf-binary-tree/" title="Find the closest leaf in a Binary Tree">Find the closest leaf in a Binary Tree</a></li><li><a href="http://www.geeksforgeeks.org/diagonal-sum-binary-tree/" title="Diagonal Sum of a Binary Tree">Diagonal Sum of a Binary Tree</a></li><li><a href="http://www.geeksforgeeks.org/bottom-view-binary-tree/" title="Bottom View of a Binary Tree">Bottom View of a Binary Tree</a></li><li><a href="http://www.geeksforgeeks.org/binary-indexed-tree-or-fenwick-tree-2/" title="Binary Indexed Tree or Fenwick tree">Binary Indexed Tree or Fenwick tree</a></li><li><a href="http://www.geeksforgeeks.org/implement-reverse-dns-look-cache/" title="How to Implement Reverse DNS Look Up Cache?">How to Implement Reverse DNS Look Up Cache?</a></li></ul>
+<p>Tags: <a href="http://www.geeksforgeeks.org/tag/advance-data-structures/" rel="tag">Advance Data Structures</a>, <a href="http://www.geeksforgeeks.org/tag/advanced-data-structures/" rel="tag">Advanced Data Structures</a></p> 
+<div>
+<iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.geeksforgeeks.org%2Finterval-tree%2F&layout=button_count&show_faces=false&width=90&action=like&colorscheme=light" scrolling="no" frameborder="0" allowTransparency="true" style="border:none; overflow:hidden; width:90px; height:20px"></iframe>
+<a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.geeksforgeeks.org/interval-tree/" data-text="Interval Tree" data-count="horizontal" data-via="jakerutter">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+<g:plusone size="medium" href="http://www.geeksforgeeks.org/interval-tree/"></g:plusone>
+<!-- Place this render call where appropriate -->
+<script type="text/javascript">
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script></div>
+
+
+
+
+
+				</div>		  
+			</div> <!-- end post main -->					
+			<div class="post-meta">
+				<div class="left"></div>				
+				<div class="clear"></div>
+			</div>			
+        
+			<div class="comments-main">		
+ <b>Writing code in comment?</b> Please use <b><a href="http://ideone.com/">ideone.com</a></b> and share the link here.
+				
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-34936">
+        <div id="dsq-comment-header-34936" class="dsq-comment-header">
+            <cite id="dsq-cite-34936">
+                <span id="dsq-author-user-34936">muhammed hassan</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-34936" class="dsq-comment-body">
+            <div id="dsq-comment-message-34936" class="dsq-comment-message"><p>first: thanks geeksforgeeks . you are very cool.<br />
+second: I think there is another very important operation which is search for all overlapping intervals. thanks</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-33711">
+        <div id="dsq-comment-header-33711" class="dsq-comment-header">
+            <cite id="dsq-cite-33711">
+                <span id="dsq-author-user-33711">mccullum</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-33711" class="dsq-comment-body">
+            <div id="dsq-comment-message-33711" class="dsq-comment-message"><p>hey geeksforgeeks..<br />
+plz share an article on binary indexed trees.!!</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-33693">
+        <div id="dsq-comment-header-33693" class="dsq-comment-header">
+            <cite id="dsq-cite-33693">
+                <span id="dsq-author-user-33693">Aditya Chhilwar</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-33693" class="dsq-comment-body">
+            <div id="dsq-comment-message-33693" class="dsq-comment-message"><p>In insert function after NULL check adding below lines will work:</p>
+<p>// If root&#8217;s max is smaller than i.high then update new max in root as i will be the child of root<br />
+if(i.high &gt; root-&gt;max)<br />
+root-&gt;max = i.high;</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-33717">
+        <div id="dsq-comment-header-33717" class="dsq-comment-header">
+            <cite id="dsq-cite-33717">
+                <span id="dsq-author-user-33717">GeeksforGeeks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-33717" class="dsq-comment-body">
+            <div id="dsq-comment-message-33717" class="dsq-comment-message"><p>Aditya, thanks for pointing this out.  We have updated the code.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-33691">
+        <div id="dsq-comment-header-33691" class="dsq-comment-header">
+            <cite id="dsq-cite-33691">
+                <span id="dsq-author-user-33691">Aditya Chhilwar</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-33691" class="dsq-comment-body">
+            <div id="dsq-comment-message-33691" class="dsq-comment-message"><p>It will not work for input {{15,20} , {4,25}, {3,30}}<br />
+and search {26,27}<br />
+although it is overlapping with {3,30}</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-33667">
+        <div id="dsq-comment-header-33667" class="dsq-comment-header">
+            <cite id="dsq-cite-33667">
+                <span id="dsq-author-user-33667">Zheng Luo</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-33667" class="dsq-comment-body">
+            <div id="dsq-comment-message-33667" class="dsq-comment-message"><p>This is the Link, Hope it can be helpful<br />
+<a href="http://ideone.com/yluRJb" rel="nofollow">http://ideone.com/yluRJb</a></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-33661">
+        <div id="dsq-comment-header-33661" class="dsq-comment-header">
+            <cite id="dsq-cite-33661">
+                <span id="dsq-author-user-33661">geekcoder</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-33661" class="dsq-comment-body">
+            <div id="dsq-comment-message-33661" class="dsq-comment-message"><p>nice post, this link is also good <a href="http://www.bowdoin.edu/~ltoma/teaching/cs231/fall07/Lectures/augtrees.pdf" rel="nofollow">http://www.bowdoin.edu/~ltoma/teaching/cs231/fall07/Lectures/augtrees.pdf</a></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-33660">
+        <div id="dsq-comment-header-33660" class="dsq-comment-header">
+            <cite id="dsq-cite-33660">
+                <span id="dsq-author-user-33660">geekcoder</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-33660" class="dsq-comment-body">
+            <div id="dsq-comment-message-33660" class="dsq-comment-message"><p>nice post, this link is also good <a href="http://www.bowdoin.edu/~ltoma/teaching/cs231/fall07/Lectures/augtrees.pdf" rel="nofollow">http://www.bowdoin.edu/~ltoma/teaching/cs231/fall07/Lectures/augtrees.pdf</a></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://www.geeksforgeeks.org/interval-tree/';
+var disqus_identifier = '125741 http://www.geeksforgeeks.org/?p=125741';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'geeksforgeeks';
+var disqus_title = "Interval Tree";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+			</div>
+	
+					
+			
+			
+
+		</div> <!-- end post -->	
+
+<br></br>
+	
+</div> <!-- end content -->
+
+<ul id="sidebar">
+	<li id="text-19" class="widget widget_text">			<div class="textwidget"><script>
+  (function() {
+    var cx = '009682134359037907028:tj6eafkv_be';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+
+<style type="text/css">
+  .gsc-control-cse {
+    font-family: "Trebuchet MS", sans-serif;
+    border-color: #E1F3DA;
+    background-color: #E1F3DA;
+  }
+  input.gsc-input {
+    border-color: #94CC7A;
+  }
+  input.gsc-search-button {
+    border-color: #94CC7A;
+    background-color: #AADA92;
+  }
+  .gsc-tabHeader.gsc-tabhInactive {
+    border-color: #A9DA92;
+    background-color: #FFFFFF;
+  }
+  .gsc-tabHeader.gsc-tabhActive {
+    border-color: #A9DA92;
+    background-color: #A9DA92;
+  }
+  .gsc-tabsArea {
+    border-color: #A9DA92;
+  }
+  .gsc-webResult.gsc-result {
+    border-color: #A9DA92;
+    background-color: #FFFFFF;
+  }
+  .gsc-webResult.gsc-result:hover {
+    border-color: #A9DA92;
+    background-color: #FFFFFF;
+  }
+  .gs-webResult.gs-result a.gs-title:link,
+  .gs-webResult.gs-result a.gs-title:link b {
+    color: #009900;
+  }
+  .gs-webResult.gs-result a.gs-title:visited,
+  .gs-webResult.gs-result a.gs-title:visited b {
+    color: #009900;
+  }
+  .gs-webResult.gs-result a.gs-title:hover,
+  .gs-webResult.gs-result a.gs-title:hover b {
+    color: #003300;
+  }
+  .gs-webResult.gs-result a.gs-title:active,
+  .gs-webResult.gs-result a.gs-title:active b {
+    color: #009900;
+  }
+  .gsc-cursor-page {
+    color: #009900;
+  }
+  a.gsc-trailing-more-results:link {
+    color: #009900;
+  }
+  .gs-webResult.gs-result .gs-snippet {
+    color: #454545;
+  }
+  .gs-webResult.gs-result .gs-visibleUrl {
+    color: #33cc00;
+  }
+  .gs-webResult.gs-result .gs-visibleUrl-short {
+    color: #33cc00;
+  }
+  .gs-webResult.gs-result .gs-visibleUrl-short {
+    display: none;
+  }
+  .gs-webResult.gs-result .gs-visibleUrl-long {
+    display: block;
+  }
+  .gsc-cursor-box {
+    border-color: #A9DA92;
+  }
+  .gsc-results .gsc-cursor-page {
+    border-color: #A9DA92;
+    background-color: #FFFFFF;
+  }
+  .gsc-results .gsc-cursor-page.gsc-cursor-current-page {
+    border-color: #A9DA92;
+    background-color: #A9DA92;
+  }
+  .gs-promotion.gs-result {
+    border-color: #94CC7A;
+    background-color: #CBE8B4;
+  }
+  .gs-promotion.gs-result a.gs-title:link {
+    color: #0066CC;
+  }
+  .gs-promotion.gs-result a.gs-title:visited {
+    color: #0066CC;
+  }
+  .gs-promotion.gs-result a.gs-title:hover {
+    color: #0066CC;
+  }
+  .gs-promotion.gs-result a.gs-title:active {
+    color: #0066CC;
+  }
+  .gs-promotion.gs-result .gs-snippet {
+    color: #454545;
+  }
+  .gs-promotion.gs-result .gs-visibleUrl,
+  .gs-promotion.gs-result .gs-visibleUrl-short {
+    color: #815FA7;
+  }
+</style>    </div>
+		</li>
+<li id="text-9" class="widget widget_text">			<div class="textwidget"><div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=138031159685820";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<div class="fb-like-box" data-href="https://www.facebook.com/pages/GeeksforGeeks/316764689022" data-width="250" data-height="170" data-colorscheme="light" data-show-faces="true" data-header="false" data-stream="false" data-show-border="false"></div></div>
+		</li>
+<li id="text-18" class="widget widget_text">			<div class="textwidget"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- LargeRectangleSide -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:336px;height:280px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="1884636833"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
+		</li>
+<li id="text-13" class="widget widget_text">			<div class="textwidget"><ul><li><a href="http://www.geeksforgeeks.org/category/interview-experiences/">Interview Experiences</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/advance-data-structures">Advanced Data Structures</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/dynamic-programming">Dynamic Programming</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/Greedy-Algorithm/">Greedy Algorithms</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/backtracking">Backtracking</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/pattern-searching">Pattern Searching</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/divide-and-conquer">Divide & Conquer</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/MathematicalAlgo">Mathematical Algorithms</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/recursion">Recursion</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/geometric-algorithms/">Geometric Algorithms</a></li>
+</ul></div>
+		</li>
+<li id="text-17" class="widget widget_text">			<div class="textwidget"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Big 300x600 Sidebar -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:600px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="4402736037"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
+		</li>
+<li id="text-14" class="widget widget_text"><h2 class="widgettitle">Popular Posts</h2>
+			<div class="textwidget"><ul>
+<li><a href="http://www.geeksforgeeks.org/write-a-c-program-to-print-all-permutations-of-a-given-string/">  All permutations of a given string </a></li>
+<li><a href="http://www.geeksforgeeks.org/memory-layout-of-c-program/"> Memory Layout of C Programs</a> </li>
+<li><a href="http://www.geeksforgeeks.org/understanding-extern-keyword-in-c/"> Understanding “extern” keyword in C</a> </li>
+<li><a href="http://www.geeksforgeeks.org/median-of-two-sorted-arrays/">Median of two sorted arrays</a> </li>
+<li><a href="http://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion-and-without-stack/"> Tree traversal without recursion and without stack! </a></li>
+<li><a href="http://www.geeksforgeeks.org/structure-member-alignment-padding-and-data-packing/"> Structure Member Alignment, Padding and Data Packing</a> </li>
+<li><a href="http://www.geeksforgeeks.org/write-a-function-to-get-the-intersection-point-of-two-linked-lists/"> Intersection point of two Linked Lists</a> </li>
+<li><a href="http://www.geeksforgeeks.org/lowest-common-ancestor-in-a-binary-search-tree/"> Lowest Common Ancestor in a BST.</span></a> </li>
+<li><a href="http://www.geeksforgeeks.org/a-program-to-check-if-a-binary-tree-is-bst-or-not/"> Check if a binary tree is BST or not</a> </li>
+<li><a href="http://www.geeksforgeeks.org/sorted-linked-list-to-balanced-bst/"> Sorted Linked List to Balanced BST</a></li>
+</ul></div>
+		</li>
+<li id="text-3" class="widget widget_text">			<div class="textwidget"><a href="https://twitter.com/GeeksforGeeks" class="twitter-follow-button" data-show-count="false">Follow @GeeksforGeeks</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>         
+
+
+<!-- GOOGLE FEEDBURNER BUTTON-->
+<a href="http://feeds.feedburner.com/Geeksforgeeks" title="Subscribe to my feed" rel="alternate" type="application/rss+xml"><img src="http://www.feedburner.com/fb/images/pub/feed-icon32x32.png" alt="" style="border:0"/></a><a href="http://feeds.feedburner.com/Geeksforgeeks" title="Subscribe to my feed" rel="alternate" type="application/rss+xml">Subscribe</a>
+
+</div>
+		</li>
+<li id="text-21" class="widget widget_text"><h2 class="widgettitle">Recent Comments</h2>
+			<div class="textwidget"><script type="text/javascript" src="http://geeksforgeeks.disqus.com//recent_comments_widget.js?num_items=6&hide_avatars=1&excerpt_length=50&hide_mods=0"></script></div>
+		</li>
+<li id="text-22" class="widget widget_text">			<div class="textwidget"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- LinkAd -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:90px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="2606115235"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- LinkAd -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:90px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="2606115235"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- LinkAd -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:90px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="2606115235"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
+		</li>
+
+</ul>					  
+		<div class="clear"></div>
+
+		<div id="footer">
+		
+		    <div class="xhtml">
+                        @geeksforgeeks, <a href="http://creativecommons.org/licenses/by-nc-nd/2.5/in/deed.en_US" title="Valid XHTML Strict 1.0">Some rights reserved</a>  <a href="http://www.geeksforgeeks.org/about/contact-us/"> &nbsp; &nbsp; &nbsp; &nbsp;Contact Us!</a>
+
+		    </div>
+		    
+		    <div class="credits">
+			  Powered by <a href="http://wordpress.org">WordPress </a> &amp; <a href="http://mootools.net/" title="Mootools JavaScript Framework">MooTools</a>, customized by geeksforgeeks team </div>
+			  
+		   <div class="clear"></div>						                            
+		   
+		</div> <!--end footer-->  
+        
+		        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'geeksforgeeks';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1) {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script'); 
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shCore.js?ver=3.0.9'></script>
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shBrushCpp.js?ver=3.0.9'></script>
+<script type='text/javascript'>
+	(function(){
+		var corecss = document.createElement('link');
+		var themecss = document.createElement('link');
+		var corecssurl = "http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCore.css?ver=3.0.9";
+		if ( corecss.setAttribute ) {
+				corecss.setAttribute( "rel", "stylesheet" );
+				corecss.setAttribute( "type", "text/css" );
+				corecss.setAttribute( "href", corecssurl );
+		} else {
+				corecss.rel = "stylesheet";
+				corecss.href = corecssurl;
+		}
+		document.getElementsByTagName("head")[0].insertBefore( corecss, document.getElementById("syntaxhighlighteranchor") );
+		var themecssurl = "http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shThemeDefault.css?ver=3.0.9";
+		if ( themecss.setAttribute ) {
+				themecss.setAttribute( "rel", "stylesheet" );
+				themecss.setAttribute( "type", "text/css" );
+				themecss.setAttribute( "href", themecssurl );
+		} else {
+				themecss.rel = "stylesheet";
+				themecss.href = themecssurl;
+		}
+		//document.getElementById("syntaxhighlighteranchor").appendChild(themecss);
+		document.getElementsByTagName("head")[0].insertBefore( themecss, document.getElementById("syntaxhighlighteranchor") );
+	})();
+	SyntaxHighlighter.config.strings.expandSource = '+ expand source';
+	SyntaxHighlighter.config.strings.help = '?';
+	SyntaxHighlighter.config.strings.alert = 'SyntaxHighlighter\n\n';
+	SyntaxHighlighter.config.strings.noBrush = 'Can\'t find brush for: ';
+	SyntaxHighlighter.config.strings.brushNotHtmlScript = 'Brush wasn\'t configured for html-script option: ';
+	SyntaxHighlighter.defaults['gutter'] = false;
+	SyntaxHighlighter.defaults['pad-line-numbers'] = true;
+	SyntaxHighlighter.defaults['toolbar'] = false;
+	SyntaxHighlighter.all();
+</script>
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/bbpress/templates/default/js/editor.js?ver=2.5.4-5380'></script>
+				  
+		</div> <!--end wrapper-->
+        <div id="ajaxSpinner"></div> <!--For AJAX spinner holder-->
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-12148232-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+	</body>
+
+</html>
+<!-- Dynamic page generated in 0.190 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2015-02-14 05:37:01 -->
+
+<!-- Compression = gzip -->
+<!-- super cache -->

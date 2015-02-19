@@ -1,0 +1,1690 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+       <title>Segment Tree | Set 1 (Sum of given range) - GeeksforGeeks</title>
+       <style type="text/css" media="screen">
+          @import url('http://d2o58evtke57tz.cloudfront.net/wp-content/themes/minimoo/style.css');
+    </style>
+      <link href="http://d2o58evtke57tz.cloudfront.net/wp-content/themes/minimoo/favicon.ico" rel="shortcut icon" />    
+    
+<!-- This site is optimized with the Yoast WordPress SEO plugin v1.7.1 - https://yoast.com/wordpress/plugins/seo/ -->
+<link rel="canonical" href="http://www.geeksforgeeks.org/segment-tree-set-1-sum-of-given-range/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Segment Tree | Set 1 (Sum of given range) - GeeksforGeeks" />
+<meta property="og:description" content="Let us consider the following problem to understand Segment Trees. We have an array arr[0 . . . n-1]. We should be able to 1 Find the sum of elements from index l to r where 0" />
+<meta property="og:url" content="http://www.geeksforgeeks.org/segment-tree-set-1-sum-of-given-range/" />
+<meta property="og:site_name" content="GeeksforGeeks" />
+<meta property="article:tag" content="Advance Data Structures" />
+<meta property="article:tag" content="Advanced Data Structures" />
+<meta property="article:tag" content="SegmentTree" />
+<meta property="article:section" content="Trees" />
+<meta property="article:published_time" content="2013-01-16T20:16:23+00:00" />
+<meta property="article:modified_time" content="2014-12-12T08:10:36+00:00" />
+<meta property="og:updated_time" content="2014-12-12T08:10:36+00:00" />
+<meta property="og:image" content="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/segment-tree1.png" />
+<!-- / Yoast WordPress SEO plugin. -->
+
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css?ver=4.0.1' type='text/css' media='all' />
+<link rel='stylesheet' id='bbp-default-css'  href='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/bbpress/templates/default/css/bbpress.css?ver=2.5.4-5380' type='text/css' media='screen' />
+<link rel='stylesheet' id='wp-pagenavi-css'  href='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/wp-pagenavi/pagenavi-css.css?ver=2.70' type='text/css' media='all' />
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-includes/js/jquery/jquery.js?ver=1.11.1'></script>
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1'></script>
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js?ver=1.0'></script>
+
+<!-- Bad Behavior 2.2.16 run time: 1.483 ms -->
+<script type="text/javascript">
+<!--
+function bb2_addLoadEvent(func) {
+	var oldonload = window.onload;
+	if (typeof window.onload != 'function') {
+		window.onload = func;
+	} else {
+		window.onload = function() {
+			oldonload();
+			func();
+		}
+	}
+}
+
+bb2_addLoadEvent(function() {
+	for ( i=0; i < document.forms.length; i++ ) {
+		if (document.forms[i].method == 'post') {
+			var myElement = document.createElement('input');
+			myElement.setAttribute('type', 'hidden');
+			myElement.name = 'bb2_screener_';
+			myElement.value = '1418352060 122.177.184.86';
+			document.forms[i].appendChild(myElement);
+		}
+	}
+});
+// --></script>
+		<style type="text/css" id="syntaxhighlighteranchor"></style>
+   <meta name="google-site-verification" content="rHK2v8_zzuAZQY8JHAzbllDN8u-aQxcn2Kqnp67Old0" />
+</head>
+
+<body>
+<!-- o4dI0sCXUgoSONabbd8mbZ4SA3E -->    
+    <div id="wrapper">
+        <div class="blog-info">
+                <h1 class="blog-title">
+                <a href="http://www.geeksforgeeks.org" title="GeeksforGeeks">GeeksforGeeks</a>
+            </h1>
+       
+            <div class="blog-description">
+                A computer science portal for geeks            </div>
+        </div>
+        <b><p>  <h2 align="right"> <a href="http://geeksquiz.com/">GeeksQuiz</a></h2> 
+   <a href="http://www.geeksforgeeks.org/wp-login.php">Login</a> 
+         </p></b>  
+         
+         <div class="clear"></div>         
+              
+                     
+            <div id="menu">   
+                 <ul>
+ <li><a href="http://www.geeksforgeeks.org">Home</a></li>
+  <li><a href="http://www.geeksforgeeks.org/fundamentals-of-algorithms/">Algorithms</a></li>
+ <li><a href="http://www.geeksforgeeks.org/data-structures/">DS</a></li>
+  <li><a href="http://www.geeksforgeeks.org/gate-corner/">GATE</a></li>
+  <li><a href="http://www.geeksforgeeks.org/about/interview-corner/">Interview Corner</a></li>
+  <li><a href="http://www.geeksforgeeks.org/forums/">Q&A</a></li>
+  <li><a href="http://www.geeksforgeeks.org/c/">C</a></li>
+  <li><a href="http://www.geeksforgeeks.org/c-plus-plus/">C++</a></li>
+  <li><a href="http://www.geeksforgeeks.org/java/">Java</a></li>
+  <li><a href="http://www.geeksforgeeks.org/books/">Books</a></li>
+  <li><a href="http://www.geeksforgeeks.org/contribute/">Contribute</a></li>
+  <li><a href="http://www.geeksforgeeks.org/contribute/ask-a-question/">Ask a Q</a></li>
+  <li><a href="http://www.geeksforgeeks.org/about/">About</a></li>
+            </ul>
+
+               
+            <div class="clear"></div>     
+        </div>
+             <div id="navmenu">
+				<ul id="menu" style="padding:0; margin:0;">
+						<li class="cat-item cat-item-3"><a href="http://www.geeksforgeeks.org/category/c-arrays/" title="Questions regarding Arrays">Array</a>
+</li>	
+
+	<li class="cat-item cat-item-17"><a href="http://www.geeksforgeeks.org/category/bit-magic/" title="View all posts filed under Bit Magic">Bit Magic</a>
+</li>
+	<li class="cat-item cat-item-14"><a href="http://www.geeksforgeeks.org/category/c-puzzles/" title="View all posts filed under C/C++ Puzzles">C/C++</a>
+</li>
+
+<li class="cat-item cat-item-18"><a href="http://www.geeksforgeeks.org/category/articles/" title="View all posts filed under Articles">Articles</a>
+</li>
+
+	<li class="cat-item cat-item-67"><a href="http://www.geeksforgeeks.org/category/gfact/" title="View all posts filed under GFacts">GFacts</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://www.geeksforgeeks.org/category/linked-list/" title="Linked List problems">Linked List</a>
+</li>
+	<li class="cat-item cat-item-66"><a href="http://www.geeksforgeeks.org/category/multiple-choice-question/" title="View all posts filed under MCQ">MCQ</a>
+
+</li>
+	<li class="cat-item cat-item-4"><a href="http://www.geeksforgeeks.org/category/c-programs/" title="Miscellaneous">Misc</a>
+</li>
+	<li class="cat-item cat-item-5"><a href="http://www.geeksforgeeks.org/category/program-output/" title="View all posts filed under Output">Output</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="http://www.geeksforgeeks.org/category/c-strings/" title="Questions related to strings">String</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://www.geeksforgeeks.org/category/tree/" title="View all posts filed under Trees">Tree</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://www.geeksforgeeks.org/category/graph/" title="View all posts filed under Graph">Graph</a>
+</li>
+</ul>
+        </div>
+             <div id="content">	   	
+	<div class="post" id="post">
+							<div class="post-info">			
+					<div class="post-title-info">
+						<h2 class="post-title">Segment Tree | Set 1 (Sum of given range)</h2>
+					</div>			
+					<div class="clear"></div>				  
+				<div class="post-content" id="post-content">
+					<p>Let us consider the following problem to understand Segment Trees.</p>
+<p>We have an array arr[0 . . . n-1]. We should be able to<br />
+<strong>1</strong> Find the sum of elements from index l to r where 0 <= l <= r <= n-1<br />
+<strong>2</strong> Change value of a specified element of the array arr[i] = x where 0 <= i <= n-1.<span id="more-29503"></span></p>
+<p>A <strong>simple solution</strong> is to run a loop from l to r and calculate sum of elements in given range.  To update a value, simply do arr[i] = x.  The first operation takes O(n) time and second operation takes O(1) time.  </p>
+<p><strong>Another solution</strong> is to create another array and store sum from start to i at the ith index in this array. Sum of a given range can now be calculated in O(1) time, but update operation takes O(n) time now.  This works well if the number of query operations are large and very few updates.</p>
+<p>What if the number of query and updates are equal? <strong>Can we perform both the operations in O(log n) time once given the array?</strong> We can use a Segment Tree to do both operations in O(Logn) time.</p>
+<p><strong>Representation of Segment trees</strong><br />
+<strong>1.</strong> Leaf Nodes are the elements of the input array.<br />
+<strong>2.</strong> Each internal node represents some merging of the leaf nodes.  The merging may be different for different problems. For this problem, merging is sum of leaves under a node.</p>
+<p>An array representation of tree is used to represent Segment Trees. For each node at index i, the left child is at index 2*i+1, right child at 2*i+2 and the parent is at <img src="http://d2o58evtke57tz.cloudfront.net/wp-content/ql-cache/quicklatex.com-2cfd252ac5fd2f0f89149a5989c14e25_l3.png" class="ql-img-inline-formula " alt="&#92;&#108;&#102;&#108;&#111;&#111;&#114;&#32;&#40;&#105;&#45;&#49;&#41;&#47;&#50;&#32;&#32;&#92;&#114;&#102;&#108;&#111;&#111;&#114;" title="Rendered by QuickLaTeX.com" height="19" width="79" style="vertical-align: -5px;"/>.</p>
+<p><a href="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/segment-tree1.png"><img src="http://d2o58evtke57tz.cloudfront.net/wp-content/uploads/segment-tree1.png" alt="" title="segment-tree" width="460" height="318" class="aligncenter size-full wp-image-29594" /></a></p>
+<p><strong>Construction of Segment Tree from given array</strong><br />
+We start with a segment arr[0 . . . n-1]. and every time we divide the current segment into two halves(if it has not yet become a segment of length 1), and then call the same procedure on both halves, and for each such segment we store the sum in corresponding node.<br />
+All levels of the constructed segment tree will be completely filled except the last level. Also, the tree will be a <a href="http://en.wikipedia.org/wiki/Binary_tree#Types_of_binary_trees" target="_blank">Full Binary Tree</a> because we always divide segments in two halves at every level. Since the constructed tree is always full binary tree with n leaves, there will be n-1 internal nodes. So total number of nodes will be 2*n &#8211; 1.<br />
+Height of the segment tree will be <img src="http://d2o58evtke57tz.cloudfront.net/wp-content/ql-cache/quicklatex.com-450213a0ead2f203224923ed77bbc1e5_l3.png" class="ql-img-inline-formula " alt="&#92;&#108;&#99;&#101;&#105;&#108;&#32;&#92;&#108;&#111;&#103;&#95;&#50;&#123;&#110;&#125;&#32;&#32;&#92;&#114;&#99;&#101;&#105;&#108;" title="Rendered by QuickLaTeX.com" height="19" width="54" style="vertical-align: -5px;"/>.  Since the tree is represented using array and relation between parent and child indexes must be maintained, size of memory allocated for segment tree will be <img src="http://d2o58evtke57tz.cloudfront.net/wp-content/ql-cache/quicklatex.com-5faa912d34391d3c73250f145b106a73_l3.png" class="ql-img-inline-formula " alt="&#50;&#32;&#42;&#32;&#50;&#32;&#94;&#123;&#92;&#108;&#99;&#101;&#105;&#108;&#32;&#92;&#108;&#111;&#103;&#95;&#50;&#123;&#110;&#125;&#32;&#32;&#92;&#114;&#99;&#101;&#105;&#108;&#125;&#32;&#45;&#32;&#49;" title="Rendered by QuickLaTeX.com" height="17" width="112" style="vertical-align: -1px;"/>.</p>
+<p><strong>Query for Sum of given range</strong><br />
+Once the tree is constructed, how to get the sum using the constructed segment tree.  Following is algorithm to get the sum of elements.</p>
+<pre>
+int getSum(node, l, r) 
+{
+   if range of node is within l and r
+        return value in node
+   else if range of node is completely outside l and r
+        return 0
+   else
+    return getSum(node's left child, l, r) + 
+           getSum(node's right child, l, r)
+}</pre>
+<p><strong>Update a value</strong><br />
+Like tree construction and query operations, update can also be done recursively.  We are given an index which needs to updated.  Let <em>diff </em>be the value to be added.   We start from root of the segment tree, and add <em>diff </em>to all nodes which have given index in their range.   If a node doesn&#8217;t have given index in its range, we don&#8217;t make any changes to that node.</p>
+<p><strong>Implementation:</strong><br />
+Following is implementation of segment tree.  The program implements construction of segment tree for any given array. It also implements query and update operations.</p>
+<pre class="brush: cpp; title: ; notranslate" title="">
+// Program to show segment tree operations like construction, query and update
+#include &lt;stdio.h&gt;
+#include &lt;math.h&gt;
+
+// A utility function to get the middle index from corner indexes.
+int getMid(int s, int e) {  return s + (e -s)/2;  }
+
+/*  A recursive function to get the sum of values in given range of the array.
+    The following are parameters for this function.
+
+    st    --&gt; Pointer to segment tree
+    index --&gt; Index of current node in the segment tree. Initially 0 is
+             passed as root is always at index 0
+    ss &amp; se  --&gt; Starting and ending indexes of the segment represented by
+                 current node, i.e., st[index]
+    qs &amp; qe  --&gt; Starting and ending indexes of query range */
+int getSumUtil(int *st, int ss, int se, int qs, int qe, int index)
+{
+    // If segment of this node is a part of given range, then return the 
+    // sum of the segment
+    if (qs &lt;= ss &amp;&amp; qe &gt;= se)
+        return st[index];
+
+    // If segment of this node is outside the given range
+    if (se &lt; qs || ss &gt; qe)
+        return 0;
+
+    // If a part of this segment overlaps with the given range
+    int mid = getMid(ss, se);
+    return getSumUtil(st, ss, mid, qs, qe, 2*index+1) +
+           getSumUtil(st, mid+1, se, qs, qe, 2*index+2);
+}
+
+/* A recursive function to update the nodes which have the given index in
+   their range. The following are parameters
+    st, index, ss and se are same as getSumUtil()
+    i    --&gt; index of the element to be updated. This index is in input array.
+   diff --&gt; Value to be added to all nodes which have i in range */
+void updateValueUtil(int *st, int ss, int se, int i, int diff, int index)
+{
+    // Base Case: If the input index lies outside the range of this segment
+    if (i &lt; ss || i &gt; se)
+        return;
+
+    // If the input index is in range of this node, then update the value
+    // of the node and its children
+    st[index] = st[index] + diff;
+    if (se != ss)
+    {
+        int mid = getMid(ss, se);
+        updateValueUtil(st, ss, mid, i, diff, 2*index + 1);
+        updateValueUtil(st, mid+1, se, i, diff, 2*index + 2);
+    }
+}
+
+// The function to update a value in input array and segment tree.
+// It uses updateValueUtil() to update the value in segment tree
+void updateValue(int arr[], int *st, int n, int i, int new_val)
+{
+    // Check for erroneous input index
+    if (i &lt; 0 || i &gt; n-1)
+    {
+        printf(&quot;Invalid Input&quot;);
+        return;
+    }
+
+    // Get the difference between new value and old value
+    int diff = new_val - arr[i];
+
+    // Update the value in array
+    arr[i] = new_val;
+
+    // Update the values of nodes in segment tree
+    updateValueUtil(st, 0, n-1, i, diff, 0);
+}
+
+// Return sum of elements in range from index qs (quey start) to
+// qe (query end).  It mainly uses getSumUtil()
+int getSum(int *st, int n, int qs, int qe)
+{
+    // Check for erroneous input values
+    if (qs &lt; 0 || qe &gt; n-1 || qs &gt; qe)
+    {
+        printf(&quot;Invalid Input&quot;);
+        return -1;
+    }
+
+    return getSumUtil(st, 0, n-1, qs, qe, 0);
+}
+
+// A recursive function that constructs Segment Tree for array[ss..se].
+// si is index of current node in segment tree st
+int constructSTUtil(int arr[], int ss, int se, int *st, int si)
+{
+    // If there is one element in array, store it in current node of
+    // segment tree and return
+    if (ss == se)
+    {
+        st[si] = arr[ss];
+        return arr[ss];
+    }
+
+    // If there are more than one elements, then recur for left and
+    // right subtrees and store the sum of values in this node
+    int mid = getMid(ss, se);
+    st[si] =  constructSTUtil(arr, ss, mid, st, si*2+1) +
+              constructSTUtil(arr, mid+1, se, st, si*2+2);
+    return st[si];
+}
+
+/* Function to construct segment tree from given array. This function
+   allocates memory for segment tree and calls constructSTUtil() to
+   fill the allocated memory */
+int *constructST(int arr[], int n)
+{
+    // Allocate memory for segment tree
+    int x = (int)(ceil(log2(n))); //Height of segment tree
+    int max_size = 2*(int)pow(2, x) - 1; //Maximum size of segment tree
+    int *st = new int[max_size];
+
+    // Fill the allocated memory st
+    constructSTUtil(arr, 0, n-1, st, 0);
+
+    // Return the constructed segment tree
+    return st;
+}
+
+// Driver program to test above functions
+int main()
+{
+    int arr[] = {1, 3, 5, 7, 9, 11};
+    int n = sizeof(arr)/sizeof(arr[0]);
+
+    // Build segment tree from given array
+    int *st = constructST(arr, n);
+
+    // Print sum of values in array from index 1 to 3
+    printf(&quot;Sum of values in given range = %d\n&quot;, getSum(st, n, 1, 3));
+
+    // Update: set arr[1] = 10 and update corresponding segment
+    // tree nodes
+    updateValue(arr, st, n, 1, 10);
+
+    // Find sum after the value is updated
+    printf(&quot;Updated sum of values in given range = %d\n&quot;,
+                                                  getSum(st, n, 1, 3));
+
+    return 0;
+}
+</pre>
+<p>Output:
+<pre> 
+Sum of values in given range = 15
+Updated sum of values in given range = 22</pre>
+<p><strong>Time Complexity:</strong><br />
+Time Complexity for tree construction is O(n).  There are total 2n-1 nodes, and value of every node is calculated only once in tree construction.</p>
+<p>Time complexity to query is O(Logn).  To query a sum, we process at most four nodes at every level and number of levels is O(Logn).  </p>
+<p>The time complexity of update is also O(Logn). To update a leaf value, we process one node at every level and number of levels is O(Logn).</p>
+<p><strong><a href="http://www.geeksforgeeks.org/segment-tree-set-1-range-minimum-query/" target="_blank"><br />
+Segment Tree | Set 2 (Range Minimum Query)</a></strong></p>
+<p><strong>References:</strong><br />
+<a href="http://www.cse.iitk.ac.in/users/aca/lop12/slides/06.pdf" target="_blank">http://www.cse.iitk.ac.in/users/aca/lop12/slides/06.pdf</a></p>
+<p>Please write comments if you find anything incorrect, or you want to share more information about the topic discussed above.</p>
+		
+&nbsp;
+&nbsp;
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Big Rectangle Blog Bottom -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:336px;height:280px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="4061219431"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+<h3>Related Topics:</h3><ul><li><a href="http://www.geeksforgeeks.org/binary-indexed-tree-or-fenwick-tree-2/" title="Binary Indexed Tree or Fenwick tree">Binary Indexed Tree or Fenwick tree</a></li><li><a href="http://www.geeksforgeeks.org/implement-reverse-dns-look-cache/" title="How to Implement Reverse DNS Look Up Cache?">How to Implement Reverse DNS Look Up Cache?</a></li><li><a href="http://www.geeksforgeeks.org/given-n-appointments-find-conflicting-appointments/" title="Given n appointments, find all conflicting appointments">Given n appointments, find all conflicting appointments</a></li><li><a href="http://www.geeksforgeeks.org/perfect-binary-tree-specific-level-order-traversal/" title="Perfect Binary Tree Specific Level Order Traversal">Perfect Binary Tree Specific Level Order Traversal</a></li><li><a href="http://www.geeksforgeeks.org/print-nodes-top-view-binary-tree/" title="Print Nodes in Top View of Binary Tree">Print Nodes in Top View of Binary Tree</a></li><li><a href="http://www.geeksforgeeks.org/k-dimensional-tree/" title="K Dimensional Tree">K Dimensional Tree</a></li><li><a href="http://www.geeksforgeeks.org/convert-binary-tree-threaded-binary-tree/" title="Convert a Binary Tree to Threaded binary tree">Convert a Binary Tree to Threaded binary tree</a></li><li><a href="http://www.geeksforgeeks.org/serialize-deserialize-n-ary-tree/" title="Serialize and Deserialize an N-ary Tree">Serialize and Deserialize an N-ary Tree</a></li></ul>
+<p>Tags: <a href="http://www.geeksforgeeks.org/tag/advance-data-structures/" rel="tag">Advance Data Structures</a>, <a href="http://www.geeksforgeeks.org/tag/advanced-data-structures/" rel="tag">Advanced Data Structures</a>, <a href="http://www.geeksforgeeks.org/tag/segmenttree/" rel="tag">SegmentTree</a></p> 
+<div>
+<iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.geeksforgeeks.org%2Fsegment-tree-set-1-sum-of-given-range%2F&layout=button_count&show_faces=false&width=90&action=like&colorscheme=light" scrolling="no" frameborder="0" allowTransparency="true" style="border:none; overflow:hidden; width:90px; height:20px"></iframe>
+<a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.geeksforgeeks.org/segment-tree-set-1-sum-of-given-range/" data-text="Segment Tree | Set 1 (Sum of given range)" data-count="horizontal" data-via="jakerutter">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+<g:plusone size="medium" href="http://www.geeksforgeeks.org/segment-tree-set-1-sum-of-given-range/"></g:plusone>
+<!-- Place this render call where appropriate -->
+<script type="text/javascript">
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script></div>
+
+
+
+
+
+				</div>		  
+			</div> <!-- end post main -->					
+			<div class="post-meta">
+				<div class="left"></div>				
+				<div class="clear"></div>
+			</div>			
+        
+			<div class="comments-main">		
+ <b>Writing code in comment?</b> Please use <b><a href="http://ideone.com/">ideone.com</a></b> and share the link here.
+				
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-34612">
+        <div id="dsq-comment-header-34612" class="dsq-comment-header">
+            <cite id="dsq-cite-34612">
+                <span id="dsq-author-user-34612">dmr</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-34612" class="dsq-comment-body">
+            <div id="dsq-comment-message-34612" class="dsq-comment-message"><p>We can use segment trees for finding sum in a given range. But how can this be modified to find minimum element in a given range in O(logn) time? This is a question in References link (<br />
+<a href="http://www.cse.iitk.ac.in/users/aca/lop12/slides/06.pdf" rel="nofollow">http://www.cse.iitk.ac.in/users/aca/lop12/slides/06.pdf</a>) given above.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-33423">
+        <div id="dsq-comment-header-33423" class="dsq-comment-header">
+            <cite id="dsq-cite-33423">
+                <span id="dsq-author-user-33423">prshant jha</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-33423" class="dsq-comment-body">
+            <div id="dsq-comment-message-33423" class="dsq-comment-message"><p>here is my  update version in 0(logn) complexity with much simpler implementation than above<br />
+<a href="http://ideone.com/SppdWT" rel="nofollow">http://ideone.com/SppdWT</a></p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-34205">
+        <div id="dsq-comment-header-34205" class="dsq-comment-header">
+            <cite id="dsq-cite-34205">
+http://www.phoenixuser.blogspot.com                <span id="dsq-author-user-34205">GOPI GOPINATH</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-34205" class="dsq-comment-body">
+            <div id="dsq-comment-message-34205" class="dsq-comment-message"><p>will the complexity in your implementation be O(logn) ???? but to find the sum&#8230;.u r computing the sum during runtime ryt ????</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-33393">
+        <div id="dsq-comment-header-33393" class="dsq-comment-header">
+            <cite id="dsq-cite-33393">
+                <span id="dsq-author-user-33393">prashant jha</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-33393" class="dsq-comment-body">
+            <div id="dsq-comment-message-33393" class="dsq-comment-message"><p>#include</p>
+<p>using namespace std;</p>
+<p>struct node</p>
+<p>{</p>
+<p>	node* lchild;</p>
+<p>	int data;</p>
+<p>	node* rchild;</p>
+<p>	node()</p>
+<p>	{</p>
+<p>		lchild=NULL;</p>
+<p>		rchild=NULL;</p>
+<p>	}</p>
+<p>}*root=NULL;</p>
+<p>node* fun(node* root,int arr[],int low,int high)</p>
+<p>{</p>
+<p>	if(!root)</p>
+<p>	    root=new node();</p>
+<p>	if(low==high)</p>
+<p>	{</p>
+<p>		root-&gt;data=arr[low];</p>
+<p>		return root;</p>
+<p>	}</p>
+<p>	int mid=(low+high)/2;</p>
+<p>	root-&gt;lchild=fun(root-&gt;lchild,arr,low,mid);</p>
+<p>	root-&gt;rchild=fun(root-&gt;rchild,arr,mid+1,high);</p>
+<p>	root-&gt;data=root-&gt;lchild-&gt;data+root-&gt;rchild-&gt;data;</p>
+<p>	return root;</p>
+<p>}</p>
+<p>void display(node* root)</p>
+<p>{</p>
+<p>   if(root!=NULL)</p>
+<p>   {</p>
+<p>   	display(root-&gt;lchild);</p>
+<p>   	cout&lt;data&lt;rchild);</p>
+<p>   }</p>
+<p>}</p>
+<p>int main()</p>
+<p>{</p>
+<p>	int arr[]={3,5,1,7,9,6};</p>
+<p>	int i,r;</p>
+<p>	int n=sizeof(arr)/sizeof(arr[0]);</p>
+<p>	cout&lt;&lt;&quot;the inorder trversal of segment tree is.n&quot;;</p>
+<p>	display(fun(root,arr,0,n-1));</p>
+<p>    cout&lt;&lt;&quot;n&quot;&lt;&gt;i&gt;&gt;r;</p>
+<p>    root=NULL;</p>
+<p>    cout&lt;data&lt;&lt;&quot; is the range sum.n&quot;;</p>
+<p>	return 0;</p>
+<p>}</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-33391">
+        <div id="dsq-comment-header-33391" class="dsq-comment-header">
+            <cite id="dsq-cite-33391">
+                <span id="dsq-author-user-33391">prashant jha</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-33391" class="dsq-comment-body">
+            <div id="dsq-comment-message-33391" class="dsq-comment-message"><p>here is the implementation of the segment tree<br />
+<a href="http://ideone.com/JPDzqz" rel="nofollow">http://ideone.com/JPDzqz</a></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-33240">
+        <div id="dsq-comment-header-33240" class="dsq-comment-header">
+            <cite id="dsq-cite-33240">
+                <span id="dsq-author-user-33240">nwoebcke</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-33240" class="dsq-comment-body">
+            <div id="dsq-comment-message-33240" class="dsq-comment-message"><p>Although this puts an additional O(log(n)) of memory on the heap, I think it makes the range comparison and recursion a little easier to follow. Also it is C++. To preserve the C language, you could use structs instead of classes and rename the methods to functions with a struct pointer parameter tagged on.<br />
+<code><br />
+class Range {<br />
+  public:<br />
+   int start;<br />
+   int end;<br />
+   Range(s, e) : start(s), end(e) {}<br />
+   void init(s, e) {<br />
+      start = s;<br />
+      end = e;<br />
+   }<br />
+   inline bool isInside(Range *other) {<br />
+      return start &gt;= other-&gt;start &amp;&amp; end end;<br />
+   }<br />
+   inline bool isOutside(Range *other) {<br />
+      return start &gt; other-&gt;end || end start;<br />
+   }<br />
+};</p>
+<p>class NodeInfo {<br />
+   Range range;<br />
+  public:<br />
+   int index;<br />
+   NodeInfo(s, e, idx) : index(idx) {<br />
+      range.init(s, e);<br />
+   }<br />
+   inline bool isInside(Range *other) { return range.isInside(other); }<br />
+   inline bool isOutside(Range *other) { return range.isOutside(other); }<br />
+   inline int getMidRange() {<br />
+      return getMid(range.start, range.end);<br />
+   }<br />
+   NodeInfo* getLeftChild(mid) {<br />
+      return new NodeInfo(range.start, mid, index * 2 + 1);<br />
+   }<br />
+   NodeInfo* getRightChild(mid) {<br />
+      return new NodeInfo(mid + 1, range.end, index * 2 + 2);<br />
+   }<br />
+};</p>
+<p>int getSum(int *st, int n, int qs, int qe)<br />
+{<br />
+   // Check for erroneous input values<br />
+   if (qs  n-1 || qs &gt; qe)<br />
+   {<br />
+      printf("Invalid Input");<br />
+      return -1;<br />
+   }<br />
+   NodeInfo *segNode = new NodeInfo(0, n-1, 0);<br />
+   Range *query = new Range(qs, qe);<br />
+   int retval = getSumUtil(st, query, segNode);<br />
+   delete segNode;<br />
+   delete query;<br />
+   return retval;<br />
+}</p>
+<p>int getSumUtil(int *st, Range *query, NodeInfo *segNode)<br />
+{<br />
+   // If segment of this node is a part of given range, then return the<br />
+   // sum of the segment<br />
+   if(segNode-&gt;isInside(query))<br />
+      return st[segNode-&gt;index];<br />
+   // If segment of this node is outside the given range<br />
+   if (segNode-&gt;isOutside(query))<br />
+      return 0;<br />
+   // If a part of this segment overlaps with the given range<br />
+   int mid = segNode-&gt;getMidRange();<br />
+   NodeInfo *left = segNode-&gt;getLeftChild(mid);<br />
+   NodeInfo *right = segNode-&gt;getRightChild(mid);<br />
+   int retval = getSumUtil(st, query, left) + getSumUtil(st, query, right);<br />
+   delete left; delete right;<br />
+   return retval;<br />
+}<br />
+</code></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-31680">
+        <div id="dsq-comment-header-31680" class="dsq-comment-header">
+            <cite id="dsq-cite-31680">
+                <span id="dsq-author-user-31680">Puneet Jaiswal</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-31680" class="dsq-comment-body">
+            <div id="dsq-comment-message-31680" class="dsq-comment-message"><p>Would this work as tree implementation</p>
+<p><code><br />
+public class SegmentTree {<br />
+    public static class STNode {<br />
+        int leftIndex;<br />
+        int rightIndex;<br />
+        int sum;<br />
+        STNode leftNode;<br />
+        STNode rightNode;<br />
+    }</p>
+<p>    static STNode constructSegmentTree(int[] A, int l, int r) {<br />
+        if (l == r) {<br />
+            STNode node = new STNode();<br />
+            node.leftIndex = l;<br />
+            node.rightIndex = r;<br />
+            node.sum = A[l];<br />
+            return node;<br />
+        }<br />
+        int mid = (l + r) / 2;<br />
+        STNode leftNode = constructSegmentTree(A, l, mid);<br />
+        STNode rightNode = constructSegmentTree(A, mid, r);<br />
+        STNode root = new STNode();<br />
+        root.leftIndex = leftNode.leftIndex;<br />
+        root.rightIndex = rightNode.rightIndex;<br />
+        root.sum = leftNode.sum + rightNode.sum;<br />
+        root.leftNode = leftNode;<br />
+        root.rightNode = rightNode;<br />
+        return root;<br />
+    }</p>
+<p>    static int getSum(STNode root, int l, int r) {<br />
+        if (root.leftIndex &gt;= l &amp;&amp; root.rightIndex &lt;= r) {<br />
+            return root.sum;<br />
+        }<br />
+        if (root.rightIndex  r) {<br />
+            return 0;<br />
+        }<br />
+        return getSum(root.leftNode, l, r) + getSum(root.rightNode, l, r);<br />
+    }</p>
+<p>    /**<br />
+     *<br />
+     * @param root<br />
+     * @param index index of number to be updated in original array<br />
+     * @param newValue<br />
+     * @return difference between new and old values<br />
+     */<br />
+    static int updateValueAtIndex(STNode root, int index, int newValue) {<br />
+        int diff = 0;<br />
+        if(root.leftIndex==root.rightIndex &amp;&amp; index == root.leftIndex) {<br />
+            // We actually reached to the leaf node to be updated<br />
+            diff = newValue-root.sum;<br />
+            root.sum=newValue;<br />
+            return diff;<br />
+        }<br />
+        int mid = (root.leftIndex + root.rightIndex) / 2;<br />
+        if (index &lt;= mid) {<br />
+            diff= updateValueAtIndex(root.leftNode, index, newValue);<br />
+        } else {<br />
+            diff= updateValueAtIndex(root.rightNode, index, newValue);<br />
+        }<br />
+        root.sum+=diff;<br />
+        return diff;<br />
+    }<br />
+}<br />
+</code></p>
+<p>Run time complexity for all operations ===&gt;  Log(n)</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-31481">
+        <div id="dsq-comment-header-31481" class="dsq-comment-header">
+            <cite id="dsq-cite-31481">
+                <span id="dsq-author-user-31481">mallard</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-31481" class="dsq-comment-body">
+            <div id="dsq-comment-message-31481" class="dsq-comment-message"><p>sorry but i think the language of implementation of above code is  C and i think &#8216;new&#8217; operator can&#8217;t be used in C.I am getting error when i am trying to run this code.I am using codeblock.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-31165">
+        <div id="dsq-comment-header-31165" class="dsq-comment-header">
+            <cite id="dsq-cite-31165">
+                <span id="dsq-author-user-31165">Newbie90</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-31165" class="dsq-comment-body">
+            <div id="dsq-comment-message-31165" class="dsq-comment-message"><p>What is the difference between the constructST and constructSTUtil functions? Someone please explain the constructSTUTil fucntion.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-31072">
+        <div id="dsq-comment-header-31072" class="dsq-comment-header">
+            <cite id="dsq-cite-31072">
+                <span id="dsq-author-user-31072">Vu Duc Minh</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-31072" class="dsq-comment-body">
+            <div id="dsq-comment-message-31072" class="dsq-comment-message"><p>I do not think the procedure &#8220;updateValueUtil&#8221; is a good one (even it is correct). Segment tree is a tree; and we should update from a leaf to the root; like the &#8220;constructSTUtil&#8221; procedure. In fact, &#8220;updateValueUtil&#8221; is &#8220;constructSTUtil&#8221;. We only need one procedure for all two tasks.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-30918">
+        <div id="dsq-comment-header-30918" class="dsq-comment-header">
+            <cite id="dsq-cite-30918">
+                <span id="dsq-author-user-30918">Adrian Carballo</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-30918" class="dsq-comment-body">
+            <div id="dsq-comment-message-30918" class="dsq-comment-message"><p>Hey, great tutorial, I wrote a python implementation here <a href="https://github.com/adrianca/Competitive-Programming-Tools/tree/master/data%20structures/Segment%20Tree" rel="nofollow">https://github.com/adrianca/Competitive-Programming-Tools/tree/master/data%20structures/Segment%20Tree</a></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-29345">
+        <div id="dsq-comment-header-29345" class="dsq-comment-header">
+            <cite id="dsq-cite-29345">
+                <span id="dsq-author-user-29345">Avinash Ks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-29345" class="dsq-comment-body">
+            <div id="dsq-comment-message-29345" class="dsq-comment-message"><p>Just one doubt, in SumUtil, isn&#8217;t qs supposed to be greater than ss and qe less than se, because qs &#8211; qe is a subset of ss &#8211; se</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-26899">
+        <div id="dsq-comment-header-26899" class="dsq-comment-header">
+            <cite id="dsq-cite-26899">
+                <span id="dsq-author-user-26899">Denis</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-26899" class="dsq-comment-body">
+            <div id="dsq-comment-message-26899" class="dsq-comment-message"><p>Hi, you wrote : &#8220;size of memory allocated for segment tree will be 2*2^|log2n|-1&#8243;,<br />
+where I assume n is a number of leafs in the tree. This is seems not to<br />
+be true using your example of a segment tree : &#8220;{1,3,5,7,9,11}&#8221;,<br />
+where n=6. Thus using   2*2^|log2n|-1 size of memory allocated is 7, which is not true because on the picture there are 11 nodes. Suppose n should be replaced<br />
+on the (2*n-1) in your expression.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-26923">
+        <div id="dsq-comment-header-26923" class="dsq-comment-header">
+            <cite id="dsq-cite-26923">
+                <span id="dsq-author-user-26923">Denis</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-26923" class="dsq-comment-body">
+            <div id="dsq-comment-message-26923" class="dsq-comment-message"><p>Sorry, I&#8217;ve got it. You are using ceil() function in this case. So 2*2^ceil(log2N)-1 will produce correct segment tree size. I was thinking about floor() instead of ceil().</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even depth-2" id="dsq-comment-26924">
+        <div id="dsq-comment-header-26924" class="dsq-comment-header">
+            <cite id="dsq-cite-26924">
+                <span id="dsq-author-user-26924">Denis</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-26924" class="dsq-comment-body">
+            <div id="dsq-comment-message-26924" class="dsq-comment-message"><p>Sorry, I&#8217;ve got it. You are using ceil() function in this case. So 2*2^ceil(log2N)-1 will produce correct segment tree size. I was thinking about floor() instead of ceil().</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-26898">
+        <div id="dsq-comment-header-26898" class="dsq-comment-header">
+            <cite id="dsq-cite-26898">
+                <span id="dsq-author-user-26898">Denis</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-26898" class="dsq-comment-body">
+            <div id="dsq-comment-message-26898" class="dsq-comment-message"><p>Hi, you wrote : &#8220;size of memory allocated for segment tree will be &#8220;, where I assume n is a number of leafs in the tree. This is seems not to be true using your example of a segment tree : &#8220;{1,3,5,7,9,11}&#8221;,<br />
+where n=6. Thus using  size of memory allocated is 7, which is not true because on the picture there are 11 nodes. Suppose n should be replaced on the (2*n-1) in your expression.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment byuser comment-author-denial even thread-odd thread-alt depth-1" id="dsq-comment-24948">
+        <div id="dsq-comment-header-24948" class="dsq-comment-header">
+            <cite id="dsq-cite-24948">
+                <span id="dsq-author-user-24948">denial</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-24948" class="dsq-comment-body">
+            <div id="dsq-comment-message-24948" class="dsq-comment-message"><p>@geeksforgeeks:<br />
+Change suggestion in the paragraph &#8220;Query for Sum of given range&#8221;. It should be changed to following:</p>
+<pre> <code language="C">
+int getSum(node, l, r) 
+{
+   if range of node is within l and r
+        return value in node
+
+   if range of node is completely outside l and r
+        return 0
+  
+    return getSum(node's left child, l, r) + 
+           getSum(node's right child, l, r)
+}
+</code> </pre>
+<p>let me know if I&#8217;m wrong. <img src="http://d2o58evtke57tz.cloudfront.net/wp-includes/images/smilies/icon_smile.gif" alt=":)" class="wp-smiley" /></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment byuser comment-author-denial odd alt thread-even depth-1" id="dsq-comment-24947">
+        <div id="dsq-comment-header-24947" class="dsq-comment-header">
+            <cite id="dsq-cite-24947">
+                <span id="dsq-author-user-24947">denial</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-24947" class="dsq-comment-body">
+            <div id="dsq-comment-message-24947" class="dsq-comment-message"><p>@geeksforgeeks<br />
+Change suggestion in the paragraph &#8220;Query for Sum of given range&#8221; above :</p>
+<p>You written it as :</p>
+<pre> <code language="C">
+int getSum(node, l, r) 
+{
+   if range of node is within l and r
+        return value in node
+   else if range of node is completely outside l and r
+        return 0
+   else
+    return getSum(node's left child, l, r) + 
+           getSum(node's right child, l, r)
+}
+</code> </pre>
+<p>should be changed to this:</p>
+<pre> <code language="C">
+int getSum(node, l, r) 
+{
+   if range of node is within l and r
+        return value in node
+
+   if range of node is completely outside l and r
+        return 0
+
+    return getSum(node's left child, l, r) + 
+           getSum(node's right child, l, r)
+}
+</code> </pre>
+<p>Let me know if I&#8217;m wrong. <img src="http://d2o58evtke57tz.cloudfront.net/wp-includes/images/smilies/icon_smile.gif" alt=":)" class="wp-smiley" /></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-21584">
+        <div id="dsq-comment-header-21584" class="dsq-comment-header">
+            <cite id="dsq-cite-21584">
+                <span id="dsq-author-user-21584">Prakhar Jain</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-21584" class="dsq-comment-body">
+            <div id="dsq-comment-message-21584" class="dsq-comment-message"><p>Time Complexity of query is O(log n) because we process at most &#8220;4 nodes&#8221; at each level.. you have written &#8220;2 nodes&#8221; which is wrong. For example take range [1-3] in your example and make tree of recursive calls of getSum() function, you will see there are at most 4 nodes at each level.<br />
+Even it is also given in the iitk link you have given at the end.</p>
+<pre> <code language="C">
+/* Paste your code here (You may delete these lines if not writing code) */
+</code> </pre>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment byuser comment-author-geeksforgeeks bypostauthor odd alt depth-2" id="dsq-comment-21608">
+        <div id="dsq-comment-header-21608" class="dsq-comment-header">
+            <cite id="dsq-cite-21608">
+                <span id="dsq-author-user-21608">GeeksforGeeks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-21608" class="dsq-comment-body">
+            <div id="dsq-comment-message-21608" class="dsq-comment-message"><p>@Prakhar Jain: Thanks for pointing this out.  we have updated the post.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-21787">
+        <div id="dsq-comment-header-21787" class="dsq-comment-header">
+            <cite id="dsq-cite-21787">
+                <span id="dsq-author-user-21787">Prakhar Jain</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-21787" class="dsq-comment-body">
+            <div id="dsq-comment-message-21787" class="dsq-comment-message"><p>Also, to update a leaf we process &#8220;two nodes&#8221; at each level, not &#8220;one node&#8221;.</p>
+<pre> <code language="C">
+/* Paste your code here (You may delete these lines if not writing code) */
+</code> </pre>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-19894">
+        <div id="dsq-comment-header-19894" class="dsq-comment-header">
+            <cite id="dsq-cite-19894">
+                <span id="dsq-author-user-19894">kartik</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-19894" class="dsq-comment-body">
+            <div id="dsq-comment-message-19894" class="dsq-comment-message"><p>How do we do the updation if we have to update more than 2 values</p>
+<p>like we have to increase all number in range a to b by 2 </p>
+<p>how our update function do this in O(log(n))</p>
+<p>can any body plz help</p>
+<pre> <code language="C">
+/* Paste your code here (You may delete these lines if not writing code) */
+</code> </pre>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-19797">
+        <div id="dsq-comment-header-19797" class="dsq-comment-header">
+            <cite id="dsq-cite-19797">
+                <span id="dsq-author-user-19797">sumanth232</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-19797" class="dsq-comment-body">
+            <div id="dsq-comment-message-19797" class="dsq-comment-message"><p>Since the tree is represented using array and relation between parent and child indexes must be maintained, size of memory allocated for segment tree will be 2*(2^ceil(log2n)) &#8211; 1. </p>
+<p>Why not just 2*n &#8211; 1 ? What are the bad sequences of just allotting 2*n &#8211; 1 nodes to the tree. Where will it go wrong?<br />
+Anybody pls help..</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment byuser comment-author-alveko odd alt depth-2" id="dsq-comment-19807">
+        <div id="dsq-comment-header-19807" class="dsq-comment-header">
+            <cite id="dsq-cite-19807">
+                <span id="dsq-author-user-19807">alveko</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-19807" class="dsq-comment-body">
+            <div id="dsq-comment-message-19807" class="dsq-comment-message"><p>The array must have enough elements to include a possible right-most leaf. The index of a possible right-most leaf increases with a step of power of 2. The size of (2*n-1) might be just not big enough.</p>
+<pre> <code language="C">
+// segment tree size (n is the number of elements in the input array)
+//     (log2ceil(n))   is the level that can hold all distinct elements
+//   2^(log2ceil(n))   is the number of elements at that level
+// 2*2^(log2ceil(n))-1 is the total number of elements in the tree
+</code> </pre>
+<p>/ Alexander K.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-3" id="dsq-comment-20009">
+        <div id="dsq-comment-header-20009" class="dsq-comment-header">
+            <cite id="dsq-cite-20009">
+                <span id="dsq-author-user-20009">sumanth232</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-20009" class="dsq-comment-body">
+            <div id="dsq-comment-message-20009" class="dsq-comment-message"><p>Thanks.. that made it clear..</p>
+<pre> <code language="C">
+/* Paste your code here (You may delete these lines if not writing code) */
+</code> </pre>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment byuser comment-author-abhishek08aug odd alt thread-even depth-1" id="dsq-comment-18482">
+        <div id="dsq-comment-header-18482" class="dsq-comment-header">
+            <cite id="dsq-cite-18482">
+                <span id="dsq-author-user-18482">abhishek08aug</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-18482" class="dsq-comment-body">
+            <div id="dsq-comment-message-18482" class="dsq-comment-message"><p>Intelligent <img src="http://d2o58evtke57tz.cloudfront.net/wp-includes/images/smilies/icon_biggrin.gif" alt=":D" class="wp-smiley" /></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-17962">
+        <div id="dsq-comment-header-17962" class="dsq-comment-header">
+            <cite id="dsq-cite-17962">
+                <span id="dsq-author-user-17962">prasad</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-17962" class="dsq-comment-body">
+            <div id="dsq-comment-message-17962" class="dsq-comment-message"><p>I have difficulty understanding the time complexity of FindMin().</p>
+<p>At each node we are splitting the problem in to two sub problems of equal size.</p>
+<p>T(n) = 2T(n/2) + 1;</p>
+<p>I think this reduces to O(n).</p>
+<p>Please correct me if I am wrong any where?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-15639">
+        <div id="dsq-comment-header-15639" class="dsq-comment-header">
+            <cite id="dsq-cite-15639">
+                <span id="dsq-author-user-15639">Abhay</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-15639" class="dsq-comment-body">
+            <div id="dsq-comment-message-15639" class="dsq-comment-message"><p>I think in updateValueUti function it should be<br />
+updateValueUtil(st, ss, mid, i, diff, 2*index + 1) instead of<br />
+updateValueUtil(st, 0, mid, i, diff, 2*index + 1)</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment byuser comment-author-geeksforgeeks bypostauthor even depth-2" id="dsq-comment-15640">
+        <div id="dsq-comment-header-15640" class="dsq-comment-header">
+            <cite id="dsq-cite-15640">
+                <span id="dsq-author-user-15640">GeeksforGeeks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-15640" class="dsq-comment-body">
+            <div id="dsq-comment-message-15640" class="dsq-comment-message"><p>Thanks for pointing this out.  We have updated the code.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-14910">
+        <div id="dsq-comment-header-14910" class="dsq-comment-header">
+            <cite id="dsq-cite-14910">
+                <span id="dsq-author-user-14910">Gaurav Jain</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-14910" class="dsq-comment-body">
+            <div id="dsq-comment-message-14910" class="dsq-comment-message"><p>This is incorrect&#8230;<br />
+Let us reconsider the example of array 1,3,5,7,9,11</p>
+<p>if i have to calculate sum of indices 2 to 4. This should be 5+7+9=21. But using segment tree it is not possible to calculate the same.</p>
+<p>Segment tree will work only if the indices are in first half or 2nd half, but when the indices span across halves it might not work</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment byuser comment-author-geeksforgeeks bypostauthor even depth-2" id="dsq-comment-15041">
+        <div id="dsq-comment-header-15041" class="dsq-comment-header">
+            <cite id="dsq-cite-15041">
+                <span id="dsq-author-user-15041">GeeksforGeeks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-15041" class="dsq-comment-body">
+            <div id="dsq-comment-message-15041" class="dsq-comment-message"><p>We ran the above given code for your input and it produced the correct output.  Did you run the code?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-14832">
+        <div id="dsq-comment-header-14832" class="dsq-comment-header">
+            <cite id="dsq-cite-14832">
+                <span id="dsq-author-user-14832">Sitesh</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-14832" class="dsq-comment-body">
+            <div id="dsq-comment-message-14832" class="dsq-comment-message"><p>BIT is more efficient in this case. Relatively faster than Segment trees, Lesser memory requirements:</p>
+<p>Time complexities : O(log N)<br />
+Space complexities: O(N)<br />
+More details here: <a href="http://www.algorithmist.com/index.php/Fenwick_tree" rel="nofollow">http://www.algorithmist.com/index.php/Fenwick_tree</a></p>
+<p>#include &lt;vector&gt;<br />
+using namespace std;</p>
+<p>// In this implementation, the tree is represented by a vector&lt;int&gt;.<br />
+// Elements are numbered by 0, 1, &#8230;, n-1.<br />
+// tree[i] is sum of elements with indexes i&amp;(i+1)..i, inclusive.</p>
+<p>// Creates a zero-initialized Fenwick tree for n elements.<br />
+vector&lt;int&gt; create(int n) { return vector&lt;int&gt;(n, 0); }</p>
+<p>// Returns sum of elements with indexes a..b, inclusive<br />
+int query(const vector&lt;int&gt; &amp;tree, int a, int b) {<br />
+    if (a == 0) {<br />
+        int sum = 0;<br />
+        for (; b &gt;= 0; b = (b &amp; (b + 1)) &#8211; 1)<br />
+          sum += tree[b];<br />
+        return sum;<br />
+    } else {<br />
+        return query(tree, 0, b) &#8211; query(tree, 0, a-1);<br />
+    }<br />
+}</p>
+<p>// Increases value of k-th element by inc.<br />
+void increase(vector&lt;int&gt; &amp;tree, int k, int inc) {<br />
+    for (; k &lt; (int)tree.size(); k |= k + 1)<br />
+        tree[k] += inc;<br />
+}</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-14595">
+        <div id="dsq-comment-header-14595" class="dsq-comment-header">
+            <cite id="dsq-cite-14595">
+                <span id="dsq-author-user-14595">Kumar</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-14595" class="dsq-comment-body">
+            <div id="dsq-comment-message-14595" class="dsq-comment-message"><p>Nice explanation. But there&#8217;s another tree structure which is precisely meant to answer range-sum &amp; product queries called Binary indexed trees, which is simpler, powerful and easy to maintain.</p>
+<p>Segment trees are really good for answering range minimum queries &amp; intervals.</p>
+<p>Here&#8217;s a complete working implementation of segment tree in C#</p>
+<p>/* Paste your code here (You may delete these lines if not writing code) </p>
+<p>using System;<br />
+using System.Collections.Generic;<br />
+using System.Linq;<br />
+using System.Text;<br />
+using Algorithms.Trees.Base;</p>
+<p>namespace Algorithms.Trees<br />
+{<br />
+    public class SegmentTree&lt;K&gt; where K:IComparable&lt;K&gt;<br />
+    {<br />
+        private List&lt;SegmentTreeNode&lt;K&gt;&gt; Elements;</p>
+<p>        public K[] Keys { get; set; }</p>
+<p>        public SegmentTree(K[] keys)<br />
+        {<br />
+            if (null == keys || 0 == keys.Length)<br />
+            {<br />
+                return;<br />
+            }</p>
+<p>            Keys = keys;</p>
+<p>            int segmentTreeSize = (int)Math.Pow(2, Math.Log(Keys.Length, 2) + 1);<br />
+            Elements = new List&lt;SegmentTreeNode&lt;K&gt;&gt;(segmentTreeSize);</p>
+<p>            for (int i = 0; i &lt; segmentTreeSize; i++)<br />
+            {<br />
+                Elements.Add(null);<br />
+            }</p>
+<p>            ConstructSegmentTreeForRange(0, keys.Length &#8211; 1, 0);<br />
+        }</p>
+<p>        SegmentTreeNode&lt;K&gt; ConstructSegmentTreeForRange(int lowIndex, int highIndex, int rangeIndex)<br />
+        {<br />
+            SegmentTreeNode&lt;K&gt; rangeNode = new SegmentTreeNode&lt;K&gt;() { LowIndex = lowIndex, HighIndex = highIndex };</p>
+<p>            K leftMinimum, rightMinimum;</p>
+<p>            int midPoint = lowIndex + (highIndex &#8211; lowIndex)/2;</p>
+<p>            if (lowIndex &lt; highIndex)<br />
+            {<br />
+                leftMinimum = ConstructSegmentTreeForRange(lowIndex, midPoint, 2 * rangeIndex + 1).RangeMinimum;<br />
+                rightMinimum = ConstructSegmentTreeForRange(midPoint + 1, highIndex, 2 * rangeIndex + 2).RangeMinimum;</p>
+<p>                rangeNode.RangeMinimum = (leftMinimum.CompareTo(rightMinimum) &lt;= 0) ? leftMinimum : rightMinimum;<br />
+            }<br />
+            else if (lowIndex == highIndex)<br />
+            {<br />
+                rangeNode.RangeMinimum = Keys[lowIndex];<br />
+                rangeNode.LowIndex = lowIndex;<br />
+                rangeNode.HighIndex = lowIndex;<br />
+            }</p>
+<p>            Elements[rangeIndex] = rangeNode;</p>
+<p>            return rangeNode;<br />
+        }</p>
+<p>        public K QueryMinimumInRange(int lowIndex, int highIndex)<br />
+        {<br />
+            if (lowIndex &lt; 0 || highIndex &gt;= Keys.Length)<br />
+            {<br />
+                return default(K);<br />
+            }</p>
+<p>            return QueryMinimumInRangeAux(lowIndex, highIndex, 0);<br />
+        }</p>
+<p>        private K QueryMinimumInRangeAux(int lowIndex, int highIndex, int rangeIndex)<br />
+        {<br />
+            if (highIndex &lt; Elements[rangeIndex].LowIndex || lowIndex &gt; Elements[rangeIndex].HighIndex)<br />
+            {<br />
+                return default(K);<br />
+            }</p>
+<p>            if (Elements[rangeIndex].LowIndex &gt;= lowIndex &amp;&amp; Elements[rangeIndex].HighIndex &lt;= highIndex)<br />
+            {<br />
+                return Elements[rangeIndex].RangeMinimum;<br />
+            }</p>
+<p>            K leftMinimum = QueryMinimumInRangeAux(lowIndex, highIndex, 2 * rangeIndex + 1);<br />
+            K rightMinimum = QueryMinimumInRangeAux(lowIndex, highIndex, 2 * rangeIndex + 2);</p>
+<p>            if (EqualityComparer&lt;K&gt;.Default.Equals(default(K), leftMinimum))<br />
+            {<br />
+                return rightMinimum;<br />
+            }</p>
+<p>            if (EqualityComparer&lt;K&gt;.Default.Equals(default(K), rightMinimum))<br />
+            {<br />
+                return leftMinimum;<br />
+            }</p>
+<p>            return (leftMinimum.CompareTo(rightMinimum) &lt;= 0) ? leftMinimum : rightMinimum;<br />
+        }</p>
+<p>        public bool UpdateKey(int keyIndex, K newKey)<br />
+        {<br />
+            if (keyIndex &lt; 0 || keyIndex &gt;= Keys.Length)<br />
+            {<br />
+                return false;<br />
+            }</p>
+<p>            Keys[keyIndex] = newKey;</p>
+<p>            return UpdateKeyAux(keyIndex, newKey, 0);<br />
+        }</p>
+<p>        private bool UpdateKeyAux(int keyIndex, K newKey, int rangeIndex)<br />
+        {<br />
+            if (Elements[rangeIndex].LowIndex == keyIndex &amp;&amp; Elements[rangeIndex].HighIndex == keyIndex)<br />
+            {<br />
+                Elements[rangeIndex].RangeMinimum = newKey;<br />
+                return true;<br />
+            }</p>
+<p>            if (Elements[rangeIndex].RangeMinimum.CompareTo(newKey) &gt; 0)<br />
+            {<br />
+                Elements[rangeIndex].RangeMinimum = newKey;<br />
+            }</p>
+<p>            int midPoint = Elements[rangeIndex].LowIndex + (Elements[rangeIndex].HighIndex &#8211; Elements[rangeIndex].LowIndex) / 2;</p>
+<p>            if (keyIndex &lt;= midPoint)<br />
+            {<br />
+                return UpdateKeyAux(keyIndex, newKey, 2 * rangeIndex + 1);<br />
+            }<br />
+            else<br />
+            {<br />
+                return UpdateKeyAux(keyIndex, newKey, 2 * rangeIndex + 2);<br />
+            }<br />
+        }<br />
+    }<br />
+}</p>
+<p>*/</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-14545">
+        <div id="dsq-comment-header-14545" class="dsq-comment-header">
+            <cite id="dsq-cite-14545">
+                <span id="dsq-author-user-14545">kT</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-14545" class="dsq-comment-body">
+            <div id="dsq-comment-message-14545" class="dsq-comment-message"><pre> <code language="C">
+Hi,
+I think this is incorrect.
+constructSTUtil(arr, 0, n-1, st, 0);
+ // Return the constructed segment tree
+    return st;
+
+
+This should do the job.
+st = constructSTUtil(arr, 0, n-1, st, 0);
+
+Please correct me else.
+
+Thanks
+</code> </pre>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment byuser comment-author-geeksforgeeks bypostauthor even depth-2" id="dsq-comment-14613">
+        <div id="dsq-comment-header-14613" class="dsq-comment-header">
+            <cite id="dsq-cite-14613">
+                <span id="dsq-author-user-14613">GeeksforGeeks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-14613" class="dsq-comment-body">
+            <div id="dsq-comment-message-14613" class="dsq-comment-message"><p>Please take a closer look at the code.  The recursive function constructSTUtil() returns the value of root (or sum of leaf nodes under it).  st is a pointer to the constructed segment tree.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-14714">
+        <div id="dsq-comment-header-14714" class="dsq-comment-header">
+            <cite id="dsq-cite-14714">
+                <span id="dsq-author-user-14714">kT</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-14714" class="dsq-comment-body">
+            <div id="dsq-comment-message-14714" class="dsq-comment-message"><p>Ok, yes. My bad!</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-14521">
+        <div id="dsq-comment-header-14521" class="dsq-comment-header">
+            <cite id="dsq-cite-14521">
+                <span id="dsq-author-user-14521">Vikas</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-14521" class="dsq-comment-body">
+            <div id="dsq-comment-message-14521" class="dsq-comment-message"><p>May you please give the code to implement segment tree to store intervals ?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-14534">
+        <div id="dsq-comment-header-14534" class="dsq-comment-header">
+            <cite id="dsq-cite-14534">
+                <span id="dsq-author-user-14534">sreeram</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-14534" class="dsq-comment-body">
+            <div id="dsq-comment-message-14534" class="dsq-comment-message"><p>Yeah ..can you please provide that implementation also ?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-14505">
+        <div id="dsq-comment-header-14505" class="dsq-comment-header">
+            <cite id="dsq-cite-14505">
+http://www.linkedin.com/in/ramanawithu                <span id="dsq-author-user-14505">Venki</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-14505" class="dsq-comment-body">
+            <div id="dsq-comment-message-14505" class="dsq-comment-message"><p>You are using 0th location also, so, left child is at 2*i+1 and right child at 2*i+2. If i is either left or right child location, parent is at i/2.</p>
+<p>Power function can be excluded with simple shift operation.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-14513">
+        <div id="dsq-comment-header-14513" class="dsq-comment-header">
+            <cite id="dsq-cite-14513">
+                <span id="dsq-author-user-14513">GeeksforGeeks</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-14513" class="dsq-comment-body">
+            <div id="dsq-comment-message-14513" class="dsq-comment-message"><p>@Venki: Thanks for pointing this out.  The line of explanation was for starting index 1 and code for starting index 0.  We have updated the explanation to match with code.  The code and other explanation remains same.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://www.geeksforgeeks.org/segment-tree-set-1-sum-of-given-range/';
+var disqus_identifier = '29503 http://www.geeksforgeeks.org/?p=29503';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'geeksforgeeks';
+var disqus_title = "Segment Tree | Set 1 (Sum of given range)";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+			</div>
+	
+					
+			
+			
+
+		</div> <!-- end post -->	
+
+<br></br>
+	
+</div> <!-- end content -->
+
+<ul id="sidebar">
+	<li id="text-19" class="widget widget_text">			<div class="textwidget"><script>
+  (function() {
+    var cx = '009682134359037907028:tj6eafkv_be';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+
+<style type="text/css">
+  .gsc-control-cse {
+    font-family: "Trebuchet MS", sans-serif;
+    border-color: #E1F3DA;
+    background-color: #E1F3DA;
+  }
+  input.gsc-input {
+    border-color: #94CC7A;
+  }
+  input.gsc-search-button {
+    border-color: #94CC7A;
+    background-color: #AADA92;
+  }
+  .gsc-tabHeader.gsc-tabhInactive {
+    border-color: #A9DA92;
+    background-color: #FFFFFF;
+  }
+  .gsc-tabHeader.gsc-tabhActive {
+    border-color: #A9DA92;
+    background-color: #A9DA92;
+  }
+  .gsc-tabsArea {
+    border-color: #A9DA92;
+  }
+  .gsc-webResult.gsc-result {
+    border-color: #A9DA92;
+    background-color: #FFFFFF;
+  }
+  .gsc-webResult.gsc-result:hover {
+    border-color: #A9DA92;
+    background-color: #FFFFFF;
+  }
+  .gs-webResult.gs-result a.gs-title:link,
+  .gs-webResult.gs-result a.gs-title:link b {
+    color: #009900;
+  }
+  .gs-webResult.gs-result a.gs-title:visited,
+  .gs-webResult.gs-result a.gs-title:visited b {
+    color: #009900;
+  }
+  .gs-webResult.gs-result a.gs-title:hover,
+  .gs-webResult.gs-result a.gs-title:hover b {
+    color: #003300;
+  }
+  .gs-webResult.gs-result a.gs-title:active,
+  .gs-webResult.gs-result a.gs-title:active b {
+    color: #009900;
+  }
+  .gsc-cursor-page {
+    color: #009900;
+  }
+  a.gsc-trailing-more-results:link {
+    color: #009900;
+  }
+  .gs-webResult.gs-result .gs-snippet {
+    color: #454545;
+  }
+  .gs-webResult.gs-result .gs-visibleUrl {
+    color: #33cc00;
+  }
+  .gs-webResult.gs-result .gs-visibleUrl-short {
+    color: #33cc00;
+  }
+  .gs-webResult.gs-result .gs-visibleUrl-short {
+    display: none;
+  }
+  .gs-webResult.gs-result .gs-visibleUrl-long {
+    display: block;
+  }
+  .gsc-cursor-box {
+    border-color: #A9DA92;
+  }
+  .gsc-results .gsc-cursor-page {
+    border-color: #A9DA92;
+    background-color: #FFFFFF;
+  }
+  .gsc-results .gsc-cursor-page.gsc-cursor-current-page {
+    border-color: #A9DA92;
+    background-color: #A9DA92;
+  }
+  .gs-promotion.gs-result {
+    border-color: #94CC7A;
+    background-color: #CBE8B4;
+  }
+  .gs-promotion.gs-result a.gs-title:link {
+    color: #0066CC;
+  }
+  .gs-promotion.gs-result a.gs-title:visited {
+    color: #0066CC;
+  }
+  .gs-promotion.gs-result a.gs-title:hover {
+    color: #0066CC;
+  }
+  .gs-promotion.gs-result a.gs-title:active {
+    color: #0066CC;
+  }
+  .gs-promotion.gs-result .gs-snippet {
+    color: #454545;
+  }
+  .gs-promotion.gs-result .gs-visibleUrl,
+  .gs-promotion.gs-result .gs-visibleUrl-short {
+    color: #815FA7;
+  }
+</style>    </div>
+		</li>
+<li id="text-9" class="widget widget_text">			<div class="textwidget"><div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=138031159685820";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<div class="fb-like-box" data-href="https://www.facebook.com/pages/GeeksforGeeks/316764689022" data-width="250" data-height="170" data-colorscheme="light" data-show-faces="true" data-header="false" data-stream="false" data-show-border="false"></div></div>
+		</li>
+<li id="text-18" class="widget widget_text">			<div class="textwidget"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- LargeRectangleSide -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:336px;height:280px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="1884636833"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
+		</li>
+<li id="text-13" class="widget widget_text">			<div class="textwidget"><ul><li><a href="http://www.geeksforgeeks.org/category/interview-experiences/">Interview Experiences</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/advance-data-structures">Advanced Data Structures</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/dynamic-programming">Dynamic Programming</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/Greedy-Algorithm/">Greedy Algorithms</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/backtracking">Backtracking</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/pattern-searching">Pattern Searching</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/divide-and-conquer">Divide & Conquer</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/MathematicalAlgo">Mathematical Algorithms</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/recursion">Recursion</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/geometric-algorithms/">Geometric Algorithms</a></li>
+</ul></div>
+		</li>
+<li id="text-17" class="widget widget_text">			<div class="textwidget"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Big 300x600 Sidebar -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:600px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="4402736037"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
+		</li>
+<li id="text-14" class="widget widget_text"><h2 class="widgettitle">Popular Posts</h2>
+			<div class="textwidget"><ul>
+<li><a href="http://www.geeksforgeeks.org/write-a-c-program-to-print-all-permutations-of-a-given-string/">  All permutations of a given string </a></li>
+<li><a href="http://www.geeksforgeeks.org/memory-layout-of-c-program/"> Memory Layout of C Programs</a> </li>
+<li><a href="http://www.geeksforgeeks.org/understanding-extern-keyword-in-c/"> Understanding “extern” keyword in C</a> </li>
+<li><a href="http://www.geeksforgeeks.org/median-of-two-sorted-arrays/">Median of two sorted arrays</a> </li>
+<li><a href="http://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion-and-without-stack/"> Tree traversal without recursion and without stack! </a></li>
+<li><a href="http://www.geeksforgeeks.org/structure-member-alignment-padding-and-data-packing/"> Structure Member Alignment, Padding and Data Packing</a> </li>
+<li><a href="http://www.geeksforgeeks.org/write-a-function-to-get-the-intersection-point-of-two-linked-lists/"> Intersection point of two Linked Lists</a> </li>
+<li><a href="http://www.geeksforgeeks.org/lowest-common-ancestor-in-a-binary-search-tree/"> Lowest Common Ancestor in a BST.</span></a> </li>
+<li><a href="http://www.geeksforgeeks.org/a-program-to-check-if-a-binary-tree-is-bst-or-not/"> Check if a binary tree is BST or not</a> </li>
+<li><a href="http://www.geeksforgeeks.org/sorted-linked-list-to-balanced-bst/"> Sorted Linked List to Balanced BST</a></li>
+</ul></div>
+		</li>
+<li id="text-3" class="widget widget_text">			<div class="textwidget"><a href="https://twitter.com/GeeksforGeeks" class="twitter-follow-button" data-show-count="false">Follow @GeeksforGeeks</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>         
+
+
+<!-- GOOGLE FEEDBURNER BUTTON-->
+<a href="http://feeds.feedburner.com/Geeksforgeeks" title="Subscribe to my feed" rel="alternate" type="application/rss+xml"><img src="http://www.feedburner.com/fb/images/pub/feed-icon32x32.png" alt="" style="border:0"/></a><a href="http://feeds.feedburner.com/Geeksforgeeks" title="Subscribe to my feed" rel="alternate" type="application/rss+xml">Subscribe</a>
+
+</div>
+		</li>
+<li id="text-21" class="widget widget_text"><h2 class="widgettitle">Recent Comments</h2>
+			<div class="textwidget"><script type="text/javascript" src="http://geeksforgeeks.disqus.com//recent_comments_widget.js?num_items=6&hide_avatars=1&excerpt_length=50&hide_mods=0"></script></div>
+		</li>
+<li id="text-22" class="widget widget_text">			<div class="textwidget"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- LinkAd -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:90px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="2606115235"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- LinkAd -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:90px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="2606115235"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- LinkAd -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:90px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="2606115235"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
+		</li>
+
+</ul>					  
+		<div class="clear"></div>
+
+		<div id="footer">
+		
+		    <div class="xhtml">
+                        @geeksforgeeks, <a href="http://creativecommons.org/licenses/by-nc-nd/2.5/in/deed.en_US" title="Valid XHTML Strict 1.0">Some rights reserved</a>  <a href="http://www.geeksforgeeks.org/about/contact-us/"> &nbsp; &nbsp; &nbsp; &nbsp;Contact Us!</a>
+
+		    </div>
+		    
+		    <div class="credits">
+			  Powered by <a href="http://wordpress.org">WordPress </a> &amp; <a href="http://mootools.net/" title="Mootools JavaScript Framework">MooTools</a>, customized by geeksforgeeks team </div>
+			  
+		   <div class="clear"></div>						                            
+		   
+		</div> <!--end footer-->  
+        
+		        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'geeksforgeeks';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1) {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('rel'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script'); 
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shCore.js?ver=3.0.9'></script>
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shBrushCpp.js?ver=3.0.9'></script>
+<script type='text/javascript'>
+	(function(){
+		var corecss = document.createElement('link');
+		var themecss = document.createElement('link');
+		var corecssurl = "http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCore.css?ver=3.0.9";
+		if ( corecss.setAttribute ) {
+				corecss.setAttribute( "rel", "stylesheet" );
+				corecss.setAttribute( "type", "text/css" );
+				corecss.setAttribute( "href", corecssurl );
+		} else {
+				corecss.rel = "stylesheet";
+				corecss.href = corecssurl;
+		}
+		document.getElementsByTagName("head")[0].insertBefore( corecss, document.getElementById("syntaxhighlighteranchor") );
+		var themecssurl = "http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shThemeDefault.css?ver=3.0.9";
+		if ( themecss.setAttribute ) {
+				themecss.setAttribute( "rel", "stylesheet" );
+				themecss.setAttribute( "type", "text/css" );
+				themecss.setAttribute( "href", themecssurl );
+		} else {
+				themecss.rel = "stylesheet";
+				themecss.href = themecssurl;
+		}
+		//document.getElementById("syntaxhighlighteranchor").appendChild(themecss);
+		document.getElementsByTagName("head")[0].insertBefore( themecss, document.getElementById("syntaxhighlighteranchor") );
+	})();
+	SyntaxHighlighter.config.strings.expandSource = '+ expand source';
+	SyntaxHighlighter.config.strings.help = '?';
+	SyntaxHighlighter.config.strings.alert = 'SyntaxHighlighter\n\n';
+	SyntaxHighlighter.config.strings.noBrush = 'Can\'t find brush for: ';
+	SyntaxHighlighter.config.strings.brushNotHtmlScript = 'Brush wasn\'t configured for html-script option: ';
+	SyntaxHighlighter.defaults['gutter'] = false;
+	SyntaxHighlighter.defaults['pad-line-numbers'] = true;
+	SyntaxHighlighter.defaults['toolbar'] = false;
+	SyntaxHighlighter.all();
+</script>
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/bbpress/templates/default/js/editor.js?ver=2.5.4-5380'></script>
+				  
+		</div> <!--end wrapper-->
+        <div id="ajaxSpinner"></div> <!--For AJAX spinner holder-->
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-12148232-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+	</body>
+
+</html>
+<!-- Dynamic page generated in 1.009 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2014-12-12 08:11:01 -->
+
+<!-- Compression = gzip -->
+<!-- super cache -->

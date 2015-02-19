@@ -1,0 +1,2096 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+       <title>Trie | (Insert and Search) - GeeksforGeeks</title>
+       <style type="text/css" media="screen">
+          @import url('http://d2o58evtke57tz.cloudfront.net/wp-content/themes/minimoo/style.css');
+    </style>
+      <link href="http://d2o58evtke57tz.cloudfront.net/wp-content/themes/minimoo/favicon.ico" rel="shortcut icon" />    
+    
+<!-- This site is optimized with the Yoast WordPress SEO plugin v1.7.1 - https://yoast.com/wordpress/plugins/seo/ -->
+<link rel="canonical" href="http://www.geeksforgeeks.org/trie-insert-and-search/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Trie | (Insert and Search) - GeeksforGeeks" />
+<meta property="og:description" content="Trie is an efficient information retrieval data structure. Using trie, search complexities can be brought to optimal limit (key length). If we store keys in binary search tree, a well balanced BST will need time proportional to M * log N, where M is maximum string length and N is number of keys in tree. Using trie, &hellip;" />
+<meta property="og:url" content="http://www.geeksforgeeks.org/trie-insert-and-search/" />
+<meta property="og:site_name" content="GeeksforGeeks" />
+<meta property="article:tag" content="Advance Data Structures" />
+<meta property="article:section" content="Trees" />
+<meta property="article:published_time" content="2011-10-05T21:15:15+00:00" />
+<meta property="article:modified_time" content="2012-10-02T10:06:36+00:00" />
+<meta property="og:updated_time" content="2012-10-02T10:06:36+00:00" />
+<!-- / Yoast WordPress SEO plugin. -->
+
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css?ver=4.1.1' type='text/css' media='all' />
+<link rel='stylesheet' id='bbp-default-css'  href='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/bbpress/templates/default/css/bbpress.css?ver=2.5.4-5380' type='text/css' media='screen' />
+<link rel='stylesheet' id='wp-pagenavi-css'  href='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/wp-pagenavi/pagenavi-css.css?ver=2.70' type='text/css' media='all' />
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-includes/js/jquery/jquery.js?ver=1.11.1'></script>
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1'></script>
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/google-captcha/js/script.js?ver=4.1.1'></script>
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js?ver=1.0'></script>
+
+<!-- Bad Behavior 2.2.16 run time: 1.483 ms -->
+<script type="text/javascript">
+<!--
+function bb2_addLoadEvent(func) {
+	var oldonload = window.onload;
+	if (typeof window.onload != 'function') {
+		window.onload = func;
+	} else {
+		window.onload = function() {
+			oldonload();
+			func();
+		}
+	}
+}
+
+bb2_addLoadEvent(function() {
+	for ( i=0; i < document.forms.length; i++ ) {
+		if (document.forms[i].method == 'post') {
+			var myElement = document.createElement('input');
+			myElement.setAttribute('type', 'hidden');
+			myElement.name = 'bb2_screener_';
+			myElement.value = '1424320439 14.139.241.84';
+			document.forms[i].appendChild(myElement);
+		}
+	}
+});
+// --></script>
+		<style type="text/css" id="syntaxhighlighteranchor"></style>
+   <meta name="google-site-verification" content="rHK2v8_zzuAZQY8JHAzbllDN8u-aQxcn2Kqnp67Old0" />
+</head>
+
+<body>
+<!-- o4dI0sCXUgoSONabbd8mbZ4SA3E -->    
+    <div id="wrapper">
+        <div class="blog-info">
+                <h1 class="blog-title">
+                <a href="http://www.geeksforgeeks.org" title="GeeksforGeeks">GeeksforGeeks</a>
+            </h1>
+       
+            <div class="blog-description">
+                A computer science portal for geeks            </div>
+        </div>
+        <b><p>  <h2 align="right">   <a href="https://play.google.com/store/apps/details?id=free.programming.programming"> Android App </a>
+<a href="http://geeksquiz.com/">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GeeksQuiz</a></h2> 
+   <a href="http://www.geeksforgeeks.org/wp-login.php">Login/Register</a> 
+         </p></b>  
+         
+         <div class="clear"></div>         
+              
+                     
+            <div id="menu">   
+                 <ul>
+ <li><a href="http://www.geeksforgeeks.org">Home</a></li>
+  <li><a href="http://www.geeksforgeeks.org/fundamentals-of-algorithms/">Algorithms</a></li>
+ <li><a href="http://www.geeksforgeeks.org/data-structures/">DS</a></li>
+  <li><a href="http://www.geeksforgeeks.org/gate-corner/">GATE</a></li>
+  <li><a href="http://www.geeksforgeeks.org/about/interview-corner/">Interview Corner</a></li>
+  <li><a href="http://www.geeksforgeeks.org/forums/">Q&A</a></li>
+  <li><a href="http://www.geeksforgeeks.org/c/">C</a></li>
+  <li><a href="http://www.geeksforgeeks.org/c-plus-plus/">C++</a></li>
+  <li><a href="http://www.geeksforgeeks.org/java/">Java</a></li>
+  <li><a href="http://www.geeksforgeeks.org/books/">Books</a></li>
+  <li><a href="http://www.geeksforgeeks.org/contribute/">Contribute</a></li>
+  <li><a href="http://www.geeksforgeeks.org/contribute/ask-a-question/">Ask a Q</a></li>
+  <li><a href="http://www.geeksforgeeks.org/about/">About</a></li>
+            </ul>
+
+               
+            <div class="clear"></div>     
+        </div>
+             <div id="navmenu">
+				<ul id="menu" style="padding:0; margin:0;">
+						<li class="cat-item cat-item-3"><a href="http://www.geeksforgeeks.org/category/c-arrays/" title="Questions regarding Arrays">Array</a>
+</li>	
+
+	<li class="cat-item cat-item-17"><a href="http://www.geeksforgeeks.org/category/bit-magic/" title="View all posts filed under Bit Magic">Bit Magic</a>
+</li>
+	<li class="cat-item cat-item-14"><a href="http://www.geeksforgeeks.org/category/c-puzzles/" title="View all posts filed under C/C++ Puzzles">C/C++</a>
+</li>
+
+<li class="cat-item cat-item-18"><a href="http://www.geeksforgeeks.org/category/articles/" title="View all posts filed under Articles">Articles</a>
+</li>
+
+	<li class="cat-item cat-item-67"><a href="http://www.geeksforgeeks.org/category/gfact/" title="View all posts filed under GFacts">GFacts</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://www.geeksforgeeks.org/category/linked-list/" title="Linked List problems">Linked List</a>
+</li>
+	<li class="cat-item cat-item-66"><a href="http://www.geeksforgeeks.org/category/multiple-choice-question/" title="View all posts filed under MCQ">MCQ</a>
+
+</li>
+	<li class="cat-item cat-item-4"><a href="http://www.geeksforgeeks.org/category/c-programs/" title="Miscellaneous">Misc</a>
+</li>
+	<li class="cat-item cat-item-5"><a href="http://www.geeksforgeeks.org/category/program-output/" title="View all posts filed under Output">Output</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="http://www.geeksforgeeks.org/category/c-strings/" title="Questions related to strings">String</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://www.geeksforgeeks.org/category/tree/" title="View all posts filed under Trees">Tree</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://www.geeksforgeeks.org/category/graph/" title="View all posts filed under Graph">Graph</a>
+</li>
+</ul>
+        </div>
+             <div id="content">	   	
+	<div class="post" id="post">
+							<div class="post-info">			
+					<div class="post-title-info">
+						<h2 class="post-title">Trie | (Insert and Search)</h2>
+					</div>			
+					<div class="clear"></div>				  
+				<div class="post-content" id="post-content">
+					<p><a href="http://en.wikipedia.org/wiki/Trie" target="_blank">Trie</a> is an efficient information re<strong><em>trie</em></strong>val data structure. Using trie, search complexities can be brought to optimal limit (key length). <span id="more-13067"></span>If we store keys in binary search tree, a well balanced BST will need time proportional to <strong>M * log N</strong>, where M is maximum string length and N is number of keys in tree. Using trie, we can search the key in O(M) time. However the penalty is on trie storage requirements.</p>
+<p>Every node of trie consists of multiple branches. Each branch represents a possible character of keys. We need to mark the last node of every key as leaf node. A trie node field <em>value</em> will be used to distinguish the node as leaf node (there are other uses of the <em>value</em> field). A simple structure to represent nodes of English alphabet can be as following,</p>
+<div><code>struct</code> <code>trie_node</code></div>
+<div><code>{</code></div>
+<div><code>    </code><code>int</code> <code>value; /* Used to mark leaf nodes */</code></div>
+<div><code>    </code><code>trie_node_t *children[ALPHABET_SIZE];</code></div>
+<div><code>};</code></div>
+<p>Inserting a key into trie is simple approach. Every character of input key is inserted as an individual trie node. Note that the <em>children</em> is an array of pointers to next level trie nodes. The key character acts as an index into the array <em>children</em>. If the input key is new or an extension of existing key, we need to construct non-existing nodes of the key, and mark leaf node. If the input key is prefix of existing key in trie, we simply mark the last node of key as leaf. The key length determines trie depth.</p>
+<p>Searching for a key is similar to insert operation, however we only compare the characters and move down. The search can terminate due to end of string or lack of key in trie. In the former case, if the <em>value</em> field of last node is non-zero then the key exists in trie. In the second case, the search terminates without examining all the characters of key, since the key is not present in trie.</p>
+<p>The following picture explains construction of trie using keys given in the example below,</p>
+<pre>                       root
+                    /   \    \
+                    t   <span style="color: #0000ff">a</span>     b
+                    |   |     |
+                    h   n     <span style="color: #0000ff">y</span>
+                    |   |  \  |
+                    <span style="color: #0000ff">e</span>   s  <span style="color: #0000ff">y</span>  <span style="color: #0000ff">e</span>
+                 /  |   |
+                 i  r   w
+                 |  |   |
+                 <span style="color: #0000ff">r</span>  <span style="color: #0000ff">e</span>   e
+                        |
+                        <span style="color: #0000ff">r</span></pre>
+<p>In the picture, every character is of type <em>trie_node_t</em>. For example, the <em>root</em> is of type trie_node_t, and it&#8217;s children <em>a</em>, <em>b</em> and <em>t</em> are filled, all other nodes of root will be NULL. Similarly, &#8220;a&#8221; at the next level is having only one child (&#8220;n&#8221;), all other children are NULL. The leaf nodes are in <span style="color: #0000ff">blue</span>.</p>
+<p>Insert and search costs <strong>O(key_length)</strong>, however the memory requirements of trie is <strong>O(ALPHABET_SIZE * key_length * N)</strong> where N is number of keys in trie. There are efficient representation of trie nodes (e.g. compressed trie, <a href="http://en.wikipedia.org/wiki/Ternary_search_tree" target="_blank">ternary search tree</a>, etc.) to minimize memory requirements of trie.</p>
+<pre class="brush: cpp; title: ; notranslate" title="">
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+#define ARRAY_SIZE(a) sizeof(a)/sizeof(a[0])
+
+// Alphabet size (# of symbols)
+#define ALPHABET_SIZE (26)
+// Converts key current character into index
+// use only 'a' through 'z' and lower case
+#define CHAR_TO_INDEX(c) ((int)c - (int)'a')
+
+// trie node
+typedef struct trie_node trie_node_t;
+struct trie_node
+{
+    int value;
+    trie_node_t *children[ALPHABET_SIZE];
+};
+
+// trie ADT
+typedef struct trie trie_t;
+struct trie
+{
+    trie_node_t *root;
+    int count;
+};
+
+// Returns new trie node (initialized to NULLs)
+trie_node_t *getNode(void)
+{
+    trie_node_t *pNode = NULL;
+
+    pNode = (trie_node_t *)malloc(sizeof(trie_node_t));
+
+    if( pNode )
+    {
+        int i;
+
+        pNode-&gt;value = 0;
+
+        for(i = 0; i &lt; ALPHABET_SIZE; i++)
+        {
+            pNode-&gt;children[i] = NULL;
+        }
+    }
+
+    return pNode;
+}
+
+// Initializes trie (root is dummy node)
+void initialize(trie_t *pTrie)
+{
+    pTrie-&gt;root = getNode();
+    pTrie-&gt;count = 0;
+}
+
+// If not present, inserts key into trie
+// If the key is prefix of trie node, just marks leaf node
+void insert(trie_t *pTrie, char key[])
+{
+    int level;
+    int length = strlen(key);
+    int index;
+    trie_node_t *pCrawl;
+
+    pTrie-&gt;count++;
+    pCrawl = pTrie-&gt;root;
+
+    for( level = 0; level &lt; length; level++ )
+    {
+        index = CHAR_TO_INDEX(key[level]);
+        if( !pCrawl-&gt;children[index] )
+        {
+            pCrawl-&gt;children[index] = getNode();
+        }
+
+        pCrawl = pCrawl-&gt;children[index];
+    }
+
+    // mark last node as leaf
+    pCrawl-&gt;value = pTrie-&gt;count;
+}
+
+// Returns non zero, if key presents in trie
+int search(trie_t *pTrie, char key[])
+{
+    int level;
+    int length = strlen(key);
+    int index;
+    trie_node_t *pCrawl;
+
+    pCrawl = pTrie-&gt;root;
+
+    for( level = 0; level &lt; length; level++ )
+    {
+        index = CHAR_TO_INDEX(key[level]);
+
+        if( !pCrawl-&gt;children[index] )
+        {
+            return 0;
+        }
+
+        pCrawl = pCrawl-&gt;children[index];
+    }
+
+    return (0 != pCrawl &amp;&amp; pCrawl-&gt;value);
+}
+
+// Driver
+int main()
+{
+    // Input keys (use only 'a' through 'z' and lower case)
+    char keys[][8] = {&quot;the&quot;, &quot;a&quot;, &quot;there&quot;, &quot;answer&quot;, &quot;any&quot;, &quot;by&quot;, &quot;bye&quot;, &quot;their&quot;};
+    trie_t trie;
+
+    char output[][32] = {&quot;Not present in trie&quot;, &quot;Present in trie&quot;};
+
+    initialize(&amp;trie);
+
+    // Construct trie
+    for(int i = 0; i &lt; ARRAY_SIZE(keys); i++)
+    {
+        insert(&amp;trie, keys[i]);
+    }
+
+    // Search for different keys
+    printf(&quot;%s --- %s\n&quot;, &quot;the&quot;, output[search(&amp;trie, &quot;the&quot;)] );
+    printf(&quot;%s --- %s\n&quot;, &quot;these&quot;, output[search(&amp;trie, &quot;these&quot;)] );
+    printf(&quot;%s --- %s\n&quot;, &quot;their&quot;, output[search(&amp;trie, &quot;their&quot;)] );
+    printf(&quot;%s --- %s\n&quot;, &quot;thaw&quot;, output[search(&amp;trie, &quot;thaw&quot;)] );
+
+    return 0;
+}
+</pre>
+<p>&#8212; <strong><a href="http://www.linkedin.com/in/ramanawithu" target="_blank">Venki</a></strong>. Please write comments if you find anything incorrect, or you want to share more information about the topic discussed above.</p>
+		
+&nbsp;
+&nbsp;
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Big Rectangle Blog Bottom -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:336px;height:280px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="4061219431"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+<h3>Related Topics:</h3><ul><li><a href="http://www.geeksforgeeks.org/check-whether-binary-tree-complete-not-set-2-recursive-solution/" title="Check whether a binary tree is a complete tree or not | Set 2 (Recursive Solution)">Check whether a binary tree is a complete tree or not | Set 2 (Recursive Solution)</a></li><li><a href="http://www.geeksforgeeks.org/check-whether-binary-tree-full-binary-tree-not/" title="Check whether a binary tree is a full binary tree or not">Check whether a binary tree is a full binary tree or not</a></li><li><a href="http://www.geeksforgeeks.org/find-sum-left-leaves-given-binary-tree/" title="Find sum of all left leaves in a given Binary Tree">Find sum of all left leaves in a given Binary Tree</a></li><li><a href="http://www.geeksforgeeks.org/remove-nodes-root-leaf-paths-length-k/" title="Remove nodes on root to leaf paths of length &lt; K">Remove nodes on root to leaf paths of length < K</a></li><li><a href="http://www.geeksforgeeks.org/find-closest-leaf-binary-tree/" title="Find the closest leaf in a Binary Tree">Find the closest leaf in a Binary Tree</a></li><li><a href="http://www.geeksforgeeks.org/diagonal-sum-binary-tree/" title="Diagonal Sum of a Binary Tree">Diagonal Sum of a Binary Tree</a></li><li><a href="http://www.geeksforgeeks.org/bottom-view-binary-tree/" title="Bottom View of a Binary Tree">Bottom View of a Binary Tree</a></li><li><a href="http://www.geeksforgeeks.org/binary-indexed-tree-or-fenwick-tree-2/" title="Binary Indexed Tree or Fenwick tree">Binary Indexed Tree or Fenwick tree</a></li></ul>
+<p>Tags: <a href="http://www.geeksforgeeks.org/tag/advance-data-structures/" rel="tag">Advance Data Structures</a></p> 
+<div>
+<iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.geeksforgeeks.org%2Ftrie-insert-and-search%2F&layout=button_count&show_faces=false&width=90&action=like&colorscheme=light" scrolling="no" frameborder="0" allowTransparency="true" style="border:none; overflow:hidden; width:90px; height:20px"></iframe>
+<a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.geeksforgeeks.org/trie-insert-and-search/" data-text="Trie | (Insert and Search)" data-count="horizontal" data-via="jakerutter">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+<g:plusone size="medium" href="http://www.geeksforgeeks.org/trie-insert-and-search/"></g:plusone>
+<!-- Place this render call where appropriate -->
+<script type="text/javascript">
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script></div>
+
+
+
+
+
+				</div>		  
+			</div> <!-- end post main -->					
+			<div class="post-meta">
+				<div class="left"></div>				
+				<div class="clear"></div>
+			</div>			
+        
+			<div class="comments-main">		
+ <b>Writing code in comment?</b> Please use <b><a href="http://ideone.com/">ideone.com</a></b> and share the link here.
+				
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-33692">
+        <div id="dsq-comment-header-33692" class="dsq-comment-header">
+            <cite id="dsq-cite-33692">
+                <span id="dsq-author-user-33692">Prasanth Manoharan</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-33692" class="dsq-comment-body">
+            <div id="dsq-comment-message-33692" class="dsq-comment-message"><p>Could anyone give me the same code in php?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-33034">
+        <div id="dsq-comment-header-33034" class="dsq-comment-header">
+            <cite id="dsq-cite-33034">
+                <span id="dsq-author-user-33034">Milind</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-33034" class="dsq-comment-body">
+            <div id="dsq-comment-message-33034" class="dsq-comment-message"><p>nice work !!</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-32002">
+        <div id="dsq-comment-header-32002" class="dsq-comment-header">
+            <cite id="dsq-cite-32002">
+                <span id="dsq-author-user-32002">Leo Jefferson Cardoso Marinho</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-32002" class="dsq-comment-body">
+            <div id="dsq-comment-message-32002" class="dsq-comment-message"><p>In this part of the code: return (0 != pCrawl &amp;&amp; pCrawl-&gt;value);<br />
+0 != pCrawl is UNNECESSARY<br />
+This condition is ALWAYS TRUE!</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-35045">
+        <div id="dsq-comment-header-35045" class="dsq-comment-header">
+            <cite id="dsq-cite-35045">
+                <span id="dsq-author-user-35045">AlienOnEarth</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-35045" class="dsq-comment-body">
+            <div id="dsq-comment-message-35045" class="dsq-comment-message"><p>Its not unnecessary. Usually we dont use root for traversal. We use another pointer like pCrawl or current to traverse any data structure. For arrays we use i, for linked list we use current, for trees we use crawl or current.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-31944">
+        <div id="dsq-comment-header-31944" class="dsq-comment-header">
+            <cite id="dsq-cite-31944">
+                <span id="dsq-author-user-31944">vj</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-31944" class="dsq-comment-body">
+            <div id="dsq-comment-message-31944" class="dsq-comment-message"><p>can any one help me to implement the trie in matlab. please help me with the code</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-31344">
+        <div id="dsq-comment-header-31344" class="dsq-comment-header">
+            <cite id="dsq-cite-31344">
+                <span id="dsq-author-user-31344">Priyanka Gupta</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-31344" class="dsq-comment-body">
+            <div id="dsq-comment-message-31344" class="dsq-comment-message"><p>Below is the recursive version of insert. Comments are appreciated.<br />
+Break the recursion when position (iterator over input key) has exceeded key&#8217;s length.</p>
+<p>struct Node<br />
+{<br />
+    Node (bool v) : isLeaf(v) {}<br />
+    bool isLeaf;<br />
+    Node* children[MAX_ALPHABET];<br />
+};<br />
+Node* insert (Node* node, string key, int pos)<br />
+{<br />
+    // reached the end of key return a Node with &#8221; to identify end<br />
+    if (key[pos] == &#8221;) return new Node (true);<br />
+    char childIndex = CHAR_TO_INDEX(key[pos]);<br />
+    // if there is no child matching current char, create a new node<br />
+    if (node-&gt;children[childIndex] == nullptr)<br />
+    {<br />
+        node-&gt;children[childIndex] = new Node(false);<br />
+    }<br />
+    node-&gt;children[childIndex] = insert (node-&gt;children[childIndex], key, ++pos);<br />
+    return node;<br />
+}</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-31495">
+        <div id="dsq-comment-header-31495" class="dsq-comment-header">
+            <cite id="dsq-cite-31495">
+                <span id="dsq-author-user-31495">Garet Claborn</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-31495" class="dsq-comment-body">
+            <div id="dsq-comment-message-31495" class="dsq-comment-message"><p>+1 using similar code with name &#8216;treesert&#8217;, =) will compare and comment soon</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-29967">
+        <div id="dsq-comment-header-29967" class="dsq-comment-header">
+            <cite id="dsq-cite-29967">
+                <span id="dsq-author-user-29967">Code_Addict</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-29967" class="dsq-comment-body">
+            <div id="dsq-comment-message-29967" class="dsq-comment-message"><p>Java version of insert and search functionality in Trie DS is provided here in a easy manner: <a href="http://www.geeksforgeeks.org/longest-prefix-matching-a-trie-based-solution-in-java/" rel="nofollow">http://www.geeksforgeeks.org/longest-prefix-matching-a-trie-based-solution-in-java/</a></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-29197">
+        <div id="dsq-comment-header-29197" class="dsq-comment-header">
+            <cite id="dsq-cite-29197">
+                <span id="dsq-author-user-29197">Vijay Daultani</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-29197" class="dsq-comment-body">
+            <div id="dsq-comment-message-29197" class="dsq-comment-message"><p>In insert operation you performed the below line in last.<br />
+pCrawl-&gt;value = pTrie-&gt;count;</p>
+<p>If we assign leaf node value the total number of nodes in the trie as value, Does this play any significant role because I am unable to figure out why this would be helpful anyway. Also we could have achieved the same thing by just using a bool in-spite of int if we just need to discriminate between leaf and non leaf. May be I am unable to figure out some cases where this could be useful. If yes please let me know.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-33607">
+        <div id="dsq-comment-header-33607" class="dsq-comment-header">
+            <cite id="dsq-cite-33607">
+                <span id="dsq-author-user-33607">maverick</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-33607" class="dsq-comment-body">
+            <div id="dsq-comment-message-33607" class="dsq-comment-message"><p>I agree with you on these two improvements!</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment byuser comment-author-jyotishkardey even thread-odd thread-alt depth-1" id="dsq-comment-22626">
+        <div id="dsq-comment-header-22626" class="dsq-comment-header">
+            <cite id="dsq-cite-22626">
+                <span id="dsq-author-user-22626">jyotishkardey</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-22626" class="dsq-comment-body">
+            <div id="dsq-comment-message-22626" class="dsq-comment-message"><pre> <code language="C">
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include&lt;malloc.h&gt;
+#define ARRAY_SIZE(a) sizeof(a)/sizeof(a[0])
+
+// Alphabet size (# of symbols)
+#define ALPHABET_SIZE (26)
+// Converts key current character into index
+// use only 'a' through 'z' and lower case
+#define CHAR_TO_INDEX(c) ((int)c - (int)'a')
+static int test;
+// trie node
+typedef struct trie_node trie_node_t;
+struct trie_node
+{
+    int value;
+    trie_node_t *children[ALPHABET_SIZE];
+};
+
+// trie ADT
+typedef struct trie trie_t;
+struct trie
+{
+    trie_node_t *root;
+    int count;
+};
+
+// Returns new trie node (initialized to NULLs)
+trie_node_t *getNode(void)
+{
+    trie_node_t *pNode = NULL;
+
+    pNode = (trie_node_t *)malloc(sizeof(trie_node_t));
+    if(!pNode)
+    {
+        printf(&quot;\n\nMemory allocation failed!!&quot;);
+        return NULL;
+    }
+    if( pNode )
+    {
+        int i;
+
+        pNode-&gt;value = 0;
+
+        for(i = 0; i &lt; ALPHABET_SIZE; i++)
+        {
+            pNode-&gt;children[i] = NULL;
+        }
+    }
+
+    return pNode;
+}
+
+// Initializes trie (root is dummy node)
+void initialize(trie_t *pTrie)
+{
+    pTrie-&gt;root = getNode();
+    pTrie-&gt;count = 0;
+}
+
+// If not present, inserts key into trie
+// If the key is prefix of trie node, just marks leaf node
+void insert(trie_t *pTrie, char key[])
+{
+    int level;
+    int length = strlen(key);
+    int index;
+    trie_node_t *pCrawl;
+
+    pTrie-&gt;count++;
+    pCrawl = pTrie-&gt;root;
+
+    for( level = 0; level &lt; length; level++ )
+    {
+        index = CHAR_TO_INDEX(key[level]);
+        if( !pCrawl-&gt;children[index] )
+        {
+            pCrawl-&gt;children[index] = getNode();
+        }
+
+        pCrawl = pCrawl-&gt;children[index];
+    }
+
+    // mark last node as leaf
+    pCrawl-&gt;value = pTrie-&gt;count;
+}
+
+// Returns non zero, if key presents in trie
+int search(trie_t *pTrie, char key[])
+{
+    int level,i;
+    int length = strlen(key);
+    int index;
+    trie_node_t *pCrawl;
+
+    pCrawl = pTrie-&gt;root;
+
+    for( level = 0; level &lt; length; level++ )
+    {
+        index = CHAR_TO_INDEX(key[level]);
+
+        if( !pCrawl-&gt;children[index] )
+        {
+            return 0;
+        }
+
+        pCrawl = pCrawl-&gt;children[index];
+    }
+
+    return (0 != pCrawl &amp;&amp; pCrawl-&gt;value);
+}
+//after having the prefix traverse the sub tree of trie to fetch and print the suggestions
+void traverse(trie_node_t *pCrawl, char key[],int index)
+{
+   int i;
+   char *temp;
+
+   if(!pCrawl)
+   {
+
+       return ;
+   }
+   if(pCrawl-&gt;value!=0&amp;&amp;pCrawl!=NULL)
+   {
+       printf(&quot;%s\n&quot;,key);
+
+   }
+   for(i=0;i&lt;26;i++)
+   {
+
+       temp=(char *)malloc(sizeof(char)*strlen(key)+2);
+       strcpy(temp,key);
+       temp[strlen(key)]=(char)(97+i);
+       temp[strlen(key)+1]='&#92;&#48;';
+       if(pCrawl-&gt;children[i]!=NULL)
+       traverse(pCrawl-&gt;children[i], temp,i);
+
+
+       free(temp);
+   }
+
+}
+//travel down the trie upto the prefix and then look for suggestion using traverse function
+int suggestions(trie_t *pTrie, char key[])
+{
+    int level,i;
+    int length = strlen(key);
+    int index;
+    trie_node_t *pCrawl;
+
+    pCrawl = pTrie-&gt;root;
+    if(strcmp(key,&quot;&quot;)==0)
+    {
+        printf(&quot;The input is NULL!!&quot;);
+        return 0;
+    }
+
+    for( level = 0; level &lt; length; level++ )
+    {
+        index = CHAR_TO_INDEX(key[level]);
+
+        if( !pCrawl-&gt;children[index] )
+        {
+
+        printf(&quot;Prefix is not present&quot;);
+            return 0;
+        }
+
+        pCrawl = pCrawl-&gt;children[index];
+    }
+traverse(pCrawl, key,index);
+}
+//checks whether the string contains lowercase only
+int check(char key[])
+{
+int i,status;
+i=0;
+status=-1;
+while(key[i]!='&#92;&#48;')
+	{
+		if(!(key[i]&lt;='z'&amp;&amp;key[i]&gt;='a'))
+		{	status=0;
+			return status;
+		}
+		i++;
+	}
+status =1;
+return 1;
+}
+
+
+// Driver
+int main()
+{
+
+    int i,status,prompt;
+    char inputString[30];
+    prompt=1;
+    trie_t trie;
+    initialize(&amp;trie);
+while(prompt!='4')
+{
+    printf(&quot;\nPress 1 to insert a string into the database\n Press 2 to look for suggestions\nPress 3 to search a string\nPress 4 to exit\n&quot;);
+    scanf(&quot;%d&quot;,&amp;prompt);
+
+    switch(prompt)
+    {
+        case 1 : printf(&quot;\nPlease enter the string\n&quot;);
+                   scanf(&quot;%s&quot;,inputString);
+		   if(strcmp(inputString,&quot;&quot;)==0)
+			{
+				printf(&quot;Empty strings are not allowed&quot;);
+				break;
+			}
+		 if(check(inputString)==0)
+			{
+				printf(&quot;\nSorry Only lower case alphabets are allowed !!\n&quot;);
+				break;
+			}
+                   insert(&amp;trie, inputString);
+                   strcpy(inputString,&quot;&quot;);
+                   break;
+        case 2 : printf(&quot;\nPlease enter the pattern\n&quot;);
+                   scanf(&quot;%s&quot;,inputString);
+		   if(strcmp(inputString,&quot;&quot;)==0)
+			{
+				printf(&quot;Empty strings are not allowed&quot;);
+				break;
+			}
+		   if(check(inputString)==0)
+			{
+				printf(&quot;\nSorry Only lower case alphabets are allowed !!\n&quot;);
+				break;
+			}
+		   printf(&quot;\nThe patterns are ::\n&quot;);
+                   suggestions(&amp;trie,inputString);
+                   strcpy(inputString,&quot;&quot;);
+                   break;
+        case 3 : printf(&quot;\nPlease enter the string to be searched\n&quot;);
+                   scanf(&quot;%s&quot;,inputString);
+		   if(strcmp(inputString,&quot;&quot;)==0)
+			{
+				printf(&quot;Empty strings are not allowed&quot;);
+				break;
+			}
+		   if(check(inputString)==0)
+			{
+				printf(&quot;\nSorry Only lower case alphabets are allowed !!\n&quot;);
+				break;
+			}
+                   status=search(&amp;trie,inputString);
+                   strcpy(inputString,&quot;&quot;);
+			if(status==0)
+				printf(&quot;\nThe string you are looking is not present in the databse\n&quot;);
+			else
+				printf(&quot;The string is present in the database&quot;);
+
+                   break;
+
+	case 4 : return 0;
+        default: printf(&quot;Invalid option!!Please try again!!!!\n\n&quot;);
+                 break;
+    }
+
+}
+ 
+    return 0;
+}
+
+</code> </pre>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-19089">
+        <div id="dsq-comment-header-19089" class="dsq-comment-header">
+            <cite id="dsq-cite-19089">
+                <span id="dsq-author-user-19089">fatal</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-19089" class="dsq-comment-body">
+            <div id="dsq-comment-message-19089" class="dsq-comment-message"><p>@venki</p>
+<p>very nicely explained.</p>
+<p>please tell me the use of &#8220;0!=pcrawl&#8221;&#8230;what is it and what it returns?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment byuser comment-author-abhishek08aug even thread-odd thread-alt depth-1" id="dsq-comment-18352">
+        <div id="dsq-comment-header-18352" class="dsq-comment-header">
+            <cite id="dsq-cite-18352">
+                <span id="dsq-author-user-18352">abhishek08aug</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-18352" class="dsq-comment-body">
+            <div id="dsq-comment-message-18352" class="dsq-comment-message"><p>Intelligent <img src="http://d2o58evtke57tz.cloudfront.net/wp-includes/images/smilies/icon_biggrin.gif" alt=":D" class="wp-smiley" /></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-17701">
+        <div id="dsq-comment-header-17701" class="dsq-comment-header">
+            <cite id="dsq-cite-17701">
+                <span id="dsq-author-user-17701">Luas</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-17701" class="dsq-comment-body">
+            <div id="dsq-comment-message-17701" class="dsq-comment-message"><p>hi a very good compilation of trie.My question is with the statement in search function  </p>
+<p>&#8220;return (0 != pCrawl &amp;&amp; pCrawl-&gt;value);&#8221;.</p>
+<p>Is &#8220;0 != pCrawl&#8221;really required or can we do away with it ?Plz correct me if i am wrong.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment byuser comment-author-venki bypostauthor even depth-2" id="dsq-comment-17707">
+        <div id="dsq-comment-header-17707" class="dsq-comment-header">
+            <cite id="dsq-cite-17707">
+http://www.linkedin.com/in/ramanawithu                <span id="dsq-author-user-17707">Venki</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-17707" class="dsq-comment-body">
+            <div id="dsq-comment-message-17707" class="dsq-comment-message"><p>It is just a matter of style. Generally it returns bool type, not an integer. You can return &#8216;value&#8217; in lieu of compared result.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-16271">
+        <div id="dsq-comment-header-16271" class="dsq-comment-header">
+            <cite id="dsq-cite-16271">
+                <span id="dsq-author-user-16271">Aditya</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-16271" class="dsq-comment-body">
+            <div id="dsq-comment-message-16271" class="dsq-comment-message"><p>This is the deletion code.Haven&#8217;t used it yet,so please check the code before using it!</p>
+<pre> <code language="C">
+void delete(trie_t *tree,char key[])
+{int i,j;
+bool found;
+int index=strlen(key);
+trie_node_t *temp=tree-&gt;root;
+for(i=0;i&lt;index;i++)
+{
+j=int(key[i])-int('a');
+if(!temp-&gt;children[j])
+{printf(&quot;not found&quot;);}
+else
+{
+for(int k=0;k&lt;26;k++)
+{
+
+ if(k==j)
+{
+continue;
+}
+else if(temp-&gt;children[k])
+{
+found=true;
+temp=temp-&gt;children[j];
+break;
+}
+else
+{
+found=false;
+}
+
+}
+
+if(!found)
+{
+temp-&gt;children[j]=NULL;
+break;
+}
+}
+}
+}
+</code> </pre>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-16272">
+        <div id="dsq-comment-header-16272" class="dsq-comment-header">
+            <cite id="dsq-cite-16272">
+                <span id="dsq-author-user-16272">Aditya</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-16272" class="dsq-comment-body">
+            <div id="dsq-comment-message-16272" class="dsq-comment-message"><p>Sorry,i have used the keyword delete as a function name to remove the node. Please change the name before using</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-14721">
+        <div id="dsq-comment-header-14721" class="dsq-comment-header">
+            <cite id="dsq-cite-14721">
+                <span id="dsq-author-user-14721">teja</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-14721" class="dsq-comment-body">
+            <div id="dsq-comment-message-14721" class="dsq-comment-message"><p>Informative thanx <img src="http://d2o58evtke57tz.cloudfront.net/wp-includes/images/smilies/icon_smile.gif" alt=":)" class="wp-smiley" /></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-14367">
+        <div id="dsq-comment-header-14367" class="dsq-comment-header">
+            <cite id="dsq-cite-14367">
+                <span id="dsq-author-user-14367">dfg</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-14367" class="dsq-comment-body">
+            <div id="dsq-comment-message-14367" class="dsq-comment-message"><pre>    
+                       root
+                    /   \    \
+                    t   a     b
+                    |   |     |
+                    h  | n |&lt;-- should&#039;nt this be coloured in blue as it is a leaf node     y
+                    |   |  \  |
+                    e   s  y  e
+                 /  |   |
+                 i  r   w
+                 |  |   |
+                 r  e   e
+                        |
+                        r
+</pre>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-14377">
+        <div id="dsq-comment-header-14377" class="dsq-comment-header">
+            <cite id="dsq-cite-14377">
+http://www.linkedin.com/in/ramanawithu                <span id="dsq-author-user-14377">Venki</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-14377" class="dsq-comment-body">
+            <div id="dsq-comment-message-14377" class="dsq-comment-message"><p>I am not sure about which node do you referring? y and e are already leaf nodes. n is not leaf node. I agree &#8216;an&#8217; is valid word, but it is not input to the current program. Hope it is clear.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-14020">
+        <div id="dsq-comment-header-14020" class="dsq-comment-header">
+            <cite id="dsq-cite-14020">
+                <span id="dsq-author-user-14020">mayank</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-14020" class="dsq-comment-body">
+            <div id="dsq-comment-message-14020" class="dsq-comment-message"><p>How do we display all the names(not the tree in its format but the names we entered) stored in the tree. Consider the case cris, cristy. How we will ever know these are separate names. Pls give the algorithm.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-2" id="dsq-comment-33732">
+        <div id="dsq-comment-header-33732" class="dsq-comment-header">
+            <cite id="dsq-cite-33732">
+                <span id="dsq-author-user-33732">abhiroyg</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-33732" class="dsq-comment-body">
+            <div id="dsq-comment-message-33732" class="dsq-comment-message"><p>If we have entered cristy and cris (or in the reverse order) before, we would have made &#8216;y&#8217; and &#8216;s&#8217; as leaf nodes, so if we are searching for &#8216;cris&#8217;, since we marked &#8216;s&#8217; as leaf node, we will stop there and return that we have found it. Hope it helps <img src="http://d2o58evtke57tz.cloudfront.net/wp-includes/images/smilies/icon_smile.gif" alt=":)" class="wp-smiley" /></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment byuser comment-author-tarun even thread-odd thread-alt depth-1" id="dsq-comment-7634">
+        <div id="dsq-comment-header-7634" class="dsq-comment-header">
+            <cite id="dsq-cite-7634">
+                <span id="dsq-author-user-7634">Tarun</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-7634" class="dsq-comment-body">
+            <div id="dsq-comment-message-7634" class="dsq-comment-message"><pre> <code language="C">
+/* Paste your code here (You may delete these lines if not writing code) */
+
+///===========================node.h==========================================
+#ifndef __NODE__H
+#define __NODE__H
+
+//node.h
+#include &lt;string&gt;
+#include &lt;ostream&gt;
+
+#define ARRAY_SIZE(a) sizeof(a)/sizeof(a[0])
+#define ALPHABET_SIZE 26
+#define index(c) ((int)c - (int)'a')
+
+
+
+
+class Node
+{
+private:
+    int m_count;
+    std::string m_data;
+    Node* child[ALPHABET_SIZE];
+public:
+    Node();
+    friend std::ostream&amp; operator&lt;&lt;(std::ostream&amp; _out, const Node&amp; _node);
+    friend class Tries;
+};
+#endif //node.h
+///===========================end of node.h==========================================
+///===========================node.cpp==========================================
+#include &quot;node.h&quot;
+
+
+
+Node::Node()
+{
+    for(int i = 0; i &lt; ALPHABET_SIZE; ++i)
+    {
+        child[i] = 0;
+    }
+}
+
+
+std::ostream&amp; operator&lt;&lt;(std::ostream&amp; _out, const Node&amp; _node)
+{
+    if(!_node.m_data.empty())
+    {
+        _out&lt;&lt;_node.m_data&lt;&lt;&quot;,&quot;;
+    }
+    for(int i = 0; i &lt; ALPHABET_SIZE; i++)
+    {
+        if(_node.child[i] == NULL)
+        {
+            continue;
+        }
+        _out&lt;&lt;*(_node.child[i]);
+    }
+    _out&lt;&lt;std::endl;
+}
+////===========================end of node.cpp==========================================
+
+///===========================tries.h==========================================
+#ifndef __TRIES__H
+#define __TRIES__H
+
+
+class Node;
+
+class Tries
+{
+public:
+    Tries();
+    void insert(char _key[]);
+    void search(char _key[]);
+private:
+    void init();
+    Node* m_head;
+};
+#endif //tries.h
+///===========================end of tries.h==========================================
+
+///===========================tries.cpp==========================================
+#include &lt;iostream&gt;
+#include &quot;node.h&quot;
+#include &quot;tries.h&quot;
+
+void Tries::init()
+{
+    if(NULL == m_head)
+    {
+        m_head = new Node();
+    }
+    m_head-&gt;m_count = 0;
+}
+
+Tries::Tries()
+{
+    init();
+}
+
+void Tries::insert(char _key[])
+{
+    if (NULL == _key)
+    {
+        return;
+    }
+    Node* temp = m_head;
+    int len = strlen(_key);
+
+    for(int i = 0; i &lt; len; ++i)
+    {
+        int indx = index(_key[i]);
+        if(NULL == temp-&gt;child[indx])
+        {
+            temp-&gt;child[indx] = new Node();
+            temp = temp-&gt;child[indx];
+        }
+        else
+        {
+            temp = temp-&gt;child[indx];
+        }
+        temp-&gt;m_count++;
+    }
+    temp-&gt;m_data = _key;
+}
+
+void Tries::search(char _key[])
+{
+    if(NULL == m_head)
+    {
+        return;
+    }
+
+    int len = strlen(_key);
+    int i = 0;
+    Node* temp = m_head;
+
+    for(i = 0; i &lt; len-1; i++)
+
+    for(i = 0; i &lt; len-1; i++)
+    {
+        temp = temp-&gt;child[index(_key[i])];
+        if(NULL == temp)
+        {
+            return;
+        }
+        if(!temp-&gt;m_data.empty())
+        {
+            std::cout&lt;&lt;&quot;data: &lt;&quot;&lt;&lt;temp-&gt;m_data&lt;&lt;&quot;&gt;&quot;&lt;&lt;std::endl;
+        }
+    }
+    temp = temp-&gt;child[index(_key[i])];
+    if(temp)
+    {
+        std::cout&lt;&lt;*temp;
+    }
+}
+///===========================end of tries.cpp==========================================
+
+/*
+ * =====================================================================================
+ *
+ *       Filename:  tries_test.cpp
+ *
+ *    Description:  main calls for testing of tries
+ *
+ *        Version:  1.0
+ *        Created:  Tue Feb 21 2012 05:52:50
+ *       Revision:  none
+ *       Compiler:  gcc
+ *
+ *         Author:  Tarun Kumar (1.1), tarun_kumar1@symantec.com
+ *        Company:  Symantec, Chennai
+ *
+ * =====================================================================================
+ */
+
+#include &quot;tries.h&quot;
+
+int main()
+{
+    char value[][8] = {&quot;she&quot;, &quot;sells&quot;, &quot;sea&quot;, &quot;shore&quot;, &quot;the&quot;, &quot;by&quot;, &quot;sheer&quot;};
+
+    Tries Tree;
+
+    for(int i = 0; i &lt; 7; ++i)
+    {
+        Tree.insert(value[i]);
+    }
+
+    Tree.search(&quot;s&quot;);
+
+    return 0;
+}
+
+///===========================Makefile==========================================
+##Makefile
+
+GCC = g++ -g
+
+all: tries.exe
+
+OBJ =   node.o \
+        tries.o \
+        tries_test.o \
+
+
+tries.exe: $(OBJ)
+    $(GCC) $(OBJ) -o tries.exe
+    rm -f $(OBJ)
+
+tries.o: tries.cpp tries.h node.h node.cpp
+    $(GCC) -c tries.cpp
+
+node.o: node.cpp node.h
+    $(GCC) -c node.cpp
+
+tries_test.o: tries.o
+    $(GCC) -c tries_test.cpp
+
+
+# -- remove binary and executable
+
+clean:
+    rm -f $(OBJ) tries.exe
+///===========================end of Makefile==========================================
+</code> </pre>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-6677">
+        <div id="dsq-comment-header-6677" class="dsq-comment-header">
+            <cite id="dsq-cite-6677">
+                <span id="dsq-author-user-6677">Pranav</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-6677" class="dsq-comment-body">
+            <div id="dsq-comment-message-6677" class="dsq-comment-message"><p>Hi Venki, Nice post.</p>
+<p>What if we want to search for &#8220;here&#8221; . How to change if we want the output to be true for &#8220;here&#8221; ?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-33735">
+        <div id="dsq-comment-header-33735" class="dsq-comment-header">
+            <cite id="dsq-cite-33735">
+                <span id="dsq-author-user-33735">abhiroyg</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-33735" class="dsq-comment-body">
+            <div id="dsq-comment-message-33735" class="dsq-comment-message"><p>Simple answer is to insert &#8216;here&#8217; beforehand.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment byuser comment-author-sesha odd alt thread-odd thread-alt depth-1" id="dsq-comment-6561">
+        <div id="dsq-comment-header-6561" class="dsq-comment-header">
+            <cite id="dsq-cite-6561">
+http://www.yourbitsandbytes.com                <span id="dsq-author-user-6561">sesha</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-6561" class="dsq-comment-body">
+            <div id="dsq-comment-message-6561" class="dsq-comment-message"><p>@venki,<br />
+ A few comments:<br />
+1) void insert(trie_t *pTrie, char key[])<br />
+int search(trie_t *pTrie, char key[])<br />
+&#8220;int length = strlen(key);&#8221;<br />
+Instead of finding the string length and then traversing, we could also have the loop to traverse till we don&#8217;t encounter a NULL character. This would save one traversal of the given key (string)</p>
+<p>2) Reg the below code:<br />
+The following code checks if the a new node needs to be created or not and then move to its children&#8217;s index.<br />
+&#8221;<br />
+if( pCrawl-&gt;children[index] )<br />
+        {<br />
+            // Key current character already present<br />
+            // skip the node<br />
+            pCrawl = pCrawl-&gt;children[index];<br />
+        }<br />
+        else<br />
+        {<br />
+            // Add new node<br />
+            pCrawl-&gt;children[index] = getNode();<br />
+            pCrawl = pCrawl-&gt;children[index];<br />
+        }<br />
+&#8221;<br />
+As moving to children&#8217;s index is common, can we compress the code as follows:<br />
+if(!pCrawl-&gt;children[index]) {<br />
+   // Add new node<br />
+            pCrawl-&gt;children[index] = getNode();<br />
+}<br />
+pCrawl = pCrawl-&gt;children[index];</p>
+<p>3) Reg insert function:<br />
+pCrawl-&gt;children[index] = getNode();<br />
+As getNode can return NULL when malloc fails, it&#8217;s safer to check the return value before doing the below assignment:<br />
+pCrawl = pCrawl-&gt;children[index];</p>
+<p>4) It&#8217;s safer to validate the input arguments of the functions that are exposed to the callers. If any of the input arguments is NULL then dereferencing may cause access violation.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment byuser comment-author-venki bypostauthor even depth-2" id="dsq-comment-6620">
+        <div id="dsq-comment-header-6620" class="dsq-comment-header">
+            <cite id="dsq-cite-6620">
+http://geeksforgeeks.org/?page_id=2                <span id="dsq-author-user-6620">Venki</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-6620" class="dsq-comment-body">
+            <div id="dsq-comment-message-6620" class="dsq-comment-message"><p>1. Agreed. We will traverse the string twice if we calculate length. The intent is to provide ADT of tree.</p>
+<p>2. Agreed. The optimization can be performed. I have updated code.</p>
+<p>3. Memory management and error handling depends on application. When memory allocation fails, getNode() will do necessary action (we omitted, rather than cluttering code with exception handling or explicit error handling).</p>
+<p>4. Yes, it is safer to validate NULL, these are limitations. These NULL checks depends on application. Usually the trie code will be part of library, application layer needs to ensure sending proper arguments. Do you think standard string library validates NULLs?</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment byuser comment-author-sesha odd alt depth-3" id="dsq-comment-6621">
+        <div id="dsq-comment-header-6621" class="dsq-comment-header">
+            <cite id="dsq-cite-6621">
+http://www.yourbitsandbytes.com                <span id="dsq-author-user-6621">sesha</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-6621" class="dsq-comment-body">
+            <div id="dsq-comment-message-6621" class="dsq-comment-message"><p>I agree memory management/error handling depends on the application/client, but here I mentioned because the function insert is the client and better to check the return value.<br />
+I see your point reg cluttering the code.</p>
+<p>Application layer needs to ensure the arguments validity and I mentioned this as it&#8217;s a good coding practice.<br />
+STL implementation does not check for NULL and all as I have seen the complete implementation.</p>
+<p>As a another user mentioned it would be better if you update the insert code to handle duplicate insertion where count will get incremented incorrectly.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment byuser comment-author-sesha even thread-even depth-1" id="dsq-comment-6560">
+        <div id="dsq-comment-header-6560" class="dsq-comment-header">
+            <cite id="dsq-cite-6560">
+http://www.yourbitsandbytes.com                <span id="dsq-author-user-6560">sesha</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-6560" class="dsq-comment-body">
+            <div id="dsq-comment-message-6560" class="dsq-comment-message"><p>@venki,<br />
+ Here&#8217;s the link to my TRIE article. Thought of sharing with other geeks to get some valuable inputs/comments. </p>
+<p>&#8220;http://yourbitsandbytes.com/viewtopic.php?f=443&amp;t=3540&#8243;<br />
+I have implemented the following operations using C++:<br />
+1) Insert<br />
+2) Deletion<br />
+3) Search<br />
+4) Sorting<br />
+5) Prefix search useful in solving problems using backtracking<br />
+6) Auto completion &amp; other real-time application including spell-check<br />
+7) Functions to compare the performance between TRIE and stl set/hash_set</p>
+<p>I have included images and screenshots of the memory state of TRIE through debugger where ever possible.<br />
+Would appreciate comments on improving the article. Hope its useful.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment byuser comment-author-venki bypostauthor odd alt depth-2" id="dsq-comment-6619">
+        <div id="dsq-comment-header-6619" class="dsq-comment-header">
+            <cite id="dsq-cite-6619">
+http://geeksforgeeks.org/?page_id=2                <span id="dsq-author-user-6619">Venki</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-6619" class="dsq-comment-body">
+            <div id="dsq-comment-message-6619" class="dsq-comment-message"><p>@sesha, I had glanced your article in the above link, I appreciate your effort in writing your article. Good coverage of applications.</p>
+<p>But from reader perspective, I request to provide lucid and precise content, yet covers required details than elaborated content. It saves reader as well as writer time. <img src="http://d2o58evtke57tz.cloudfront.net/wp-includes/images/smilies/icon_smile.gif" alt=":)" class="wp-smiley" /></p>
+<p>Remember, as an engineer (not researchers :)) we should quickly pick data structure and implement it. It would be good to know Ternary search, compressed trie, and other verities of digital search trees.</p>
+<p>Keep it up.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment byuser comment-author-sesha even depth-3" id="dsq-comment-6622">
+        <div id="dsq-comment-header-6622" class="dsq-comment-header">
+            <cite id="dsq-cite-6622">
+http://www.yourbitsandbytes.com                <span id="dsq-author-user-6622">sesha</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-6622" class="dsq-comment-body">
+            <div id="dsq-comment-message-6622" class="dsq-comment-message"><p>@venki,<br />
+ Thanks for taking the time to glance through the article.<br />
+The intent in providing the elaborate content (in terms number of posts) as follows:<br />
+We believe while talking about a new data structure (DS), one has to explain why a new DS is required when there are many existing DS, what is that and comparitive study with the other popular/basic DS in terms of the advantages/disadvantages. Also, provide sufficient tools (code) to compare the performance with other DS.</p>
+<p>We just don&#8217;t want to stop with the individual operations implementation and explanation around that as there is no value addition for the readers in this case. </p>
+<p>We&#8217;ll surely improve on the content reduction for each post. </p>
+<p>I agree to your statement reg Engineer, but to be an effective Engineer its better to have in-depth knowledge of DS to make smarter decision instead of just of know-how.</p>
+<p>We made it very elaborative to make sure any beginner to expert can learn one or two things out of it. We do have plans to write about the other Tress you have mentioned.</p>
+<p>Thanks a lot for your time.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment odd alt depth-2" id="dsq-comment-33033">
+        <div id="dsq-comment-header-33033" class="dsq-comment-header">
+            <cite id="dsq-cite-33033">
+                <span id="dsq-author-user-33033">Milind</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-33033" class="dsq-comment-body">
+            <div id="dsq-comment-message-33033" class="dsq-comment-message"><p>awesome article&#8230;. thumbs up!!!!</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-6448">
+        <div id="dsq-comment-header-6448" class="dsq-comment-header">
+            <cite id="dsq-cite-6448">
+http://web.iiit.ac.in/~kalyan.npg08                <span id="dsq-author-user-6448">Kalyan Nelluri</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-6448" class="dsq-comment-body">
+            <div id="dsq-comment-message-6448" class="dsq-comment-message"><p>Awesome way of doing it..good work </p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-6301">
+        <div id="dsq-comment-header-6301" class="dsq-comment-header">
+            <cite id="dsq-cite-6301">
+                <span id="dsq-author-user-6301">Harish</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-6301" class="dsq-comment-body">
+            <div id="dsq-comment-message-6301" class="dsq-comment-message"><p>As a defensive step, we could increment the count (pTrie-&gt;count++) only after  we insert the key into the trie just in case we pass the duplicate key.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment byuser comment-author-rishrt629 even thread-odd thread-alt depth-1" id="dsq-comment-6182">
+        <div id="dsq-comment-header-6182" class="dsq-comment-header">
+            <cite id="dsq-cite-6182">
+                <span id="dsq-author-user-6182">rishrt629</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-6182" class="dsq-comment-body">
+            <div id="dsq-comment-message-6182" class="dsq-comment-message"><p>nice wrk..helped a lot <img src="http://d2o58evtke57tz.cloudfront.net/wp-includes/images/smilies/icon_smile.gif" alt=":)" class="wp-smiley" /> a must thanks to you&#8230;..</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-5663">
+        <div id="dsq-comment-header-5663" class="dsq-comment-header">
+            <cite id="dsq-cite-5663">
+                <span id="dsq-author-user-5663">tunnu</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5663" class="dsq-comment-body">
+            <div id="dsq-comment-message-5663" class="dsq-comment-message"><p>&#8220;plz give d code 4 deletion also&#8221;</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment byuser comment-author-venki bypostauthor even depth-2" id="dsq-comment-5672">
+        <div id="dsq-comment-header-5672" class="dsq-comment-header">
+            <cite id="dsq-cite-5672">
+http://geeksforgeeks.org/?page_id=2                <span id="dsq-author-user-5672">Venki</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5672" class="dsq-comment-body">
+            <div id="dsq-comment-message-5672" class="dsq-comment-message"><p>@tunnu, These are planned for next series of posts. Here is pseudo code (you can write working code). First I am listing possible cases of input to delete function followed by pseudo code.</p>
+<p>1. Key shoud present in Trie<br />
+2. Key can be prefix of longer key in trie (just unmark leaf node and return)<br />
+3. If key is not prefix key<br />
+    Delete nodes from leaf to root recursively till<br />
+        Either we encounter a leaf node of prefix key or<br />
+        We reach trie root</p>
+<p><code>DeleteTrieNode(Trie, Key)<br />
+    if Key present in trie<br />
+        invoke deleteHelper(Trie.root, Key, 0)</p>
+<p>deleteHelper(pTrieNode, Key, level)</p>
+<p>    if(Key.lenght == level)<br />
+        delete leaf node<br />
+    else<br />
+        deleteHelper(pTrieNode.children[Key.char], Key, level+1)</p>
+<p>        if( pTrieNode is empty &amp;&amp; pTrieNode is not root )<br />
+            delete pTrieNode</code></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment byuser comment-author-sesha odd alt depth-2" id="dsq-comment-6493">
+        <div id="dsq-comment-header-6493" class="dsq-comment-header">
+            <cite id="dsq-cite-6493">
+http://www.yourbitsandbytes.com                <span id="dsq-author-user-6493">sesha</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-6493" class="dsq-comment-body">
+            <div id="dsq-comment-message-6493" class="dsq-comment-message"><p>tunnu,<br />
+ You can find code for deletion and other operations @<br />
+<a href="http://yourbitsandbytes.com/viewtopic.php?f=443&#038;t=3540" rel="nofollow">http://yourbitsandbytes.com/viewtopic.php?f=443&#038;t=3540</a></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-5662">
+        <div id="dsq-comment-header-5662" class="dsq-comment-header">
+            <cite id="dsq-cite-5662">
+                <span id="dsq-author-user-5662">tunnu</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5662" class="dsq-comment-body">
+            <div id="dsq-comment-message-5662" class="dsq-comment-message"><p>hey give d code 4 deletion also&#8230;&#8230;.asap&#8230;plz&#8230;</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-5644">
+        <div id="dsq-comment-header-5644" class="dsq-comment-header">
+            <cite id="dsq-cite-5644">
+http://www.krishnabharadwaj.info                <span id="dsq-author-user-5644">Krishna Bharadwaj</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5644" class="dsq-comment-body">
+            <div id="dsq-comment-message-5644" class="dsq-comment-message"><p>Very Nice tutorial. Here&#8217;s my code which i wrote couple of years back: <a href="http://krishnabharadwaj.info/Trie/" rel="nofollow">http://krishnabharadwaj.info/Trie/</a> </p>
+<p>thought of sharing it.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment byuser comment-author-venki bypostauthor even depth-2" id="dsq-comment-5695">
+        <div id="dsq-comment-header-5695" class="dsq-comment-header">
+            <cite id="dsq-cite-5695">
+http://geeksforgeeks.org/?page_id=2                <span id="dsq-author-user-5695">Venki</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5695" class="dsq-comment-body">
+            <div id="dsq-comment-message-5695" class="dsq-comment-message"><p>@Krishna Bharadwaj, thanks for the comment and link. Keep visiting geeksforgeeks.</p>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment odd alt depth-3" id="dsq-comment-5714">
+        <div id="dsq-comment-header-5714" class="dsq-comment-header">
+            <cite id="dsq-cite-5714">
+http://www.krishnabharadwaj.info                <span id="dsq-author-user-5714">Krishna Bharadwaj</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5714" class="dsq-comment-body">
+            <div id="dsq-comment-message-5714" class="dsq-comment-message"><p>Sure venki. It is interesting to see that the same implementation gets very much simplified in a language like python. Check it out..</p>
+<p><a href="http://www.ideone.com/HB1Dd" rel="nofollow">http://www.ideone.com/HB1Dd</a></p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment even thread-odd thread-alt depth-1" id="dsq-comment-5642">
+        <div id="dsq-comment-header-5642" class="dsq-comment-header">
+            <cite id="dsq-cite-5642">
+                <span id="dsq-author-user-5642">Dheeraj</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5642" class="dsq-comment-body">
+            <div id="dsq-comment-message-5642" class="dsq-comment-message"><p>Gr8 Work Now..</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-even depth-1" id="dsq-comment-5637">
+        <div id="dsq-comment-header-5637" class="dsq-comment-header">
+            <cite id="dsq-cite-5637">
+                <span id="dsq-author-user-5637">donbosio</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5637" class="dsq-comment-body">
+            <div id="dsq-comment-message-5637" class="dsq-comment-message"><pre> <code language="C">#include&lt;stdio.h&gt;
+#include&lt;iostream.h&gt;
+#include&lt;conio.h&gt;
+struct node
+{
+int value;
+struct node * child[26];
+};
+
+
+
+
+void insert(struct node**root,char*ch)
+{
+int i,k;
+struct node *temp;
+struct node *d;
+d=*root;
+for(i=0;ch[i]!='&#092;&#048;';i++)
+{
+if(d-&gt;child[ch[i]-'a']==NULL)
+{
+temp=(struct node*)malloc(sizeof(struct node));
+temp-&gt;value=0;
+for(k=0;k&lt;=25;k++)
+{
+temp-&gt;child[k]=NULL;
+}
+d-&gt;child[ch[i]-'a']=temp;
+}
+if(ch[i+1]=='&#092;&#048;')
+d-&gt;child[ch[i]-'a']-&gt;value =1;
+d=d-&gt;child[ch[i]-'a'];
+}
+}
+
+
+int search(struct node**root,char*ch)
+{
+int i;
+struct node*temp;
+temp=*root;
+for(i=0;ch[i]!='&#092;&#048;';i++)
+{
+if(temp-&gt;child[ch[i]-'a']==NULL)
+return 0;
+temp=temp-&gt;child[ch[i]-'a'];
+}
+if(temp-&gt;value==1)
+return 1;
+else
+return 0;
+}
+
+
+int main()
+{char str[20];
+struct node * root;
+int i,n;
+root=(struct node*)malloc(sizeof(struct node));
+root-&gt;value=0;
+for(i=0;i&lt;=25;i++)
+{
+root-&gt;child[i]=NULL;
+}
+printf(&quot;\nenter no of values to be inserted in a trie&quot;);
+scanf(&quot;%d&quot;,&amp;n);
+for(i=0;i&lt;=n-1;i++)
+{fflush(stdin);
+printf(&quot;\nenter %d value&quot;,i+1);
+scanf(&quot;%s&quot;,str);
+insert(&amp;root,str);
+}
+char ch[20];
+printf(&quot;\nenter string to be searched in trie&quot;);
+fflush(stdin);
+scanf(&quot;%s&quot;,ch);
+cout&lt;&lt;&quot;\n&quot;&lt;&lt;search(&amp;root,ch);
+getch();
+}
+</code> </pre>
+</div>
+        </div>
+
+    <ul class="children">
+    <li class="comment even depth-2" id="dsq-comment-32239">
+        <div id="dsq-comment-header-32239" class="dsq-comment-header">
+            <cite id="dsq-cite-32239">
+                <span id="dsq-author-user-32239">bsv</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-32239" class="dsq-comment-body">
+            <div id="dsq-comment-message-32239" class="dsq-comment-message"><p>ur algo takes O(n^2) for insert?</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+    <li class="comment byuser comment-author-venki bypostauthor odd alt thread-odd thread-alt depth-1" id="dsq-comment-5634">
+        <div id="dsq-comment-header-5634" class="dsq-comment-header">
+            <cite id="dsq-cite-5634">
+http://geeksforgeeks.org/?page_id=2                <span id="dsq-author-user-5634">Venki</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5634" class="dsq-comment-body">
+            <div id="dsq-comment-message-5634" class="dsq-comment-message"><p>@Dheeraj and @RaviChandra, Added trie picture after its construction. Hope it helps.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-5632">
+        <div id="dsq-comment-header-5632" class="dsq-comment-header">
+            <cite id="dsq-cite-5632">
+                <span id="dsq-author-user-5632">Dheeraj</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5632" class="dsq-comment-body">
+            <div id="dsq-comment-message-5632" class="dsq-comment-message"><p>Nice tutorial..wud have been more understandable..if u have added some figures..or diagrams..</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment odd alt thread-odd thread-alt depth-1" id="dsq-comment-5631">
+        <div id="dsq-comment-header-5631" class="dsq-comment-header">
+            <cite id="dsq-cite-5631">
+http://programmingtrails.wordpress.com/                <span id="dsq-author-user-5631">RaviChandra</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5631" class="dsq-comment-body">
+            <div id="dsq-comment-message-5631" class="dsq-comment-message"><p>It would nice if you include an image of the Trie</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+    <li class="comment even thread-even depth-1" id="dsq-comment-5608">
+        <div id="dsq-comment-header-5608" class="dsq-comment-header">
+            <cite id="dsq-cite-5608">
+                <span id="dsq-author-user-5608">Akhil</span>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-5608" class="dsq-comment-body">
+            <div id="dsq-comment-message-5608" class="dsq-comment-message"><p>Simple way of explaining a Trie. Good work.</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://www.geeksforgeeks.org/trie-insert-and-search/';
+var disqus_identifier = '13067 http://geeksforgeeks.org/?p=13067';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'geeksforgeeks';
+var disqus_title = "Trie | (Insert and Search)";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+			</div>
+	
+					
+			
+			
+
+		</div> <!-- end post -->	
+
+<br></br>
+	
+</div> <!-- end content -->
+
+<ul id="sidebar">
+	<li id="text-19" class="widget widget_text">			<div class="textwidget"><script>
+  (function() {
+    var cx = '009682134359037907028:tj6eafkv_be';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+
+<style type="text/css">
+  .gsc-control-cse {
+    font-family: "Trebuchet MS", sans-serif;
+    border-color: #E1F3DA;
+    background-color: #E1F3DA;
+  }
+  input.gsc-input {
+    border-color: #94CC7A;
+  }
+  input.gsc-search-button {
+    border-color: #94CC7A;
+    background-color: #AADA92;
+  }
+  .gsc-tabHeader.gsc-tabhInactive {
+    border-color: #A9DA92;
+    background-color: #FFFFFF;
+  }
+  .gsc-tabHeader.gsc-tabhActive {
+    border-color: #A9DA92;
+    background-color: #A9DA92;
+  }
+  .gsc-tabsArea {
+    border-color: #A9DA92;
+  }
+  .gsc-webResult.gsc-result {
+    border-color: #A9DA92;
+    background-color: #FFFFFF;
+  }
+  .gsc-webResult.gsc-result:hover {
+    border-color: #A9DA92;
+    background-color: #FFFFFF;
+  }
+  .gs-webResult.gs-result a.gs-title:link,
+  .gs-webResult.gs-result a.gs-title:link b {
+    color: #009900;
+  }
+  .gs-webResult.gs-result a.gs-title:visited,
+  .gs-webResult.gs-result a.gs-title:visited b {
+    color: #009900;
+  }
+  .gs-webResult.gs-result a.gs-title:hover,
+  .gs-webResult.gs-result a.gs-title:hover b {
+    color: #003300;
+  }
+  .gs-webResult.gs-result a.gs-title:active,
+  .gs-webResult.gs-result a.gs-title:active b {
+    color: #009900;
+  }
+  .gsc-cursor-page {
+    color: #009900;
+  }
+  a.gsc-trailing-more-results:link {
+    color: #009900;
+  }
+  .gs-webResult.gs-result .gs-snippet {
+    color: #454545;
+  }
+  .gs-webResult.gs-result .gs-visibleUrl {
+    color: #33cc00;
+  }
+  .gs-webResult.gs-result .gs-visibleUrl-short {
+    color: #33cc00;
+  }
+  .gs-webResult.gs-result .gs-visibleUrl-short {
+    display: none;
+  }
+  .gs-webResult.gs-result .gs-visibleUrl-long {
+    display: block;
+  }
+  .gsc-cursor-box {
+    border-color: #A9DA92;
+  }
+  .gsc-results .gsc-cursor-page {
+    border-color: #A9DA92;
+    background-color: #FFFFFF;
+  }
+  .gsc-results .gsc-cursor-page.gsc-cursor-current-page {
+    border-color: #A9DA92;
+    background-color: #A9DA92;
+  }
+  .gs-promotion.gs-result {
+    border-color: #94CC7A;
+    background-color: #CBE8B4;
+  }
+  .gs-promotion.gs-result a.gs-title:link {
+    color: #0066CC;
+  }
+  .gs-promotion.gs-result a.gs-title:visited {
+    color: #0066CC;
+  }
+  .gs-promotion.gs-result a.gs-title:hover {
+    color: #0066CC;
+  }
+  .gs-promotion.gs-result a.gs-title:active {
+    color: #0066CC;
+  }
+  .gs-promotion.gs-result .gs-snippet {
+    color: #454545;
+  }
+  .gs-promotion.gs-result .gs-visibleUrl,
+  .gs-promotion.gs-result .gs-visibleUrl-short {
+    color: #815FA7;
+  }
+</style>    </div>
+		</li>
+<li id="text-9" class="widget widget_text">			<div class="textwidget"><div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=138031159685820";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<div class="fb-like-box" data-href="https://www.facebook.com/pages/GeeksforGeeks/316764689022" data-width="250" data-height="170" data-colorscheme="light" data-show-faces="true" data-header="false" data-stream="false" data-show-border="false"></div></div>
+		</li>
+<li id="text-18" class="widget widget_text">			<div class="textwidget"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- LargeRectangleSide -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:336px;height:280px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="1884636833"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
+		</li>
+<li id="text-13" class="widget widget_text">			<div class="textwidget"><ul><li><a href="http://www.geeksforgeeks.org/category/interview-experiences/">Interview Experiences</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/advance-data-structures">Advanced Data Structures</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/dynamic-programming">Dynamic Programming</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/Greedy-Algorithm/">Greedy Algorithms</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/backtracking">Backtracking</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/pattern-searching">Pattern Searching</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/divide-and-conquer">Divide & Conquer</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/MathematicalAlgo">Mathematical Algorithms</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/recursion">Recursion</a></li>
+<li><a href="http://www.geeksforgeeks.org/tag/geometric-algorithms/">Geometric Algorithms</a></li>
+</ul></div>
+		</li>
+<li id="text-17" class="widget widget_text">			<div class="textwidget"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Big 300x600 Sidebar -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:600px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="4402736037"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
+		</li>
+<li id="text-14" class="widget widget_text"><h2 class="widgettitle">Popular Posts</h2>
+			<div class="textwidget"><ul>
+<li><a href="http://www.geeksforgeeks.org/write-a-c-program-to-print-all-permutations-of-a-given-string/">  All permutations of a given string </a></li>
+<li><a href="http://www.geeksforgeeks.org/memory-layout-of-c-program/"> Memory Layout of C Programs</a> </li>
+<li><a href="http://www.geeksforgeeks.org/understanding-extern-keyword-in-c/"> Understanding “extern” keyword in C</a> </li>
+<li><a href="http://www.geeksforgeeks.org/median-of-two-sorted-arrays/">Median of two sorted arrays</a> </li>
+<li><a href="http://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion-and-without-stack/"> Tree traversal without recursion and without stack! </a></li>
+<li><a href="http://www.geeksforgeeks.org/structure-member-alignment-padding-and-data-packing/"> Structure Member Alignment, Padding and Data Packing</a> </li>
+<li><a href="http://www.geeksforgeeks.org/write-a-function-to-get-the-intersection-point-of-two-linked-lists/"> Intersection point of two Linked Lists</a> </li>
+<li><a href="http://www.geeksforgeeks.org/lowest-common-ancestor-in-a-binary-search-tree/"> Lowest Common Ancestor in a BST.</span></a> </li>
+<li><a href="http://www.geeksforgeeks.org/a-program-to-check-if-a-binary-tree-is-bst-or-not/"> Check if a binary tree is BST or not</a> </li>
+<li><a href="http://www.geeksforgeeks.org/sorted-linked-list-to-balanced-bst/"> Sorted Linked List to Balanced BST</a></li>
+</ul></div>
+		</li>
+<li id="text-3" class="widget widget_text">			<div class="textwidget"><a href="https://twitter.com/GeeksforGeeks" class="twitter-follow-button" data-show-count="false">Follow @GeeksforGeeks</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>         
+
+
+<!-- GOOGLE FEEDBURNER BUTTON-->
+<a href="http://feeds.feedburner.com/Geeksforgeeks" title="Subscribe to my feed" rel="alternate" type="application/rss+xml"><img src="http://www.feedburner.com/fb/images/pub/feed-icon32x32.png" alt="" style="border:0"/></a><a href="http://feeds.feedburner.com/Geeksforgeeks" title="Subscribe to my feed" rel="alternate" type="application/rss+xml">Subscribe</a>
+
+</div>
+		</li>
+<li id="text-21" class="widget widget_text"><h2 class="widgettitle">Recent Comments</h2>
+			<div class="textwidget"><script type="text/javascript" src="http://geeksforgeeks.disqus.com//recent_comments_widget.js?num_items=6&hide_avatars=1&excerpt_length=50&hide_mods=0"></script></div>
+		</li>
+<li id="text-22" class="widget widget_text">			<div class="textwidget"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- LinkAd -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:90px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="2606115235"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- LinkAd -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:90px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="2606115235"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- LinkAd -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:90px"
+     data-ad-client="ca-pub-9465609616171866"
+     data-ad-slot="2606115235"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
+		</li>
+
+</ul>					  
+		<div class="clear"></div>
+
+		<div id="footer">
+		
+		    <div class="xhtml">
+                        @geeksforgeeks, <a href="http://creativecommons.org/licenses/by-nc-nd/2.5/in/deed.en_US" title="Valid XHTML Strict 1.0">Some rights reserved</a>  <a href="http://www.geeksforgeeks.org/about/contact-us/"> &nbsp; &nbsp; &nbsp; &nbsp;Contact Us!</a>
+
+		    </div>
+		    
+		    <div class="credits">
+			  Powered by <a href="http://wordpress.org">WordPress </a> &amp; <a href="http://mootools.net/" title="Mootools JavaScript Framework">MooTools</a>, customized by geeksforgeeks team </div>
+			  
+		   <div class="clear"></div>						                            
+		   
+		</div> <!--end footer-->  
+        
+		        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'geeksforgeeks';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1) {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script'); 
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shCore.js?ver=3.0.9'></script>
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shBrushCpp.js?ver=3.0.9'></script>
+<script type='text/javascript'>
+	(function(){
+		var corecss = document.createElement('link');
+		var themecss = document.createElement('link');
+		var corecssurl = "http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCore.css?ver=3.0.9";
+		if ( corecss.setAttribute ) {
+				corecss.setAttribute( "rel", "stylesheet" );
+				corecss.setAttribute( "type", "text/css" );
+				corecss.setAttribute( "href", corecssurl );
+		} else {
+				corecss.rel = "stylesheet";
+				corecss.href = corecssurl;
+		}
+		document.getElementsByTagName("head")[0].insertBefore( corecss, document.getElementById("syntaxhighlighteranchor") );
+		var themecssurl = "http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shThemeDefault.css?ver=3.0.9";
+		if ( themecss.setAttribute ) {
+				themecss.setAttribute( "rel", "stylesheet" );
+				themecss.setAttribute( "type", "text/css" );
+				themecss.setAttribute( "href", themecssurl );
+		} else {
+				themecss.rel = "stylesheet";
+				themecss.href = themecssurl;
+		}
+		//document.getElementById("syntaxhighlighteranchor").appendChild(themecss);
+		document.getElementsByTagName("head")[0].insertBefore( themecss, document.getElementById("syntaxhighlighteranchor") );
+	})();
+	SyntaxHighlighter.config.strings.expandSource = '+ expand source';
+	SyntaxHighlighter.config.strings.help = '?';
+	SyntaxHighlighter.config.strings.alert = 'SyntaxHighlighter\n\n';
+	SyntaxHighlighter.config.strings.noBrush = 'Can\'t find brush for: ';
+	SyntaxHighlighter.config.strings.brushNotHtmlScript = 'Brush wasn\'t configured for html-script option: ';
+	SyntaxHighlighter.defaults['gutter'] = false;
+	SyntaxHighlighter.defaults['pad-line-numbers'] = true;
+	SyntaxHighlighter.defaults['toolbar'] = false;
+	SyntaxHighlighter.all();
+</script>
+<script type='text/javascript' src='http://d2o58evtke57tz.cloudfront.net/wp-content/plugins/bbpress/templates/default/js/editor.js?ver=2.5.4-5380'></script>
+				  
+		</div> <!--end wrapper-->
+        <div id="ajaxSpinner"></div> <!--For AJAX spinner holder-->
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-12148232-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+	</body>
+
+</html>
+<!-- Dynamic page generated in 0.221 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2015-02-19 10:03:59 -->
+
+<!-- Compression = gzip -->
+<!-- super cache -->
