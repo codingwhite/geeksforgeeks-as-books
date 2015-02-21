@@ -1,8 +1,7 @@
-# geeksforgeeks-in-books
+# geeksforgeeks as books
 
-Have you ever wished you can read awesome stuff on [geeksforgeeks.org][1] on you
-iPad in epub format? Or mobi format on your Kindle? Well, now you have it. Look
-under the goodies and enjoy reading!
+Have you ever wished you can read the awesome stuff on [geeksforgeeks.org][1] on you
+iPad in epub format? Or mobi format on your Kindle? Well, now you have it. Look under the directory `goodies` and enjoy reading!
 
 Right now we have a book called `Advanced Data Structure` in both epub and mobi
 format.
@@ -117,7 +116,7 @@ Welcome to contribute code into this project.
 
 ## License
 
-The content on Geeksforgeeks is licensed under Creative Commons 
+The content on Geeksforgeeks is licensed under Creative Commons
 Attribution-NonCommercial-NoDerivs 2.5 India. See the license [here][7]
 
 The code in this project is licensed under Apache License, Version 2.0. See the
