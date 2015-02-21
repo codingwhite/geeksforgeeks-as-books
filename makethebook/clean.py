@@ -54,7 +54,10 @@ def clean(file_name, directory="."):
 def clean_html_files(directory = ""):
     for html_file in glob.glob(directory + '*.html'):
         if 'clean' not in html_file:
-            clean(html_file, directory)
+            try:
+                clean(html_file, directory)
+            except:
+                print "WARNING: failed to clean", html_file
 
 if __name__ == "__main__":
     clean_html_files("")

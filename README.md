@@ -1,118 +1,76 @@
 # geeksforgeeks as books
 
+![Read books](http://rlv.zcache.com/funny_i_need_more_books_gift_postcards-r02cd503cbd784d0e934c3af02da0fea3_vgbaq_8byvr_512.jpg)
+
 Have you ever wished you can read the awesome stuff on [geeksforgeeks.org][1] on you
 iPad in epub format? Or mobi format on your Kindle? Well, now you have it. Look under the directory `goodies` and enjoy reading!
 
-Right now we have a book called `Advanced Data Structure` in both epub and mobi
-format.
+![On Kindle App](https://s-media-cache-ak0.pinimg.com/originals/2b/86/53/2b8653eff7aaa191a80263de32c29651.jpg)
+
+![On Ipad](https://s-media-cache-ak0.pinimg.com/originals/1d/28/d3/1d28d3e3148d2c91d22e837ace64c0ce.jpg)
 
 
 ## Tools
 
-Want to create a book from the geeksforgeeks site yourself? No problem. But
-you'll need some tools to get started. Apart from `Python 2.7` you also need
-those.
+Want to create a book from the geeksforgeeks site yourself? No problem. But you'll need some tools to get started. Apart from `Python 2.7` you also need those.
 
-### 1. Wget
-
-**Download webpages to local, with images.**  
-I'm sure you have this awesome tool installed on your computer but it's really
-more awesome than you think. In this project, `wget` has been used to download
-images linked in webpages onto local storage and the links in html files will be
-replaced accordingly.
 
 ### 2. Scrapy
 
-**What to download?**  
-[Scrapy][2] is a really good tool to find what you want on a webpage. You just
-need to specify the patterns for the link you want and it takes care of
-everything.  
+[Scrapy][2] is used to download webpages from `geeksforgeeks`. It makes it super easy to do so with it's rules.
+
 Install it with `pip install scrapy`
 
-### 3. Boilerpipy
+### 2. Boilerpipy
 
-**Clean 'em**  
-So you have the html files locally. But those html files have many other stuff
-you don't want. You only want... goodies.
-No problem. Check out [boilerpipy][5], forked from [here][6]
+So you have the html files locally. But those html files have many other stuff you don't want. You only want... goodies.
+No problem. Check out [boilerpipy][6], it removes all the unnecessary stuff. It has the functionality of Pocket or Readability you might be familiar with.
 
 
 ### 3. Pandoc
-**It's all about conversion.**  
-[Pandoc][3] is just super. It can convert files between so many formats. SO
-MANY. Sorry, I'm still in awe.
+
+[Pandoc][3] is just super. It's used here to convert html files to markdown files. And from html files or markdown files to epub files.
 
 ### 4. Kindlegen
-**Get your Kindle ready**  
-You'll need [kindlegen][4] to generate `mobi` so you can read on your beloved Kindle
-or Kindle App. Download it from the link and install.
 
-## Do It Yourself
+You'll need [kindlegen][4] to generate `mobi` so you can read on your beloved Kindle or Kindle App. Download it and install.
 
-### 1. Modify crawling rules
+You just need to use `kindlegen awesome.epub` and it'll give you a file called `awesome.mobi`.
 
-Find crawler.py under the subdirectory `geeksforgeeks` and modify the rules.
-Specify the directory you want the html files to be downloaded into by modifying
-dest in the class.
+## How To
 
-### 2. Start crawling
+### 1. Crawling with Scrpay
+Go to the `geeksforgeeks` subdirectory and run `scrapy crawl geeksforgeeks -a category=category -a name=name`
 
-Run `scrapy crawl geeksforgeeks` to download html files from geeksforgeeks
-server to local. the crawling script calls wget to do the actual downloading.
+For example `scrapy crawl geeksforgeeks -a category=tag -a name=pattern-searching` will crawl from the page `http://www.geeksforgeeks.org/tag/pattern-searching/`. On geeksforgeeks, things can be organized by `tag` or `category`. Scrapy will do the rest for you.
 
-### 3. Clean html  
 
-Now go into the directory where you have all the html files and run
-`python ../scripts/clean.py`.
+### 2. Generate a book  
 
-### 4. Convert html files to one markdown file
+Now go into the `makethebook` subdirectory where you should be able to find a directory called `pattern-searching`. Now run `python generate_book.py pattern-searching`. It will first clean the html files, concatenate them into one, then use `pandoc` to create an epub file from the markdown file. In the end a mobi file is created using `kindlegen`.
 
-Through trials and errors I've found I can get the best resulting epub file by
-doing this.
+Yay! Done!
 
-```
-pandoc -o advanced-data-structures.md -t strict\_markdown \*\_clean.html
-```
+## To Do
 
-### 5. Convert markdown file to epub
-
-```
-pandoc -o advanced_data_structure.epub advanced_data_structure_geeksforgeeks.md
---epub-metadata=metadata.xml --toc --toc-depth=2
---epub-stylesheet=../styles/buttondown.css
-```
-
-### 6. Get the mobi book
-
-To generate mobi file from epub just use `kindlegen advanced_data_structure.epub`
-and a book with the same name in mobi will be generated.
-
-Ummmm, a lot of steps right? Interested in bettering this process? fork this and
-contribute!
-
+### Fix the encoding
+The encoding isn't well handled yet. You'll spot some gibberish(mostly ‘ and ’) once in a while. While it won't affect your understanding much, it's quite annoying.
 
 ## Contribute
 
-I've only worked on this project one day since I had the idea. It has huge room to improve. You can contribute in many ways.
+I've only worked on this project for a few days since I had the idea. It has huge room to improve. It's the first time I used `Scrapy` and `pandoc`.  
+
+You can contribute in many ways. Besides contributing code to this project. You are more than welcome to contribute in the following ways.
 
 ### Book
 
-Spot something wrong with the books? Messed up content? Submit an issue and
-we'll look into it
+Every tag or category on `geeksforgeeks` can be turned into a book. So you are welcome to add more books.
 
-### Styles
+### Styles and Cover Images
 
-The style for ipub file is under `styles` subdirectory. Welcome to submit your
-style sheet.
+The style for ipub file is under `styles` subdirectory. Welcome to submit your style sheets.
 
-### More books
-
-Turn content under other tags into books as well.
-
-### Code
-
-Welcome to contribute code into this project.
-
+You can also make cover images for the books so `pandoc` can use when generating an epub file. Right now they don't have any.
 
 ## License
 
