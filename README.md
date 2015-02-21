@@ -3,7 +3,7 @@
 ![Read books](http://rlv.zcache.com/funny_i_need_more_books_gift_postcards-r02cd503cbd784d0e934c3af02da0fea3_vgbaq_8byvr_512.jpg)
 
 Have you ever wished you can read the awesome stuff on [geeksforgeeks.org][1] on you
-iPad in epub format? Or mobi format on your Kindle? Well, now you have it. Look under the directory `goodies` and enjoy reading!
+iPad? Or on your Kindle/Kindle App? Well, now you have it. Look under the directory `goodies` and do the world some good with your algorithmic knowledge!
 
 ![On Kindle App](https://s-media-cache-ak0.pinimg.com/originals/2b/86/53/2b8653eff7aaa191a80263de32c29651.jpg)
 
@@ -12,10 +12,10 @@ iPad in epub format? Or mobi format on your Kindle? Well, now you have it. Look 
 
 ## Tools
 
-Want to create a book from the geeksforgeeks site yourself? No problem. But you'll need some tools to get started. Apart from `Python 2.7` you also need those.
+Want to create a book from the `geeksforgeeks` site yourself? No problem. But you'll need some tools to get started. Apart from `Python 2.7` you also need those.
 
 
-### 2. Scrapy
+### 1. Scrapy
 
 [Scrapy][2] is used to download webpages from `geeksforgeeks`. It makes it super easy to do so with it's rules.
 
@@ -29,31 +29,32 @@ No problem. Check out [boilerpipy][6], it removes all the unnecessary stuff. It 
 
 ### 3. Pandoc
 
-[Pandoc][3] is just super. It's used here to convert html files to markdown files. And from html files or markdown files to epub files.
+[Pandoc][3] is just super. It's used here to convert html files or markdown files to epub files. But it can do so **much** more. You should definitely check it out.
 
 ### 4. Kindlegen
 
-You'll need [kindlegen][4] to generate `mobi` so you can read on your beloved Kindle or Kindle App. Download it and install.
+You'll need [kindlegen][4] to generate `mobi` files so you can read on your beloved Kindle or Kindle App. Download it from Amazon site and install.
 
-You just need to use `kindlegen awesome.epub` and it'll give you a file called `awesome.mobi`.
+You just need to use `kindlegen awesome.epub` and it'll give you a file called `awesome.mobi`. Awesome.
 
 ## How To
 
 ### 1. Crawling with Scrpay
-Go to the `geeksforgeeks` subdirectory and run `scrapy crawl geeksforgeeks -a category=category -a name=name`
+Go to the `geeksforgeeks` subdirectory and run commands *like* `scrapy crawl geeksforgeeks -a category=category -a name=name`.
 
-For example `scrapy crawl geeksforgeeks -a category=tag -a name=pattern-searching` will crawl from the page `http://www.geeksforgeeks.org/tag/pattern-searching/`. On geeksforgeeks, things can be organized by `tag` or `category`. Scrapy will do the rest for you.
+For example, running `scrapy crawl geeksforgeeks -a category=tag -a name=pattern-searching` will crawl from the page `http://www.geeksforgeeks.org/tag/pattern-searching/`. category and name are two arguments our spider takes. On geeksforgeeks, things can be organized by `tag` or `category`. Specify the category/tag and the name, Scrapy will do the rest for you.
 
 
 ### 2. Generate a book  
 
-Now go into the `makethebook` subdirectory where you should be able to find a directory called `pattern-searching`. Now run `python generate_book.py pattern-searching`. It will first clean the html files, concatenate them into one, then use `pandoc` to create an epub file from the markdown file. In the end a mobi file is created using `kindlegen`.
+Following the example in 1, now go into the `makethebook` subdirectory and you should be able to find a directory called `pattern-searching`. Now run `python generate_book.py pattern-searching`. It will first clean the html files, concatenate the cleaned files into one, then use `pandoc` to create an epub file from the markdown file. In the end a mobi file is created using `kindlegen`.
 
 Yay! Done!
 
 ## To Do
 
 ### Fix the encoding
+
 The encoding isn't well handled yet. You'll spot some gibberish(mostly ‘ and ’) once in a while. While it won't affect your understanding much, it's quite annoying.
 
 ## Contribute
