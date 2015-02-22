@@ -37,7 +37,7 @@ Want to create a book from the `geeksforgeeks` site yourself? No problem. But yo
 
 ### 1. Scrapy
 
-[Scrapy][2] is used to download webpages from `geeksforgeeks`. It makes it super easy to do so with it's rules.
+[Scrapy][2] is used to download webpages from `geeksforgeeks`. It makes it super easy to do so with its rules.
 
 Install it with `pip install scrapy`
 
@@ -49,7 +49,7 @@ No problem. Check out [boilerpipy][6], it can remove all the unnecessary stuff l
 
 ### 3. Pandoc
 
-[Pandoc][3] is just super. It's used here to convert html files or markdown files to epub files. But it can do so **much** more. It's also super easy to generate `pdf` versions of the books if you want. you should definitely check it out.
+[Pandoc][3] is just super. It's used here to convert html files or markdown files to epub files. But it can do so **much** more. It's also super easy to generate `pdf` versions of the books if you want. You should definitely check it out.
 
 ### 4. Kindlegen
 
