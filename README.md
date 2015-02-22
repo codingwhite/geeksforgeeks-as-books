@@ -1,18 +1,38 @@
-# geeksforgeeks as books
+# Geeksforgeeks As Books
 
 ![Read books](http://rlv.zcache.com/funny_i_need_more_books_gift_postcards-r02cd503cbd784d0e934c3af02da0fea3_vgbaq_8byvr_512.jpg)
 
-Have you ever wished you can read the awesome stuff on [geeksforgeeks.org][1] on you
-iPad? Or on your Kindle/Kindle App? Well, now you have it. Look under the directory `goodies` and do the world some good with your algorithmic knowledge!
+Have you ever wished you could read the awesome stuff on [geeksforgeeks.org][1] on your
+iPad? Or on your Kindle/Kindle App? Well, now you have it. Look under the directory `goodies` and do the world some good with your algorithmic prowess ;)
+
+Here's how the books look like in the iBooks App and Kindle App on my iPad. Kindle hasn't been tested.
+
+![On Ipad](https://s-media-cache-ak0.pinimg.com/originals/1d/28/d3/1d28d3e3148d2c91d22e837ace64c0ce.jpg)
 
 ![On Kindle App](https://s-media-cache-ak0.pinimg.com/originals/2b/86/53/2b8653eff7aaa191a80263de32c29651.jpg)
 
-![On Ipad](https://s-media-cache-ak0.pinimg.com/originals/1d/28/d3/1d28d3e3148d2c91d22e837ace64c0ce.jpg)
+## Books
+
+Right now we have those books under `goodies`
+
+- **Tree** Source: [here](http://www.geeksforgeeks.org/category/tree/)
+- **Graph** Source: [here](http://www.geeksforgeeks.org/category/graph/)
+- **Array** Source: [here](http://www.geeksforgeeks.org/category/c-arrays/)
+- **Recursion** Source: [here](http://www.geeksforgeeks.org/tag/recursion/)
+- **Backtracking** Source: [here](http://www.geeksforgeeks.org/tag/backtracking/)
+- **Linked List** Source: [here](http://www.geeksforgeeks.org/category/linked-list/)
+- **Math Problems** Source: [here](http://www.geeksforgeeks.org/tag/MathematicalAlgo/)
+- **Greedy Algorithm** Source: [here](http://www.geeksforgeeks.org/tag/Greedy-Algorithm/)
+- **Pattern Matching** Source: [here](http://www.geeksforgeeks.org/tag/pattern-searching/)
+- **Divide and Conquer** Source: [here](http://www.geeksforgeeks.org/tag/divide-and-conquer/)
+- **Dynamic Programming** Source: [here](http://www.geeksforgeeks.org/tag/dynamic-programming/)
+- **Advanced Data Structure** Source: [here](http://www.geeksforgeeks.org/tag/advance-data-structures/)
+
 
 
 ## Tools
 
-Want to create a book from the `geeksforgeeks` site yourself? No problem. But you'll need some tools to get started. Apart from `Python 2.7` you also need those.
+Want to create a book from the `geeksforgeeks` site yourself? No problem. But you'll need some tools to get started. Apart from `Python 2` you also need those.
 
 
 ### 1. Scrapy
@@ -24,18 +44,18 @@ Install it with `pip install scrapy`
 ### 2. Boilerpipy
 
 So you have the html files locally. But those html files have many other stuff you don't want. You only want... goodies.
-No problem. Check out [boilerpipy][6], it removes all the unnecessary stuff. It has the functionality of Pocket or Readability you might be familiar with.
+No problem. Check out [boilerpipy][6], it can remove all the unnecessary stuff like header and comments, leaving you with only the article itself. It has the functionality of Pocket or Readability you might be familiar with.
 
 
 ### 3. Pandoc
 
-[Pandoc][3] is just super. It's used here to convert html files or markdown files to epub files. But it can do so **much** more. You should definitely check it out.
+[Pandoc][3] is just super. It's used here to convert html files or markdown files to epub files. But it can do so **much** more. It's also super easy to generate `pdf` versions of the books if you want. you should definitely check it out.
 
 ### 4. Kindlegen
 
 You'll need [kindlegen][4] to generate `mobi` files so you can read on your beloved Kindle or Kindle App. Download it from Amazon site and install.
 
-You just need to use `kindlegen awesome.epub` and it'll give you a file called `awesome.mobi`. Awesome.
+You just need to use `kindlegen awesome.epub` and it'll give you a file called `awesome.mobi`. Awesome, right?
 
 ## How To
 
@@ -55,7 +75,7 @@ Yay! Done!
 
 ### Fix the encoding
 
-The encoding isn't well handled yet. You'll spot some gibberish(mostly ‘ and ’) once in a while. While it won't affect your understanding much, it's quite annoying.
+The encoding isn't well handled yet. You'll spot some gibberish(mostly caused by ‘ and ’) once in a while. While it won't affect your understanding much, it's quite annoying.
 
 ## Contribute
 
@@ -69,9 +89,9 @@ Every tag or category on `geeksforgeeks` can be turned into a book. So you are w
 
 ### Styles and Cover Images
 
-The style for ipub file is under `styles` subdirectory. Welcome to submit your style sheets.
+The style for generating `epub` books is under `styles` subdirectory. Welcome to submit your style sheets.
 
-You can also make cover images for the books so `pandoc` can use when generating an epub file. Right now they don't have any.
+You can also make/submit cover images for the books so `pandoc` can use them when generating `epub` files. Right now they don't have any.
 
 ## License
 
@@ -81,6 +101,9 @@ Attribution-NonCommercial-NoDerivs 2.5 India. See the license [here][7]
 The code in this project is licensed under Apache License, Version 2.0. See the
 license [here][8]
 
+## Authors
+
+Jing Zhou, gnijuohz at gmail.com
 
 
 [1]:http://www.geeksforgeeks.org/
