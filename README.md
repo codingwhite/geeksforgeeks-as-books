@@ -73,7 +73,7 @@ Yay! Done!
 
 ## To Do
 
-### Fix the encoding
+### Fix the encoding(done)
 
 The encoding isn't well handled yet. You'll spot some gibberish(mostly caused by ‘ and ’) once in a while. While it won't affect your understanding much, it's quite annoying.
 
