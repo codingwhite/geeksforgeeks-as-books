@@ -11,7 +11,7 @@ from clean import clean_html_files
 
 def generate(book, version):
     print "cleaning html files,", "this might take a while..."
-    clean_html_files(book)
+    #clean_html_files(book)
     cleaned_html = sorted(glob.glob(book + "*_cleaned.html"))
     md_file = book + book[:-1] + version + ".md"
     html_file = book + book[:-1] + version + ".html"
