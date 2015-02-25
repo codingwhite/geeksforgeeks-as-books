@@ -29,7 +29,7 @@ def clean(file_name, directory="."):
     head_doc = html_doc.find('head')
     source_url = head_doc.cssselect('meta[property="og:url"]')[0].get('content')
 
-    reconstructed_body = "<html><body>" + article.encode('utf-8').replace("<h2", "<h1").replace("</h2>", "</h1>") + "</body></html>"
+    reconstructed_body = u"<html><body>" + article.replace("<h2", "<h1").replace("</h2>", "</h1>") + u"</body></html>"
     source_header_string = "<h3>Source</h3>"
     source_link = "<p><a href='" + source_url +"' rel='tag'>" + source_url + "</a></p>"
     # further remove useless stuff

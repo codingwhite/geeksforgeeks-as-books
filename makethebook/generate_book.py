@@ -10,6 +10,9 @@ from clean import clean_html_files
 
 
 def generate(book, version):
+    if book[-1] != "/":
+        book = book + "/"
+    version = "_" + version
     print "cleaning html files,", "this might take a while..."
     clean_html_files(book)
     cleaned_html = sorted(glob.glob(book + "*_cleaned.html"))
@@ -29,7 +32,4 @@ if __name__ == "__main__":
         sys.exit()
     book = sys.argv[1]
     version = sys.argv[2]
-    if book[-1] != "/":
-        book = book + "/"
-    version = "_" + version
     generate(book, version)
